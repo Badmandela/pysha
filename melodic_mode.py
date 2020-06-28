@@ -160,6 +160,10 @@ class MelodicMode(definitions.PyshaMode):
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_ACCENT, definitions.OFF_BTN_COLOR)
 
     def update_buttons(self):
+        self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_2, definitions.ORANGE)
+        self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_6, definitions.YELLOW)
+        self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_7, definitions.TURQUOISE)
+        self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_8, definitions.RED)
         self.push.buttons.set_button_color(push2_python.constants.BUTTON_OCTAVE_DOWN, definitions.WHITE)
         self.push.buttons.set_button_color(push2_python.constants.BUTTON_OCTAVE_UP, definitions.WHITE)
         self.update_accent_button()
@@ -170,7 +174,7 @@ class MelodicMode(definitions.PyshaMode):
             row_colors = []
             for j in range(0, 8):
                 corresponding_midi_note = self.pad_ij_to_midi_note([i, j])
-                cell_color = definitions.GRAY_DARK
+                cell_color = definitions.BLACK_KEY
                 if self.is_black_key_midi_note(corresponding_midi_note):
                     cell_color = definitions.BLACK
                 if self.is_midi_note_root_octave(corresponding_midi_note):
@@ -237,3 +241,5 @@ class MelodicMode(definitions.PyshaMode):
             self.fixed_velocity_mode = not self.fixed_velocity_mode
             self.app.buttons_need_update = True
             self.app.pads_need_update = True
+
+

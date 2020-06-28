@@ -105,8 +105,9 @@ class PyshaApp(object):
             self.melodic_mode.activate()
 
     def set_melodic_mode(self):
-        if not self.is_mode_active(self.melodic_mode):
+        if self.is_mode_active(self.rhyhtmic_mode):
             self.toggle_melodic_rhythmic_modes()
+
 
     def set_rhythmic_mode(self):
         if not self.is_mode_active(self.rhyhtmic_mode):
