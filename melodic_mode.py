@@ -170,7 +170,7 @@ class MelodicMode(definitions.PyshaMode):
             row_colors = []
             for j in range(0, 8):
                 corresponding_midi_note = self.pad_ij_to_midi_note([i, j])
-                cell_color = definitions.WHITE
+                cell_color = definitions.GRAY_DARK
                 if self.is_black_key_midi_note(corresponding_midi_note):
                     cell_color = definitions.BLACK
                 if self.is_midi_note_root_octave(corresponding_midi_note):
