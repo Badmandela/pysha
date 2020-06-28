@@ -4,11 +4,11 @@ import platform
 import time
 
 import cairo
+import definitions
 import mido
 import numpy
 import push2_python
 
-from definitions import OFF_BTN_COLOR, PyshaMode
 from melodic_mode import MelodicMode
 from pyramidi_mode import PyramidiMode
 from rhythmic_mode import RhythmicMode
@@ -71,7 +71,7 @@ class PyshaApp(object):
         self.main_controls_mode = MainControlsMode(self, settings=settings)
 
     def get_all_modes(self):
-        return [getattr(self, element) for element in vars(self) if isinstance(getattr(self, element), PyshaMode)]
+        return [getattr(self, element) for element in vars(self) if isinstance(getattr(self, element), definitions.PyshaMode)]
 
     def is_mode_active(self, mode):
         return mode in self.active_modes
@@ -302,20 +302,15 @@ class PyshaApp(object):
         # Do initial configuration of Push
         print('Doing initial Push config...')
 
-        # Configure custom colors
-        # TODO: custom color for RGB buttons does not seem to work nicely
-        try:
-            app.push.set_color_palette_entry(1, [OFF_BTN_COLOR, OFF_BTN_COLOR], rgb=[32, 32, 32], bw=32)
-        except AssertionError:
-            # Color is already defined, remove it first from palette and re-define it
-            # TODO: this should be improved with fiexs in push2-python library
-            app.push.color_palette = push2_python.constants.DEFAULT_COLOR_PALETTE
-            app.push.set_color_palette_entry(1, [OFF_BTN_COLOR, OFF_BTN_COLOR], rgb=[32, 32, 32], bw=32)
+        # Configure custom color palette
+        app.push.color_palette = {}
+        for count, color_name in enumerate(definitions.COLORS_NAMES):
+            app.push.set_color_palette_entry(count, [color_name, color_name], rgb=definitions.get_color_rgb(color_name))
         app.push.reapply_color_palette()
 
         # Initialize all buttons to black, initialize all pads to off
-        app.push.buttons.set_all_buttons_color(color='black')
-        app.push.pads.set_all_pads_to_color('black')
+        app.push.buttons.set_all_buttons_color(color=definitions.BLACK)
+        app.push.pads.set_all_pads_to_color(color=definitions.BLACK)
         
         app.update_push2_buttons()
         app.update_push2_pads()
@@ -324,55 +319,81 @@ class PyshaApp(object):
 # Bind push action handlers with class methods
 @push2_python.on_encoder_rotated()
 def on_encoder_rotated(_, encoder_name, increment):
-    for mode in app.active_modes:
-        mode.on_encoder_rotated(encoder_name, increment)
+    try:
+        for mode in app.active_modes:
+            mode.on_encoder_rotated(encoder_name, increment)
+    except NameError:
+       print('app object not yet ready!')
 
 
 @push2_python.on_pad_pressed()
 def on_pad_pressed(_, pad_n, pad_ij, velocity):
-    for mode in app.active_modes:
-        mode.on_pad_pressed(pad_n, pad_ij, velocity)
+    try:
+        for mode in app.active_modes:
+            mode.on_pad_pressed(pad_n, pad_ij, velocity)
+    except NameError:
+       print('app object not yet ready!')
 
 
 @push2_python.on_pad_released()
 def on_pad_released(_, pad_n, pad_ij, velocity):
-    for mode in app.active_modes:
-        mode.on_pad_released(pad_n, pad_ij, velocity)
+    try:
+        for mode in app.active_modes:
+            mode.on_pad_released(pad_n, pad_ij, velocity)
+    except NameError:
+       print('app object not yet ready!')
 
 
 @push2_python.on_pad_aftertouch()
 def on_pad_aftertouch(_, pad_n, pad_ij, velocity):
-    for mode in app.active_modes:
-        mode.on_pad_aftertouch(pad_n, pad_ij, velocity)
+    try:
+        for mode in app.active_modes:
+            mode.on_pad_aftertouch(pad_n, pad_ij, velocity)
+    except NameError:
+       print('app object not yet ready!')
 
 
 @push2_python.on_button_pressed()
 def on_button_pressed(_, name):
-    for mode in app.active_modes:
-        mode.on_button_pressed(name)
+    try:
+        for mode in app.active_modes:
+            mode.on_button_pressed(name)
+    except NameError:
+       print('app object not yet ready!')
 
 
 @push2_python.on_button_released()
 def on_button_released(_, name):
-    for mode in app.active_modes:
-        mode.on_button_released(name)
+    try:
+        for mode in app.active_modes:
+            mode.on_button_released(name)
+    except NameError:
+       print('app object not yet ready!')
 
 
 @push2_python.on_touchstrip()
 def on_touchstrip(_, value):
-    for mode in app.active_modes:
-        mode.on_touchstrip(value)
+    try:
+        for mode in app.active_modes:
+            mode.on_touchstrip(value)
+    except NameError:
+       print('app object not yet ready!')
 
 
 @push2_python.on_midi_connected()
 def on_midi_connected(_):
-    app.on_midi_push_connection_established()
-
+    try:
+        app.on_midi_push_connection_established()
+    except NameError:
+       print('app object not yet ready!') 
 
 @push2_python.on_sustain_pedal()
 def on_sustain_pedal(_, sustain_on):
-    for mode in app.active_modes:
-        mode.on_sustain_pedal(sustain_on)
+    try:
+        for mode in app.active_modes:
+            mode.on_sustain_pedal(sustain_on)
+    except NameError:
+       print('app object not yet ready!')
 
 # Run app main loop
 if __name__ == "__main__":
