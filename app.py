@@ -99,6 +99,7 @@ class PyshaApp(object):
             self.active_modes += [self.melodic_mode]
             self.rhyhtmic_mode.deactivate()
             self.melodic_mode.activate()
+
         else:
             # If none of melodic or rhythmic modes were active, enable melodic by default
             self.active_modes += [self.melodic_mode]
@@ -110,7 +111,7 @@ class PyshaApp(object):
 
 
     def set_rhythmic_mode(self):
-        if not self.is_mode_active(self.rhyhtmic_mode):
+        if self.is_mode_active(self.melodic_mode):
             self.toggle_melodic_rhythmic_modes()
 
     def save_current_settings_to_file(self):
@@ -284,6 +285,8 @@ class PyshaApp(object):
                     self.current_frame_rate_measurement = 0
                     self.current_frame_rate_measurement_second = now
                     print('{0} fps'.format(self.actual_frame_rate))
+                    print(definitions.ROOT_KEY)
+                    print(definitions.LAYOUT_INSTRUMENT)
 
                 # Check if any delayed actions need to be applied
                 self.check_for_delayed_actions()
@@ -361,7 +364,6 @@ def on_button_pressed(_, name):
             mode.on_button_pressed(name)
     except NameError:
        print('app object not yet ready!')
-
 
 @push2_python.on_button_released()
 def on_button_released(_, name):

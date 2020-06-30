@@ -35,18 +35,100 @@ class RhythmicMode(MelodicMode):
             row_colors = []
             for j in range(0, 8):
                 corresponding_midi_note = self.pad_ij_to_midi_note([i, j])
-                cell_color = definitions.BLACK
-                if i >= 4 and j < 4:
-                    # This is the main 4x4 grid
-                    cell_color = self.app.pyramidi_mode.get_current_track_color()
+                cell_color = definitions.ROOT_KEY
+
+                # This is the main 4x4 grid
+
+                ### 1/4 ###
+                if i <= 4 and j < 4:
+                    cell_color = definitions.BLACK
+
+                ### SPARKLE LAYOUT ###
+
+                elif i == 4 and j == 0:
+                    cell_color = definitions.BLACK
+                elif i == 4 and j == 1:
+                    cell_color = definitions.BLACK
+                elif i == 4 and j == 2:
+                    cell_color = definitions.BLACK
+                elif i == 4 and j == 3:
+                    cell_color = definitions.BLACK
+
+                elif i == 5 and j == 0:
+                    cell_color = definitions.SPARKLE_5_COLOR
+                elif i == 5 and j == 1:
+                    cell_color = definitions.SPARKLE_6_COLOR
+                elif i == 5 and j == 2:
+                    cell_color = definitions.SPARKLE_7_COLOR
+                elif i == 5 and j == 3:
+                    cell_color = definitions.SPARKLE_8_COLOR
+
+                elif i == 6 and j == 0:
+                    cell_color = definitions.SPARKLE_2_COLOR
+                elif i == 6 and j == 1:
+                    cell_color = definitions.SPARKLE_3_COLOR
+                elif i == 6 and j == 2:
+                    cell_color = definitions.SPARKLE_4_COLOR
+                elif i == 6 and j == 3:
+                    cell_color = definitions.SPARKLE_5_COLOR
+
+                elif i == 7 and j == 0:
+                    cell_color = definitions.SPARKLE_1_COLOR
+                elif i == 7 and j == 1:
+                    cell_color = definitions.SPARKLE_1_COLOR
+                elif i == 7 and j == 2:
+                    cell_color = definitions.BLACK
+                elif i == 7 and j == 3:
+                    cell_color = definitions.SPARKLE_6_COLOR
+
+
+
+
+                ### DRUM LAYOUT ###
+                elif i == 0 and j == 4:
+                    cell_color = definitions.CRASH_COLOR
+                elif i == 0 and j == 5:
+                    cell_color = definitions.TOM_1_COLOR
+                elif i == 0 and j == 6:
+                    cell_color = definitions.TOM_1_COLOR
+                elif i == 0 and j == 7:
+                    cell_color = definitions.CRASH_COLOR
+
+                elif i == 1 and j == 4:
+                    cell_color = definitions.TOM_2_COLOR
+                elif i == 1 and j == 5:
+                    cell_color = definitions.KICK_DRUM_COLOR
+                elif i == 1 and j == 6:
+                    cell_color = definitions.KICK_DRUM_COLOR
+                elif i == 1 and j == 7:
+                    cell_color = definitions.TOM_2_COLOR
+
+                elif i == 2 and j == 4:
+                    cell_color = definitions.OPEN_HIHAT_COLOR
+                elif i == 2 and j == 5:
+                    cell_color = definitions.CLOSED_HIHAT_COLOR
+                elif i == 2 and j == 6:
+                    cell_color = definitions.CLOSED_HIHAT_COLOR
+                elif i == 2 and j == 7:
+                    cell_color = definitions.OPEN_HIHAT_COLOR
+
+                elif i == 3 and j == 4:
+                    cell_color = definitions.STICK_COLOR
+                elif i == 3 and j == 5:
+                    cell_color = definitions.SNARE_COLOR
+                elif i == 3 and j == 6:
+                    cell_color = definitions.SNARE_COLOR
+                elif i == 3 and j == 7:
+                    cell_color = definitions.STICK_COLOR
+
+                ### 4/4 ###
                 elif i >= 4 and j >= 4:
-                    cell_color = definitions.GRAY_LIGHT
-                elif i < 4 and j < 4:
-                    cell_color = definitions.GRAY_LIGHT
-                elif i < 4 and j >= 4:
-                    cell_color = definitions.GRAY_LIGHT
+                    cell_color = definitions.BLACK
+
                 if self.is_midi_note_being_played(corresponding_midi_note):
                     cell_color = definitions.NOTE_ON_COLOR
+                else:
+                    pass
 
                 row_colors.append(cell_color)
             color_matrix.append(row_colors)
@@ -58,3 +140,5 @@ class RhythmicMode(MelodicMode):
             self.fixed_velocity_mode = not self.fixed_velocity_mode
             self.app.buttons_need_update = True
             self.app.pads_need_update = True
+
+

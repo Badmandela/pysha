@@ -127,7 +127,7 @@ class MelodicMode(definitions.PyshaMode):
         self.push.pads.set_channel_aftertouch_range(range_start=self.channel_at_range_start, range_end=self.channel_at_range_end)
         self.push.pads.set_velocity_curve(velocities=self.get_poly_at_curve())
 
-        self.update_buttons()
+        # self.update_buttons()
 
     def deactivate(self):
         self.push.buttons.set_button_color(push2_python.constants.BUTTON_OCTAVE_DOWN, definitions.BLACK)
@@ -160,10 +160,6 @@ class MelodicMode(definitions.PyshaMode):
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_ACCENT, definitions.OFF_BTN_COLOR)
 
     def update_buttons(self):
-        self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_2, definitions.ORANGE)
-        self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_6, definitions.YELLOW)
-        self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_7, definitions.TURQUOISE)
-        self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_8, definitions.RED)
         self.push.buttons.set_button_color(push2_python.constants.BUTTON_OCTAVE_DOWN, definitions.WHITE)
         self.push.buttons.set_button_color(push2_python.constants.BUTTON_OCTAVE_UP, definitions.WHITE)
         self.update_accent_button()
@@ -179,9 +175,9 @@ class MelodicMode(definitions.PyshaMode):
                     cell_color = definitions.BLACK
                 if self.is_midi_note_root_octave(corresponding_midi_note):
                     try:
-                        cell_color = self.app.pyramidi_mode.get_current_track_color()
+                        cell_color = definitions.ROOT_KEY
                     except AttributeError:
-                        cell_color = definitions.YELLOW
+                        cell_color = definitions.ROOT_KEY
                 if self.is_midi_note_being_played(corresponding_midi_note):
                     cell_color = definitions.NOTE_ON_COLOR
 
@@ -189,6 +185,8 @@ class MelodicMode(definitions.PyshaMode):
             color_matrix.append(row_colors)
 
         self.push.pads.set_pads_color(color_matrix)
+        # self.update_pads()
+
 
     def on_pad_pressed(self, pad_n, pad_ij, velocity):
         midi_note = self.pad_ij_to_midi_note(pad_ij)
@@ -241,5 +239,7 @@ class MelodicMode(definitions.PyshaMode):
             self.fixed_velocity_mode = not self.fixed_velocity_mode
             self.app.buttons_need_update = True
             self.app.pads_need_update = True
+
+
 
 
