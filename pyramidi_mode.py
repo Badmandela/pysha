@@ -340,14 +340,14 @@ class PyramidiMode(PyshaMode):
         elif self.app.is_mode_active(self.app.rhyhtmic_mode):
             self.app.rhyhtmic_mode.remove_all_notes_being_played()
 
-    def send_select_track_to_pyramid(self, track_idx):
-        # Follows pyramidi specification (Pyramid configured to receive on ch 16)
-        msg = mido.Message('control_change', control=0, value=track_idx + 1)
-        self.app.send_midi(msg, force_channel=self.pyramidi_channel)
+    # def send_select_track_to_pyramid(self, track_idx):
+    #     # Follows pyramidi specification (Pyramid configured to receive on ch 16)
+    #     msg = mido.Message('control_change', control=0, value=track_idx + 1)
+    #     self.app.send_midi(msg, force_channel=self.pyramidi_channel)
 
     def select_pyramid_track(self, track_idx):
         self.selected_pyramid_track = track_idx
-        self.send_select_track_to_pyramid(self.selected_pyramid_track)
+        # self.send_select_track_to_pyramid(self.selected_pyramid_track)
         self.load_current_default_layout()
         self.clean_currently_notes_being_played()
         self.active_midi_control_ccs = self.synth_midi_control_ccs.get(self.get_current_track_instrument_short_name(), [])
@@ -355,10 +355,10 @@ class PyramidiMode(PyshaMode):
     def activate(self):
         self.update_buttons()
 
-    def deactivate(self):
-        # for button_name in self.pyramid_track_button_names_a + self.pyramid_track_button_names_b:
-        for button_name in self.pyramid_track_button_names_a:
-            self.push.buttons.set_button_color(button_name, 'black')
+    # def deactivate(self):
+    #     # for button_name in self.pyramid_track_button_names_a + self.pyramid_track_button_names_b:
+    #     for button_name in self.pyramid_track_button_names_a:
+    #         self.push.buttons.set_button_color(button_name, 'black')
 
     # def update_buttons(self):
     #     for count, name in enumerate(self.pyramid_track_button_names_a):
@@ -387,8 +387,7 @@ class PyramidiMode(PyshaMode):
             for i in range(0, min(len(self.active_midi_control_ccs), 8)):
                 part_x = i * part_w
                 self.active_midi_control_ccs[i].draw(ctx, part_x, part_h)
-        else:
-            pass
+
             # # Draw track info
             # font_color = [1, 1, 1]
             # rectangle_color = [0, 0, 0]
@@ -445,9 +444,11 @@ class PyramidiMode(PyshaMode):
         draw_text_at(ctx, part_x + 865, part_h - 4, 'NUDGE', font_size, color=[1, 0.4, 0.6])
 
 ##################################################################################
-############################ SWITCH INSTRUMENTS!!! ###############################
+############################        BUTTONS        ###############################
 ##################################################################################
     def on_button_pressed(self, button_name):
+
+### UPPER ROW PRESSED ###
         if button_name == push2_python.constants.BUTTON_UPPER_ROW_1:
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_1, definitions.WHITE)
             if definitions.ROOT_KEY == definitions.PINK:
@@ -497,9 +498,7 @@ class PyramidiMode(PyshaMode):
         if button_name == push2_python.constants.BUTTON_UPPER_ROW_8:
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_8, definitions.WHITE)
 
-
-
-
+### LOWER ROW PRESSED ###
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_1:
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_LOWER_ROW_1, definitions.WHITE)
             msg = mido.Message('control_change', control=101, value=127)
@@ -545,14 +544,15 @@ class PyramidiMode(PyshaMode):
             msg = mido.Message('control_change', control=109, value=127)
             self.app.send_midi(msg)
 
-        # if button_name == push2_python.constants.BUTTON_RECORD:
-        #     self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_1, definitions.WHITE)
-        #     msg = mido.Message('control_change', control=110, value=127)
-        #     self.app.send_midi(msg)
+        if button_name == push2_python.constants.BUTTON_RECORD:
+            self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_1, definitions.WHITE)
+            msg = mido.Message('control_change', control=100, value=127)
+            self.app.send_midi(msg)
 
 
     def on_button_released(self, button_name):
 
+### UPPER ROW RELEASED ###
         if button_name == push2_python.constants.BUTTON_UPPER_ROW_1:
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_1, definitions.ROOT_KEY)
 
@@ -577,14 +577,11 @@ class PyramidiMode(PyshaMode):
         if button_name == push2_python.constants.BUTTON_UPPER_ROW_8:
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_8, definitions.RED)
 
-
-
-
+### LOWER ROW RELEASED ###
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_1:
             msg = mido.Message('control_change', control=101, value=0)
             self.app.send_midi(msg)
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_LOWER_ROW_1, definitions.WHITE)
-
 
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_2:
             msg = mido.Message('control_change', control=102, value=0)
@@ -626,14 +623,10 @@ class PyramidiMode(PyshaMode):
             self.app.send_midi(msg)
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_PLAY, definitions.PINK)
 
-
-
-
-
-
-        # if button_name == push2_python.constants.BUTTON_PLAY:
-        #     msg = mido.Message('control_change', control=109, value=0)
-        #     self.app.send_midi(msg)
+        if button_name == push2_python.constants.BUTTON_RECORD:
+            self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_1, definitions.YELLOW)
+            msg = mido.Message('control_change', control=100, value=0)
+            self.app.send_midi(msg)
 
     def on_encoder_rotated(self, encoder_name, increment):
         encoder_num = [
