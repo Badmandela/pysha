@@ -1,8 +1,7 @@
-import definitions
 import push2_python.constants
 
+import definitions
 from melodic_mode import MelodicMode
-
 
 class RhythmicMode(MelodicMode):
 
@@ -81,9 +80,6 @@ class RhythmicMode(MelodicMode):
                 elif i == 7 and j == 3:
                     cell_color = definitions.SPARKLE_6_COLOR
 
-
-
-
                 ### DRUM LAYOUT ###
                 elif i == 0 and j == 4:
                     cell_color = definitions.CRASH_COLOR
@@ -140,5 +136,3 @@ class RhythmicMode(MelodicMode):
             self.fixed_velocity_mode = not self.fixed_velocity_mode
             self.app.buttons_need_update = True
             self.app.pads_need_update = True
-
-

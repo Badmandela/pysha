@@ -4,16 +4,17 @@ import platform
 import time
 
 import cairo
-import definitions
 import mido
 import numpy
 import push2_python
 
+import definitions
+from main_controls_mode import MainControlsMode
 from melodic_mode import MelodicMode
 from pyramidi_mode import PyramidiMode
 from rhythmic_mode import RhythmicMode
 from settings_mode import SettingsMode
-from main_controls_mode import MainControlsMode
+
 
 class PyshaApp(object):
 

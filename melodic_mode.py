@@ -1,7 +1,9 @@
-import definitions
+import time
+
 import mido
 import push2_python.constants
-import time
+
+import definitions
 
 
 class MelodicMode(definitions.PyshaMode):
