@@ -1,17 +1,13 @@
-import definitions
-import push2_python
 import cairo
-import mido
+import push2_python
 
-from pyramidi_mode import MIDICCControl
+import definitions
 
 SETTINGS_BUTTON = push2_python.constants.BUTTON_SETUP
 
 controls = {'instrument': 0, 'filter': 127, 'smile': 0, 'reverb': 0, 'tape': 127 }
 
 max_encoder_value = 127
-
-
 
 class MainControlsMode(definitions.PyshaMode):
 

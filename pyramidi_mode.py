@@ -22,7 +22,6 @@ synth_midi_control_cc_data = {
     ]
 }
 
-
 class MIDICCControl(object):
     color = definitions.GRAY_LIGHT
     color_rgb = None
@@ -53,48 +52,17 @@ class MIDICCControl(object):
         if self.name == '4':
             self.value = 0
 
-            # @push2_python.on_button_released(push2_python.constants.BUTTON_UPPER_ROW_4)
-            # def function(push):
-            #     self.value = 127
-            #     msg = mido.Message('control_change', control=self.cc_number, value=self.value)
-            #     self.send_midi_func(msg)
-
         if self.name == '5':
             self.value = 0
-
-            # @push2_python.on_button_released(push2_python.constants.BUTTON_UPPER_ROW_5)
-            # def function(push):
-            #     self.value = 0
-            #     msg = mido.Message('control_change', control=self.cc_number, value=self.value)
-            #     self.send_midi_func(msg)
 
         if self.name == '6': # SMILE
             self.value = 0
 
-            # @push2_python.on_button_released(push2_python.constants.BUTTON_UPPER_ROW_6)
-            # def function(push):
-            #     self.value = 0
-            #     msg = mido.Message('control_change', control=self.cc_number, value=self.value)
-            #     self.send_midi_func(msg)
-
         if self.name == '7': # REVERB
             self.value = 0
 
-            # @push2_python.on_button_released(push2_python.constants.BUTTON_UPPER_ROW_7)
-            # def function(push):
-            #     self.value = 0
-            #     msg = mido.Message('control_change', control=self.cc_number, value=self.value)
-            #     self.send_midi_func(msg)
-
         if self.name == '8': # TAPE
             self.value = 127
-
-            # @push2_python.on_button_released(push2_python.constants.BUTTON_UPPER_ROW_8)
-            # def function(push):
-            #     self.value = 127
-            #     msg = mido.Message('control_change', control=self.cc_number, value=self.value)
-            #     self.send_midi_func(msg)
-
 
     def update_value(self, increment):
         if self.value + increment > self.vmax:
@@ -109,7 +77,7 @@ class MIDICCControl(object):
 
 ##########################################################################################################
 ##########################################################################################################
-##########################################################################################################
+# "Track selector mode"
 
 class PyramidiMode(PyshaMode):
     tracks_info = []
@@ -154,25 +122,20 @@ class PyramidiMode(PyshaMode):
         self.clean_currently_notes_being_played()
         self.active_midi_control_ccs = self.synth_midi_control_ccs.get(self.get_current_track_instrument_short_name(),
                                                                        [])
-    def activate(self):
-        self.update_buttons()
+    # def activate(self):
+    #     self.update_buttons()
 
-    # def update_display(self, ctx, w, h):
-    #
-    #     # Divide display in 8 parts to show different settings
-    #     part_w = w // 8
-    #     part_h = h
-    #
-    #     if self.active_midi_control_ccs:
-    #         # Draw midi contorl ccs
-    #         for i in range(0, min(len(self.active_midi_control_ccs), 8)):
-    #             part_x = i * part_w
-    #             self.active_midi_control_ccs[i].draw(ctx, part_x, part_h)
-
-    ##################################################################################
-    ############################        BUTTONS        ###############################
-    ##################################################################################
+##################################################################################
+############################        BUTTONS        ###############################
+##################################################################################
     def on_button_pressed(self, button_name):
+
+###################################################################
+# NOTE:
+# Color is managed in the "main_controls_mode"
+#
+#
+#
 
 ########################## UPPER ROW PRESSED ###
 # PRESSED UPP button 1
@@ -287,12 +250,7 @@ class PyramidiMode(PyshaMode):
             self.app.send_midi(msg)
 
     def on_button_released(self, button_name):
-###################################################################
-# NOTE:
-# Color is managed in the "main_controls_mode"
-#
-#
-#
+
 
 ########################## UPPER ROW RELEASED ###
 # RELEASED UPP button 1
