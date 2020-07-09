@@ -398,15 +398,25 @@ class PyramidiMode(PyshaMode):
             # self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_1, definitions.YELLOW)
 
     def on_encoder_rotated(self, encoder_name, increment):
-        encoder_num = [
-            push2_python.constants.ENCODER_TRACK1_ENCODER,
-            push2_python.constants.ENCODER_TRACK2_ENCODER,
-            push2_python.constants.ENCODER_TRACK3_ENCODER,
-            push2_python.constants.ENCODER_TRACK4_ENCODER,
-            push2_python.constants.ENCODER_TRACK5_ENCODER,
-            push2_python.constants.ENCODER_TRACK6_ENCODER,
-            push2_python.constants.ENCODER_TRACK7_ENCODER,
-            push2_python.constants.ENCODER_TRACK8_ENCODER,
-        ].index(encoder_name)
-        if self.active_midi_control_ccs:
-            self.active_midi_control_ccs[encoder_num].update_value(increment)
+        if encoder_name == push2_python.constants.ENCODER_TEMPO_ENCODER:
+            pass
+
+        if encoder_name == push2_python.constants.ENCODER_SWING_ENCODER:
+            pass
+
+        if encoder_name == push2_python.constants.ENCODER_MASTER_ENCODER:
+            pass
+
+        else:
+            encoder_num = [
+                push2_python.constants.ENCODER_TRACK1_ENCODER,
+                push2_python.constants.ENCODER_TRACK2_ENCODER,
+                push2_python.constants.ENCODER_TRACK3_ENCODER,
+                push2_python.constants.ENCODER_TRACK4_ENCODER,
+                push2_python.constants.ENCODER_TRACK5_ENCODER,
+                push2_python.constants.ENCODER_TRACK6_ENCODER,
+                push2_python.constants.ENCODER_TRACK7_ENCODER,
+                push2_python.constants.ENCODER_TRACK8_ENCODER,
+            ].index(encoder_name)
+            if self.active_midi_control_ccs:
+                self.active_midi_control_ccs[encoder_num].update_value(increment)
