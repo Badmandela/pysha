@@ -172,7 +172,7 @@ class MelodicMode(definitions.PyshaMode):
             row_colors = []
             for j in range(0, 8):
                 corresponding_midi_note = self.pad_ij_to_midi_note([i, j])
-                cell_color = definitions.BLACK_KEY
+                cell_color = definitions.WHITE_KEY
                 if self.is_black_key_midi_note(corresponding_midi_note):
                     cell_color = definitions.BLACK
                 if self.is_midi_note_root_octave(corresponding_midi_note):
@@ -241,7 +241,3 @@ class MelodicMode(definitions.PyshaMode):
             self.fixed_velocity_mode = not self.fixed_velocity_mode
             self.app.buttons_need_update = True
             self.app.pads_need_update = True
-
-
-
-
