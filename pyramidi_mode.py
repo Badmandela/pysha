@@ -3,7 +3,6 @@ import push2_python
 
 import definitions
 from definitions import PyshaMode, LAYOUT_INSTRUMENT, PYRAMIDI_CHANNEL
-# from display_utils import draw_text_at, show_title, show_value
 
 # TODO: this shoud be loaded from some definition file(s)
 

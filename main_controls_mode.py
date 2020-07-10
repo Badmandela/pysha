@@ -216,14 +216,14 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.move_to(900, 75)
         ctx.arc(900, 70, 42, 3.14 / 2, 3.14 / 2 + 360 * (controls['tape'] / 127) * (3.14 / 180))
         ctx.close_path()
-        ctx.set_source_rgb(0.1, 0, 0)
+        ctx.set_source_rgb(0.2, 0, 0)
         ctx.fill()
         ctx.stroke()
 
         # Tape frame
         ctx.arc(900, 70, 42, 0, 2 * 3.14)
         if controls['tape'] == 127:
-            ctx.set_source_rgb(0.2, 0, 0)
+            ctx.set_source_rgb(0.4, 0, 0)
         else:
             ctx.set_source_rgb(1, 0, 0)
         ctx.set_line_width(5)
@@ -347,7 +347,7 @@ class MainControlsMode(definitions.PyshaMode):
         # End of drawing code
 
     def update_buttons(self):
-        self.push.buttons.set_button_color(push2_python.constants.BUTTON_SETUP, definitions.WHITE)
+        self.push.buttons.set_button_color(push2_python.constants.BUTTON_SETUP, definitions.OFF_BTN_COLOR)
 
         self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_1, definitions.ROOT_KEY)
         self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_2, definitions.ORANGE)
@@ -372,7 +372,7 @@ class MainControlsMode(definitions.PyshaMode):
 
         # Settings button, to toggle settings mode
         if self.app.is_mode_active(self.app.settings_mode):
-            self.push.buttons.set_button_color(SETTINGS_BUTTON, definitions.WHITE, animation='pulsing')
+            self.push.buttons.set_button_color(SETTINGS_BUTTON, definitions.WHITE)
         else:
             self.push.buttons.set_button_color(SETTINGS_BUTTON, definitions.OFF_BTN_COLOR)
 

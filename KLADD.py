@@ -40,3 +40,5 @@
     def function(push):
         msg = mido.Message('control_change', control=108, value=127)
         self.send_midi_func(msg)
+
+
