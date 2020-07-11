@@ -45,6 +45,7 @@ class MainControlsMode(definitions.PyshaMode):
         ########## Instruments
         if controls['instrument'] <= 41:            # Piano
             ctx.set_source_rgb(1, 0.25, 0.5)
+            # ctx.rectangle(15, 23, 90, 15)
             ctx.rectangle(15, 23 + (30 * (controls['instrument'] / 127)), 90, 15)
             ctx.fill()
             ctx.stroke()
