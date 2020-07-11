@@ -3,6 +3,7 @@ import push2_python.constants
 import definitions
 from melodic_mode import MelodicMode
 
+
 class RhythmicMode(MelodicMode):
 
     rhythmic_notes_matrix = [
@@ -38,12 +39,13 @@ class RhythmicMode(MelodicMode):
 
                 # This is the main 4x4 grid
 
-                ### 1/4 ###
+                ### 1/4 ### (Upper-left 4x4)
                 if i <= 4 and j < 4:
                     cell_color = definitions.BLACK
 
-                ### SPARKLE LAYOUT ###
+                ### SPARKLE LAYOUT ### (Bottom-left 4x4)
 
+                # ROW 1
                 elif i == 4 and j == 0:
                     cell_color = definitions.BLACK
                 elif i == 4 and j == 1:
@@ -53,6 +55,7 @@ class RhythmicMode(MelodicMode):
                 elif i == 4 and j == 3:
                     cell_color = definitions.BLACK
 
+                # ROW 2
                 elif i == 5 and j == 0:
                     cell_color = definitions.SPARKLE_5_COLOR
                 elif i == 5 and j == 1:
@@ -62,6 +65,7 @@ class RhythmicMode(MelodicMode):
                 elif i == 5 and j == 3:
                     cell_color = definitions.SPARKLE_8_COLOR
 
+                # ROW 3
                 elif i == 6 and j == 0:
                     cell_color = definitions.SPARKLE_2_COLOR
                 elif i == 6 and j == 1:
@@ -71,6 +75,7 @@ class RhythmicMode(MelodicMode):
                 elif i == 6 and j == 3:
                     cell_color = definitions.SPARKLE_5_COLOR
 
+                # ROW 4
                 elif i == 7 and j == 0:
                     cell_color = definitions.SPARKLE_1_COLOR
                 elif i == 7 and j == 1:
@@ -80,7 +85,8 @@ class RhythmicMode(MelodicMode):
                 elif i == 7 and j == 3:
                     cell_color = definitions.SPARKLE_6_COLOR
 
-                ### DRUM LAYOUT ###
+                ### DRUM LAYOUT ### (Upper-right 4x4)
+                # ROW 1
                 elif i == 0 and j == 4:
                     cell_color = definitions.CRASH_COLOR
                 elif i == 0 and j == 5:
@@ -90,6 +96,7 @@ class RhythmicMode(MelodicMode):
                 elif i == 0 and j == 7:
                     cell_color = definitions.CRASH_COLOR
 
+                # ROW 2
                 elif i == 1 and j == 4:
                     cell_color = definitions.TOM_2_COLOR
                 elif i == 1 and j == 5:
@@ -99,6 +106,7 @@ class RhythmicMode(MelodicMode):
                 elif i == 1 and j == 7:
                     cell_color = definitions.TOM_2_COLOR
 
+                # ROW 3
                 elif i == 2 and j == 4:
                     cell_color = definitions.OPEN_HIHAT_COLOR
                 elif i == 2 and j == 5:
@@ -108,6 +116,7 @@ class RhythmicMode(MelodicMode):
                 elif i == 2 and j == 7:
                     cell_color = definitions.OPEN_HIHAT_COLOR
 
+                # ROW 4
                 elif i == 3 and j == 4:
                     cell_color = definitions.STICK_COLOR
                 elif i == 3 and j == 5:
@@ -117,12 +126,13 @@ class RhythmicMode(MelodicMode):
                 elif i == 3 and j == 7:
                     cell_color = definitions.STICK_COLOR
 
-                ### 4/4 ###
+                ### 4/4 ### (Bottom-right 4x4)
                 elif i >= 4 and j >= 4:
                     cell_color = definitions.BLACK
 
                 if self.is_midi_note_being_played(corresponding_midi_note):
                     cell_color = definitions.NOTE_ON_COLOR
+
                 else:
                     pass
 

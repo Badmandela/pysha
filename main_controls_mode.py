@@ -5,7 +5,7 @@ import definitions
 
 SETTINGS_BUTTON = push2_python.constants.BUTTON_SETUP
 
-controls = {'instrument': 0, 'filter': 127, 'smile': 0, 'reverb': 0, 'tape': 127 }
+controls = {'instrument': 0, 'instrument_filter': 127, 'master_filter': 127, 'smile': 0, 'reverb': 0, 'tape': 127 }
 
 max_encoder_value = 127
 
@@ -34,24 +34,6 @@ class MainControlsMode(definitions.PyshaMode):
 
         ####################################################################################
         # INSTRUMENT
-        if controls['instrument'] <= 41:
-            ctx.set_source_rgb(1, 0.25, 0.5)
-            ctx.rectangle(15, 23, 90, 15)
-            ctx.fill()
-            ctx.stroke()
-
-        if controls['instrument'] >= 42:
-            if controls['instrument'] <= 81:
-                ctx.set_source_rgb(0, 1, 0.7)
-                ctx.rectangle(15, 38, 90, 15)
-                ctx.fill()
-                ctx.stroke()
-
-        if controls['instrument'] >= 82:
-            ctx.set_source_rgb(0.75, 0, 1)
-            ctx.rectangle(15, 53, 90, 15)
-            ctx.fill()
-            ctx.stroke()
 
         ctx.set_font_size(12)
         ctx.select_font_face(font, normal, bold)
@@ -61,6 +43,12 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.show_text(s)
 
         ########## Instruments
+        if controls['instrument'] <= 41:
+            ctx.set_source_rgb(1, 0.25, 0.5)
+            ctx.rectangle(15, 23, 90, 15)
+            ctx.fill()
+            ctx.stroke()
+
         ctx.set_source_rgb(1, 1, 1)
         ctx.set_font_size(12)
         ctx.select_font_face(font, cairo.FONT_SLANT_ITALIC, cairo.FONT_WEIGHT_NORMAL)
@@ -69,6 +57,13 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.move_to(60 - (width / 2), 35)
         ctx.show_text(s)
 
+        if controls['instrument'] >= 42:
+            if controls['instrument'] <= 81:
+                ctx.set_source_rgb(0, 1, 0.7)
+                ctx.rectangle(15, 38, 90, 15)
+                ctx.fill()
+                ctx.stroke()
+
         ctx.set_source_rgb(1, 1, 1)
         ctx.set_font_size(12)
         ctx.select_font_face(font, cairo.FONT_SLANT_ITALIC, cairo.FONT_WEIGHT_NORMAL)
@@ -76,6 +71,12 @@ class MainControlsMode(definitions.PyshaMode):
         [xbearing, ybearing, width, height, dx, dy] = ctx.text_extents(s)
         ctx.move_to(60 - (width / 2), 50)
         ctx.show_text(s)
+
+        if controls['instrument'] >= 82:
+            ctx.set_source_rgb(0.75, 0, 1)
+            ctx.rectangle(15, 53, 90, 15)
+            ctx.fill()
+            ctx.stroke()
 
         ctx.set_source_rgb(1, 1, 1)
         ctx.set_font_size(12)
@@ -86,36 +87,101 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.show_text(s)
 
         ####################################################################################
-        # FILTER
+        # INSTRUMENT_FILTER
 
-        # Filter text:
-        ctx.set_source_rgb(1, 0.5, 0.1)
+        # Instrument_filter title
+        if controls['instrument'] <= 41:            # Piano
+            ctx.set_source_rgb(1, 0.25, 0.5)
+        if controls['instrument'] >= 42:            # Synth
+            if controls['instrument'] <= 81:
+                ctx.set_source_rgb(0, 1, 0.7)
+        if controls['instrument'] >= 82:            # Sampler
+            ctx.set_source_rgb(0.75, 0, 1)
         ctx.set_font_size(12)
         ctx.select_font_face(font, normal, bold)
-        s = "FILTER:"
+        s = "INSTRUMENT FILTER:"
         [xbearing, ybearing, width, height, dx, dy] = ctx.text_extents(s)
         ctx.move_to(180 - (width / 2), 15)
         ctx.show_text(s)
 
-        # Filter "canvas"
-        ctx.rectangle(120, 25, 254, 90)
-        ctx.set_source_rgb(0.1, 0.05, 0.01)
+        # Instrument_filter canvas
+        ctx.arc(180, 70, 42, 0, 2 * 3.14)
+        if controls['instrument'] <= 41:                # Piano
+            ctx.set_source_rgb(1, 0.5, 0.75)
+        if controls['instrument'] >= 42:                # Synth
+            if controls['instrument'] <= 81:
+                ctx.set_source_rgb(0.1, 1, 0.9)
+        if controls['instrument'] >= 82:                # Sampler
+            ctx.set_source_rgb(0.9, 0.1, 1)
         ctx.fill()
+        ctx.stroke()
 
-        # Filter frequency:
-        filter_frequency = (controls['filter'] * 2) + 120
-
-        ctx.move_to(filter_frequency, 25)
-        ctx.line_to(filter_frequency, 115)
-        ctx.line_to(374, 115)
-        ctx.line_to(374, 25)
+        # Instrument_filter value
+        ctx.move_to(180, 75)
+        ctx.arc(180, 70, 42, 3.14 / 2, 3.14 / 2 + 360 * (controls['master_filter'] / 127) * (3.14 / 180))
         ctx.close_path()
+        if controls['instrument'] <= 41:                # Piano
+            ctx.set_source_rgb(0.1, 0.025, 0.05)
+        if controls['instrument'] >= 42:                # Synth
+            if controls['instrument'] <= 81:
+                ctx.set_source_rgb(0, 0.1, 0.07)
+        if controls['instrument'] >= 82:                # Sampler
+            ctx.set_source_rgb(0.075, 0, 0.01)
+        ctx.fill()
+        ctx.stroke()
+
+        # Instrument_filter frame
+        ctx.arc(540, 70, 42, 0, 2 * 3.14)
+        if controls['instrument_filter'] == 127:
+            if controls['instrument'] <= 41:            # Piano
+                ctx.set_source_rgb(0.2, 0.05, 0.1)
+            if controls['instrument'] >= 42:            # Synth
+                if controls['instrument'] <= 81:
+                    ctx.set_source_rgb(0, 0.2, 0.14)
+            if controls['instrument'] >= 82:            # Sampler
+                ctx.set_source_rgb(0.15, 0, 0.02)
+        else:
+            if controls['instrument'] <= 41:            # Piano
+                ctx.set_source_rgb(1, 0.25, 0.5)
+            if controls['instrument'] >= 42:            # Synth
+                if controls['instrument'] <= 81:
+                    ctx.set_source_rgb(0, 1, 0.7)
+            if controls['instrument'] >= 82:            # Sampler
+                ctx.set_source_rgb(0.75, 0, 1)
+
+        ctx.set_line_width(5)
+        ctx.stroke()
+
+        ####################################################################################
+        # MASTER_FILTER
+
+        # Master_filter title
+        ctx.set_source_rgb(1, 1, 0)
+        ctx.set_font_size(12)
+        ctx.select_font_face(font, normal, bold)
+        s = "MASTER FILTER:"
+        [xbearing, ybearing, width, height, dx, dy] = ctx.text_extents(s)
+        ctx.move_to(540 - (width / 2), 15)
+        ctx.show_text(s)
+        ctx.stroke()
+
+        # Master_filter canvas
+        ctx.arc(540, 70, 42, 0, 2 * 3.14)
         ctx.set_source_rgb(1, 0.5, 0.1)
         ctx.fill()
+        ctx.stroke()
 
-        # Filter "frame":
-        ctx.rectangle(120, 25, 254, 90)
-        if controls['filter'] == 127:
+        # Master_filter value
+        ctx.move_to(540, 75)
+        ctx.arc(540, 70, 42, 3.14 / 2, 3.14 / 2 + 360 * (controls['master_filter'] / 127) * (3.14 / 180))
+        ctx.close_path()
+        ctx.set_source_rgb(0.1, 0.05, 0.01)
+        ctx.fill()
+        ctx.stroke()
+
+        # Master_filter frame
+        ctx.arc(540, 70, 42, 0, 2 * 3.14)
+        if controls['master_filter'] == 127:
             ctx.set_source_rgb(0.2, 0.1, 0.02)
         else:
             ctx.set_source_rgb(1, 0.5, 0.1)
@@ -125,7 +191,7 @@ class MainControlsMode(definitions.PyshaMode):
         ####################################################################################
         # SMILE
 
-        # Smile Text
+        # Smile title
         ctx.set_source_rgb(1, 1, 0)
         ctx.set_font_size(12)
         ctx.select_font_face(font, normal, bold)
@@ -230,7 +296,7 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.stroke()
 
         ####################################################################################
-        # FLAGGA 1
+        # CUE 1
         ctx.move_to(50, 135)
         ctx.curve_to(60, 130, 60, 140, 70, 135)
         ctx.line_to(70, 145)
@@ -239,7 +305,7 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.move_to(50, 135)
         ctx.line_to(50, 155)
 
-        # FLAGGA 2
+        # CUE 2
         ctx.move_to(170, 135)
         ctx.curve_to(180, 130, 180, 140, 190, 135)
         ctx.line_to(190, 145)
@@ -251,7 +317,7 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.set_line_width(2.5)
         ctx.stroke()
 
-        # COCKTAIL 1
+        # BAR 1
         ctx.move_to(300, 145)
         ctx.line_to(300, 155)
 
@@ -263,7 +329,7 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.move_to(295, 155)
         ctx.line_to(305, 155)
 
-        # COCKTAIL 2
+        # BAR 2
         ctx.move_to(420, 145)
         ctx.line_to(420, 155)
 
@@ -279,7 +345,7 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.set_line_width(2.5)
         ctx.stroke()
 
-        # HJÄRTA 1
+        # BEAT 1
         ctx.move_to(540, 140)
         ctx.curve_to(540, 130, 555, 130, 550, 142)
         ctx.curve_to(550, 143, 542, 152, 540, 155)
@@ -288,7 +354,7 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.curve_to(540, 130, 525, 130, 530, 142)
         ctx.curve_to(530, 143, 538, 152, 540, 155)
 
-        # HJÄRTA 2
+        # BEAT 2
         ctx.move_to(660, 140)
         ctx.curve_to(660, 130, 675, 130, 670, 142)
         ctx.curve_to(670, 143, 662, 152, 660, 155)
@@ -347,13 +413,16 @@ class MainControlsMode(definitions.PyshaMode):
         # End of drawing code
 
     def update_buttons(self):
+
+        # Color all buttons...
+
         self.push.buttons.set_button_color(push2_python.constants.BUTTON_SETUP, definitions.OFF_BTN_COLOR)
 
         self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_1, definitions.ROOT_KEY)
-        self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_2, definitions.ORANGE)
+        self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_2, definitions.ROOT_KEY)
         self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_3, definitions.BLACK)
         self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_4, definitions.BLACK)
-        self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_5, definitions.BLACK)
+        self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_5, definitions.ORANGE)
         self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_6, definitions.YELLOW)
         self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_7, definitions.CYAN)
         self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_8, definitions.RED)
@@ -388,10 +457,7 @@ class MainControlsMode(definitions.PyshaMode):
                     controls['instrument'] = max_encoder_value
                 else:
                     controls['instrument'] = updated_value
-
             update_encoder_value(increment)
-            # msg = mido.Message('control_change', control=21, value=controls['instrument'])
-            # self.send_midi_func(msg)
 
             if controls['instrument'] <= 41:
                 definitions.ROOT_KEY = definitions.PINK
@@ -467,88 +533,73 @@ class MainControlsMode(definitions.PyshaMode):
             self.app.toggle_and_rotate_settings_mode()
             self.app.buttons_need_update = True
 
-# PRESSED button 2
+# PRESSED UPP button 2
         if button_name == push2_python.constants.BUTTON_UPPER_ROW_2:
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_2, definitions.BLACK)
 
-# PRESSED button 6
+# PRESSED UPP button 6
         if button_name == push2_python.constants.BUTTON_UPPER_ROW_6:
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_6, definitions.BLACK)
 
-# PRESSED button 7
+# PRESSED UPP button 7
         if button_name == push2_python.constants.BUTTON_UPPER_ROW_7:
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_7, definitions.BLACK)
 
-# PRESSED button 8
+# PRESSED UPP button 8
         if button_name == push2_python.constants.BUTTON_UPPER_ROW_8:
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_8, definitions.BLACK)
 
 # PRESSED LOW button 1
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_1:
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_LOWER_ROW_1, definitions.BLACK)
-            # msg = mido.Message('control_change', control=101, value=127)
-            # self.app.send_midi(msg)
 
 # PRESSED LOW button 2
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_2:
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_LOWER_ROW_2, definitions.BLACK)
-            # msg = mido.Message('control_change', control=102, value=127)
-            # self.app.send_midi(msg)
 
 # PRESSED LOW button 3
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_3:
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_LOWER_ROW_3, definitions.BLACK)
-            # msg = mido.Message('control_change', control=103, value=127)
-            # self.app.send_midi(msg)
 
 # PRESSED LOW button 4
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_4:
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_LOWER_ROW_4, definitions.BLACK)
-            # msg = mido.Message('control_change', control=104, value=127)
-            # self.app.send_midi(msg)
 
 # PRESSED LOW button 5
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_5:
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_LOWER_ROW_5, definitions.BLACK)
-            # msg = mido.Message('control_change', control=105, value=127)
-            # self.app.send_midi(msg)
 
 # PRESSED LOW button 6
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_6:
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_LOWER_ROW_6, definitions.BLACK)
-            # msg = mido.Message('control_change', control=106, value=127)
-            # self.app.send_midi(msg)
 
 # PRESSED LOW button 7
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_7:
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_LOWER_ROW_7, definitions.BLACK)
-            # msg = mido.Message('control_change', control=107, value=127)
-            # self.app.send_midi(msg)
 
 # PRESSED LOW button 8
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_8:
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_LOWER_ROW_8, definitions.BLACK)
-            # msg = mido.Message('control_change', control=108, value=127)
-            # self.app.send_midi(msg)
 
 # PRESSED button play
         if button_name == push2_python.constants.BUTTON_PLAY:
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_PLAY, definitions.BLACK)
-            # msg = mido.Message('control_change', control=109, value=127)
-            # self.app.send_midi(msg)
 
 # PRESSED button record
         if button_name == push2_python.constants.BUTTON_RECORD:
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_RECORD, definitions.BLACK)
-            # msg = mido.Message('control_change', control=100, value=127)
-            # self.app.send_midi(msg)
 
     def on_button_released(self, button_name):
 
 # RELEASED UPP button 2
         if button_name == push2_python.constants.BUTTON_UPPER_ROW_2:
-            self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_2, definitions.ORANGE)
-            controls['filter'] = 127
+            self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_2, definitions.ROOT_KEY)
+            controls['instrument_filter'] = 127
+
+# RELEASED UPP button 5
+        if button_name == push2_python.constants.BUTTON_UPPER_ROW_6:
+            self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_6, definitions.YELLOW)
+            controls['master_filter'] = 127
 
 # RELEASED UPP button 6
         if button_name == push2_python.constants.BUTTON_UPPER_ROW_6:
@@ -567,60 +618,40 @@ class MainControlsMode(definitions.PyshaMode):
 
 # RELEASED LOW button 1
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_1:
-            # msg = mido.Message('control_change', control=101, value=0)
-            # self.app.send_midi(msg)
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_LOWER_ROW_1, definitions.WHITE)
 
 # RELEASED LOW button 2
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_2:
-            # msg = mido.Message('control_change', control=102, value=0)
-            # self.app.send_midi(msg)
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_LOWER_ROW_2, definitions.WHITE)
 
 # RELEASED LOW button 3
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_3:
-            # msg = mido.Message('control_change', control=103, value=0)
-            # self.app.send_midi(msg)
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_LOWER_ROW_3, definitions.YELLOW)
 
 # RELEASED LOW button 4
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_4:
-            # msg = mido.Message('control_change', control=104, value=0)
-            # self.app.send_midi(msg)
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_LOWER_ROW_4, definitions.YELLOW)
 
 # RELEASED LOW button 5
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_5:
-            # msg = mido.Message('control_change', control=105, value=0)
-            # self.app.send_midi(msg)
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_LOWER_ROW_5, definitions.ORANGE)
 
 # RELEASED LOW button 6
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_6:
-            # msg = mido.Message('control_change', control=106, value=0)
-            # self.app.send_midi(msg)
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_LOWER_ROW_6, definitions.ORANGE)
 
 # RELEASED LOW button 7
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_7:
-            # msg = mido.Message('control_change', control=107, value=0)
-            # self.app.send_midi(msg)
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_LOWER_ROW_7, definitions.PINK)
 
 # RELEASED LOW button 8
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_8:
-            # msg = mido.Message('control_change', control=108, value=0)
-            # self.app.send_midi(msg)
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_LOWER_ROW_8, definitions.PINK)
 
 # RELEASED button play
         if button_name == push2_python.constants.BUTTON_PLAY:
-            # msg = mido.Message('control_change', control=109, value=0)
-            # self.app.send_midi(msg)
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_PLAY, definitions.PINK)
 
 # RELEASED button record
         if button_name == push2_python.constants.BUTTON_RECORD:
-            # msg = mido.Message('control_change', control=100, value=0)
-            # self.app.send_midi(msg)
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_RECORD, definitions.YELLOW)

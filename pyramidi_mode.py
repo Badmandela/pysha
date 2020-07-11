@@ -39,7 +39,7 @@ class MIDICCControl(object):
         if self.name == '1': # INSTRUMENT
             self.value = 0
 
-        if self.name == '2': # FILTER
+        if self.name == '2': # INSTRUMENT FILTER
             self.value = 127
 
             # @push2_python.on_button_released(push2_python.constants.BUTTON_UPPER_ROW_2)
@@ -51,7 +51,7 @@ class MIDICCControl(object):
         if self.name == '4':
             self.value = 0
 
-        if self.name == '5':
+        if self.name == '5': # MASTER FILTER
             self.value = 0
 
         if self.name == '6': # SMILE
@@ -134,8 +134,6 @@ class PyramidiMode(PyshaMode):
 # Color is managed in the "main_controls_mode"
 #
 #
-#
-
 ########################## UPPER ROW PRESSED ###
 # PRESSED UPP button 1
         # if button_name == push2_python.constants.BUTTON_UPPER_ROW_1:
@@ -160,91 +158,74 @@ class PyramidiMode(PyshaMode):
 
 # PRESSED UPP button 2
 #         if button_name == push2_python.constants.BUTTON_UPPER_ROW_2:
-#             self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_2, definitions.WHITE)
 
 # PRESSED UPP button 3
 #         if button_name == push2_python.constants.BUTTON_UPPER_ROW_3:
-#             self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_3, definitions.WHITE)
 
 # PRESSED UPP button 4
 #         if button_name == push2_python.constants.BUTTON_UPPER_ROW_4:
-#             self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_4, definitions.WHITE)
 
 # PRESSED UPP button 5
 #         if button_name == push2_python.constants.BUTTON_UPPER_ROW_5:
-#             self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_5, definitions.WHITE)
 
 # PRESSED UPP button 6
 #         if button_name == push2_python.constants.BUTTON_UPPER_ROW_6:
-#             self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_6, definitions.WHITE)
 
 # PRESSED UPP button 7
 #         if button_name == push2_python.constants.BUTTON_UPPER_ROW_7:
-#             self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_7, definitions.WHITE)
 
 # PRESSED UPP button 8
 #         if button_name == push2_python.constants.BUTTON_UPPER_ROW_8:
-#             self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_8, definitions.WHITE)
 
 
 ########################## LOWER ROW PRESSED ###
 # PRESSED LOW button 1
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_1:
-            # self.push.buttons.set_button_color(push2_python.constants.BUTTON_LOWER_ROW_1, definitions.WHITE)
             msg = mido.Message('control_change', control=101, value=127)
             self.app.send_midi(msg)
 
 # PRESSED LOW button 2
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_2:
-            # self.push.buttons.set_button_color(push2_python.constants.BUTTON_LOWER_ROW_2, definitions.WHITE)
             msg = mido.Message('control_change', control=102, value=127)
             self.app.send_midi(msg)
 
 # PRESSED LOW button 3
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_3:
-            # self.push.buttons.set_button_color(push2_python.constants.BUTTON_LOWER_ROW_3, definitions.WHITE)
             msg = mido.Message('control_change', control=103, value=127)
             self.app.send_midi(msg)
 
 # PRESSED LOW button 4
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_4:
-            # self.push.buttons.set_button_color(push2_python.constants.BUTTON_LOWER_ROW_4, definitions.WHITE)
             msg = mido.Message('control_change', control=104, value=127)
             self.app.send_midi(msg)
 
 # PRESSED LOW button 5
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_5:
-            # self.push.buttons.set_button_color(push2_python.constants.BUTTON_LOWER_ROW_5, definitions.WHITE)
             msg = mido.Message('control_change', control=105, value=127)
             self.app.send_midi(msg)
 
 # PRESSED LOW button 6
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_6:
-            # self.push.buttons.set_button_color(push2_python.constants.BUTTON_LOWER_ROW_6, definitions.WHITE)
             msg = mido.Message('control_change', control=106, value=127)
             self.app.send_midi(msg)
 
 # PRESSED LOW button 7
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_7:
-            # self.push.buttons.set_button_color(push2_python.constants.BUTTON_LOWER_ROW_7, definitions.WHITE)
             msg = mido.Message('control_change', control=107, value=127)
             self.app.send_midi(msg)
 
 # PRESSED LOW button 8
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_8:
-            # self.push.buttons.set_button_color(push2_python.constants.BUTTON_LOWER_ROW_8, definitions.WHITE)
             msg = mido.Message('control_change', control=108, value=127)
             self.app.send_midi(msg)
 
 # PRESSED button play
         if button_name == push2_python.constants.BUTTON_PLAY:
-            # self.push.buttons.set_button_color(push2_python.constants.BUTTON_PLAY, definitions.WHITE)
             msg = mido.Message('control_change', control=109, value=127)
             self.app.send_midi(msg)
 
 # PRESSED button record
         if button_name == push2_python.constants.BUTTON_RECORD:
-            # self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_1, definitions.WHITE)
             msg = mido.Message('control_change', control=100, value=127)
             self.app.send_midi(msg)
 
@@ -254,41 +235,35 @@ class PyramidiMode(PyshaMode):
 ########################## UPPER ROW RELEASED ###
 # RELEASED UPP button 1
 #         if button_name == push2_python.constants.BUTTON_UPPER_ROW_1:
-#             self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_1, definitions.ROOT_KEY)
 
 # RELEASED UPP button 2
         if button_name == push2_python.constants.BUTTON_UPPER_ROW_2:
-            # self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_2, definitions.ORANGE)
             msg = mido.Message('control_change', control=22, value=127)
             self.app.send_midi(msg)
 
 # RELEASED UPP button 3
 #         if button_name == push2_python.constants.BUTTON_UPPER_ROW_3:
-#             self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_3, definitions.BLACK)
 
 # RELEASED UPP button 4
 #         if button_name == push2_python.constants.BUTTON_UPPER_ROW_4:
-#             self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_4, definitions.PURPLE)
 
-# RELEASED UPP button 5
-#         if button_name == push2_python.constants.BUTTON_UPPER_ROW_5:
-#             self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_5, definitions.YELLOW)
+RELEASED UPP button 5
+        if button_name == push2_python.constants.BUTTON_UPPER_ROW_5:
+            msg = mido.Message('control_change', control=25, value=127)
+            self.app.send_midi(msg)
 
 # RELEASED UPP button 6
         if button_name == push2_python.constants.BUTTON_UPPER_ROW_6:
-            # self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_6, definitions.SURF)
             msg = mido.Message('control_change', control=26, value=127)
             self.app.send_midi(msg)
 
 # RELEASED UPP button 7
         if button_name == push2_python.constants.BUTTON_UPPER_ROW_7:
-            # self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_7, definitions.CYAN)
             msg = mido.Message('control_change', control=27, value=0)
             self.app.send_midi(msg)
 
 # RELEASED UPP button 8
         if button_name == push2_python.constants.BUTTON_UPPER_ROW_8:
-            # self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_8, definitions.RED)
             msg = mido.Message('control_change', control=28, value=127)
             self.app.send_midi(msg)
 
@@ -298,61 +273,51 @@ class PyramidiMode(PyshaMode):
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_1:
             msg = mido.Message('control_change', control=101, value=0)
             self.app.send_midi(msg)
-            # self.push.buttons.set_button_color(push2_python.constants.BUTTON_LOWER_ROW_1, definitions.WHITE)
 
 # RELEASED LOW button 2
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_2:
             msg = mido.Message('control_change', control=102, value=0)
             self.app.send_midi(msg)
-            # self.push.buttons.set_button_color(push2_python.constants.BUTTON_LOWER_ROW_2, definitions.WHITE)
 
 # RELEASED LOW button 3
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_3:
             msg = mido.Message('control_change', control=103, value=0)
             self.app.send_midi(msg)
-            # self.push.buttons.set_button_color(push2_python.constants.BUTTON_LOWER_ROW_3, definitions.YELLOW)
 
 # RELEASED LOW button 4
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_4:
             msg = mido.Message('control_change', control=104, value=0)
             self.app.send_midi(msg)
-            # self.push.buttons.set_button_color(push2_python.constants.BUTTON_LOWER_ROW_4, definitions.YELLOW)
 
 # RELEASED LOW button 5
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_5:
             msg = mido.Message('control_change', control=105, value=0)
             self.app.send_midi(msg)
-            # self.push.buttons.set_button_color(push2_python.constants.BUTTON_LOWER_ROW_5, definitions.ORANGE)
 
 # RELEASED LOW button 6
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_6:
             msg = mido.Message('control_change', control=106, value=0)
             self.app.send_midi(msg)
-            # self.push.buttons.set_button_color(push2_python.constants.BUTTON_LOWER_ROW_6, definitions.ORANGE)
 
 # RELEASED LOW button 7
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_7:
             msg = mido.Message('control_change', control=107, value=0)
             self.app.send_midi(msg)
-            # self.push.buttons.set_button_color(push2_python.constants.BUTTON_LOWER_ROW_7, definitions.PINK)
 
 # RELEASED LOW button 8
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_8:
             msg = mido.Message('control_change', control=108, value=0)
             self.app.send_midi(msg)
-            # self.push.buttons.set_button_color(push2_python.constants.BUTTON_LOWER_ROW_8, definitions.PINK)
 
 # RELEASED button play
         if button_name == push2_python.constants.BUTTON_PLAY:
             msg = mido.Message('control_change', control=109, value=0)
             self.app.send_midi(msg)
-            # self.push.buttons.set_button_color(push2_python.constants.BUTTON_PLAY, definitions.PINK)
 
 # RELEASED button record
         if button_name == push2_python.constants.BUTTON_RECORD:
             msg = mido.Message('control_change', control=100, value=0)
             self.app.send_midi(msg)
-            # self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_1, definitions.YELLOW)
 
     def on_encoder_rotated(self, encoder_name, increment):
         if encoder_name == push2_python.constants.ENCODER_TEMPO_ENCODER:

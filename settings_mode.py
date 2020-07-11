@@ -1,12 +1,11 @@
-import definitions
-import push2_python.constants
-import time
 import os
 import sys
-import psutil
-import threading
-import subprocess
+import time
 
+import psutil
+import push2_python.constants
+
+import definitions
 from display_utils import show_title, show_value, draw_text_at
 
 
