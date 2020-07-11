@@ -33,7 +33,7 @@ class MainControlsMode(definitions.PyshaMode):
         italic = cairo.FONT_SLANT_ITALIC
 
         ####################################################################################
-        # INSTRUMENT
+        # INSTRUMENT_SELECTION
 
         ctx.set_font_size(12)
         ctx.select_font_face(font, normal, bold)
@@ -43,9 +43,9 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.show_text(s)
 
         ########## Instruments
-        if controls['instrument'] <= 41:
+        if controls['instrument'] <= 41:            # Piano
             ctx.set_source_rgb(1, 0.25, 0.5)
-            ctx.rectangle(15, 23, 90, 15)
+            ctx.rectangle(15, 23 + (30 * (controls['instrument'] / 127)), 90, 15)
             ctx.fill()
             ctx.stroke()
 
@@ -57,10 +57,11 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.move_to(60 - (width / 2), 35)
         ctx.show_text(s)
 
-        if controls['instrument'] >= 42:
+        if controls['instrument'] >= 42:            # Synth
             if controls['instrument'] <= 81:
                 ctx.set_source_rgb(0, 1, 0.7)
-                ctx.rectangle(15, 38, 90, 15)
+                # ctx.rectangle(15, 38, 90, 15)
+                ctx.rectangle(15, 23 + (30 * (controls['instrument'] / 127)), 90, 15)
                 ctx.fill()
                 ctx.stroke()
 
@@ -72,9 +73,10 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.move_to(60 - (width / 2), 50)
         ctx.show_text(s)
 
-        if controls['instrument'] >= 82:
+        if controls['instrument'] >= 82:            # Sampler
             ctx.set_source_rgb(0.75, 0, 1)
-            ctx.rectangle(15, 53, 90, 15)
+            # ctx.rectangle(15, 53, 90, 15)
+            ctx.rectangle(15, 23 + (30 * (controls['instrument'] / 127)), 90, 15)
             ctx.fill()
             ctx.stroke()
 
@@ -178,6 +180,11 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.set_source_rgb(0.1, 0.05, 0.01)
         ctx.fill()
         ctx.stroke()
+
+        # ctx.move_to(540,75)
+        # ctx.line_to()
+        # ctx.set_line_width(5)
+        # ctx.stroke()
 
         # Master_filter frame
         ctx.arc(540, 70, 42, 0, 2 * 3.14)
