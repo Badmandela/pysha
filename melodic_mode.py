@@ -157,7 +157,7 @@ class MelodicMode(definitions.PyshaMode):
     def update_accent_button(self):
         # Accent button has its own method so it can be reused in the rhythmic mode which inherits from melodic mode
         if self.fixed_velocity_mode:
-            self.push.buttons.set_button_color(push2_python.constants.BUTTON_ACCENT, definitions.WHITE, animation='pulsing')
+            self.push.buttons.set_button_color(push2_python.constants.BUTTON_ACCENT, definitions.WHITE)
         else:
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_ACCENT, definitions.OFF_BTN_COLOR)
 

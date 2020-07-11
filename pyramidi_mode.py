@@ -247,7 +247,7 @@ class PyramidiMode(PyshaMode):
 # RELEASED UPP button 4
 #         if button_name == push2_python.constants.BUTTON_UPPER_ROW_4:
 
-RELEASED UPP button 5
+# RELEASED UPP button 5
         if button_name == push2_python.constants.BUTTON_UPPER_ROW_5:
             msg = mido.Message('control_change', control=25, value=127)
             self.app.send_midi(msg)

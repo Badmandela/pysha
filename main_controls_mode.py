@@ -40,12 +40,16 @@ class MainControlsMode(definitions.PyshaMode):
         s = "INSTRUMENT:"
         [xbearing, ybearing, width, height, dx, dy] = ctx.text_extents(s)
         ctx.move_to(60 - (width / 2), 15)
+        if controls['instrument'] <= 41: ctx.set_source_rgb(1, 0.25, 0.5)   # Piano
+        if controls['instrument'] >= 42:
+            if controls['instrument'] <= 81: ctx.set_source_rgb(0, 1, 0.7)  # Synth
+        if controls['instrument'] >= 82: ctx.set_source_rgb(0.75, 0, 1)     # Sampler
+
         ctx.show_text(s)
 
         ########## Instruments
         if controls['instrument'] <= 41:            # Piano
             ctx.set_source_rgb(1, 0.25, 0.5)
-            # ctx.rectangle(15, 23, 90, 15)
             ctx.rectangle(15, 23 + (30 * (controls['instrument'] / 127)), 90, 15)
             ctx.fill()
             ctx.stroke()
@@ -102,7 +106,7 @@ class MainControlsMode(definitions.PyshaMode):
             ctx.set_source_rgb(0.75, 0, 1)
         ctx.set_font_size(12)
         ctx.select_font_face(font, normal, bold)
-        s = "INSTRUMENT FILTER:"
+        s = "INSTR. FILTER:"
         [xbearing, ybearing, width, height, dx, dy] = ctx.text_extents(s)
         ctx.move_to(180 - (width / 2), 15)
         ctx.show_text(s)
@@ -111,30 +115,36 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.arc(180, 70, 42, 0, 2 * 3.14)
         if controls['instrument'] <= 41:                # Piano
             ctx.set_source_rgb(1, 0.5, 0.75)
+            if controls['instrument_filter'] == 127:
+                ctx.set_source_rgb(0.1, 0.025, 0.05)
         if controls['instrument'] >= 42:                # Synth
             if controls['instrument'] <= 81:
-                ctx.set_source_rgb(0.1, 1, 0.9)
+                ctx.set_source_rgb(0.5, 1, 0.95)
+                if controls['instrument_filter'] == 127:
+                    ctx.set_source_rgb(0, 0.1, 0.07)
         if controls['instrument'] >= 82:                # Sampler
-            ctx.set_source_rgb(0.9, 0.1, 1)
+            ctx.set_source_rgb(0.9, 0.25, 1)
+            if controls['instrument_filter'] == 127:
+                ctx.set_source_rgb(0.075, 0, 0.075)
         ctx.fill()
         ctx.stroke()
 
         # Instrument_filter value
         ctx.move_to(180, 75)
-        ctx.arc(180, 70, 42, 3.14 / 2, 3.14 / 2 + 360 * (controls['master_filter'] / 127) * (3.14 / 180))
+        ctx.arc(180, 70, 42, 3.14 / 2, 3.14 / 2 + 360 * (controls['instrument_filter'] / 127) * (3.14 / 180))
         ctx.close_path()
         if controls['instrument'] <= 41:                # Piano
             ctx.set_source_rgb(0.1, 0.025, 0.05)
         if controls['instrument'] >= 42:                # Synth
             if controls['instrument'] <= 81:
-                ctx.set_source_rgb(0, 0.1, 0.07)
+                ctx.set_source_rgb(0, 0.05, 0.014)
         if controls['instrument'] >= 82:                # Sampler
-            ctx.set_source_rgb(0.075, 0, 0.01)
+            ctx.set_source_rgb(0.075, 0, 0.075)
         ctx.fill()
         ctx.stroke()
 
         # Instrument_filter frame
-        ctx.arc(540, 70, 42, 0, 2 * 3.14)
+        ctx.arc(180, 70, 42, 0, 2 * 3.14)
         if controls['instrument_filter'] == 127:
             if controls['instrument'] <= 41:            # Piano
                 ctx.set_source_rgb(0.2, 0.05, 0.1)
@@ -142,13 +152,13 @@ class MainControlsMode(definitions.PyshaMode):
                 if controls['instrument'] <= 81:
                     ctx.set_source_rgb(0, 0.2, 0.14)
             if controls['instrument'] >= 82:            # Sampler
-                ctx.set_source_rgb(0.15, 0, 0.02)
+                ctx.set_source_rgb(0.15, 0, 0.15)
         else:
             if controls['instrument'] <= 41:            # Piano
                 ctx.set_source_rgb(1, 0.25, 0.5)
             if controls['instrument'] >= 42:            # Synth
                 if controls['instrument'] <= 81:
-                    ctx.set_source_rgb(0, 1, 0.7)
+                    ctx.set_source_rgb(0.05, 0.9, 0.7)
             if controls['instrument'] >= 82:            # Sampler
                 ctx.set_source_rgb(0.75, 0, 1)
 
@@ -159,7 +169,7 @@ class MainControlsMode(definitions.PyshaMode):
         # MASTER_FILTER
 
         # Master_filter title
-        ctx.set_source_rgb(1, 1, 0)
+        ctx.set_source_rgb(1, 0.5, 0.1)
         ctx.set_font_size(12)
         ctx.select_font_face(font, normal, bold)
         s = "MASTER FILTER:"
@@ -170,7 +180,9 @@ class MainControlsMode(definitions.PyshaMode):
 
         # Master_filter canvas
         ctx.arc(540, 70, 42, 0, 2 * 3.14)
-        ctx.set_source_rgb(1, 0.5, 0.1)
+        ctx.set_source_rgb(1, 0.75, 0.3)
+        if controls['master_filter'] == 127:
+            ctx.set_source_rgb(0.1, 0.05, 0.01)
         ctx.fill()
         ctx.stroke()
 
@@ -212,6 +224,8 @@ class MainControlsMode(definitions.PyshaMode):
         # Smile canvas
         ctx.arc(660, 70, 42, 0, 2 * 3.14)
         ctx.set_source_rgb(0.1, 0.1, 0)
+        if controls['smile'] == 127:
+            ctx.set_source_rgb(1, 1, 0.5)
         ctx.fill()
         ctx.stroke()
 
@@ -248,6 +262,8 @@ class MainControlsMode(definitions.PyshaMode):
         # Reverb canvas
         ctx.arc(780, 70, 42, 0, 2 * 3.14)
         ctx.set_source_rgb(0, 0.1, 0.1)
+        if controls['reverb'] == 127:
+            ctx.set_source_rgb(0.5, 1, 1)
         ctx.fill()
         ctx.stroke()
 
@@ -283,6 +299,8 @@ class MainControlsMode(definitions.PyshaMode):
         # Tape canvas
         ctx.arc(900, 70, 42, 0, 2 * 3.14)
         ctx.set_source_rgb(1, 0.5, 0.5)
+        if controls['tape'] == 127:
+            ctx.set_source_rgb(0.2, 0, 0)
         ctx.fill()
         ctx.stroke()
 
@@ -503,10 +521,19 @@ class MainControlsMode(definitions.PyshaMode):
 # encoder 2
         if encoder_name == push2_python.constants.ENCODER_TRACK2_ENCODER:
             def update_encoder_value(increment):
-                updated_filter_value = int(controls['filter'] + increment)
-                if updated_filter_value < 0: controls['filter'] = 0
-                elif updated_filter_value > max_encoder_value: controls['filter'] = max_encoder_value
-                else: controls['filter'] = updated_filter_value
+                updated_filter_value = int(controls['instrument_filter'] + increment)
+                if updated_filter_value < 0: controls['instrument_filter'] = 0
+                elif updated_filter_value > max_encoder_value: controls['instrument_filter'] = max_encoder_value
+                else: controls['instrument_filter'] = updated_filter_value
+            update_encoder_value(increment)
+
+# encoder 5
+        if encoder_name == push2_python.constants.ENCODER_TRACK5_ENCODER:
+            def update_encoder_value(increment):
+                updated_filter_value = int(controls['master_filter'] + increment)
+                if updated_filter_value < 0: controls['master_filter'] = 0
+                elif updated_filter_value > max_encoder_value: controls['master_filter'] = max_encoder_value
+                else: controls['master_filter'] = updated_filter_value
             update_encoder_value(increment)
 
 # encoder 6
@@ -544,6 +571,10 @@ class MainControlsMode(definitions.PyshaMode):
 # PRESSED UPP button 2
         if button_name == push2_python.constants.BUTTON_UPPER_ROW_2:
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_2, definitions.BLACK)
+
+# PRESSED UPP button 5
+        if button_name == push2_python.constants.BUTTON_UPPER_ROW_5:
+            self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_5, definitions.BLACK)
 
 # PRESSED UPP button 6
         if button_name == push2_python.constants.BUTTON_UPPER_ROW_6:
@@ -605,8 +636,8 @@ class MainControlsMode(definitions.PyshaMode):
             controls['instrument_filter'] = 127
 
 # RELEASED UPP button 5
-        if button_name == push2_python.constants.BUTTON_UPPER_ROW_6:
-            self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_6, definitions.YELLOW)
+        if button_name == push2_python.constants.BUTTON_UPPER_ROW_5:
+            self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_5, definitions.ORANGE)
             controls['master_filter'] = 127
 
 # RELEASED UPP button 6
