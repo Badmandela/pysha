@@ -95,60 +95,52 @@ class MainControlsMode(definitions.PyshaMode):
 
         ctx.set_font_size(12)
         ctx.select_font_face(font, normal, bold)
-        s = "INSTR. FILTER:"
+        s = "INSTRUMENT LPF:"
         [xbearing, ybearing, width, height, dx, dy] = ctx.text_extents(s)
         ctx.move_to(180 - (width / 2), 15)
         ctx.show_text(s)
 
-        # Instrument_filter canvas
+        # Instrument_filter value (canvas - inverted)
         ctx.arc(180, 70, 42, 0, 2 * 3.14)
-        if controls['instrument'] <= 41:                # Piano
+        # Piano
+        if controls['instrument'] <= 41:
             ctx.set_source_rgb(1, 0.5, 0.75)
             if controls['instrument_filter'] == 127:
                 ctx.set_source_rgb(0.1, 0.025, 0.05)
-        if controls['instrument'] >= 42:                # Synth
-            if controls['instrument'] <= 81:
+        # Synth
+        if controls['instrument'] >= 42 and controls['instrument'] <= 81:
                 ctx.set_source_rgb(0.5, 1, 0.95)
                 if controls['instrument_filter'] == 127:
                     ctx.set_source_rgb(0, 0.1, 0.07)
-        if controls['instrument'] >= 82:                # Sampler
+        # Sampler
+        if controls['instrument'] >= 82:
             ctx.set_source_rgb(0.9, 0.25, 1)
             if controls['instrument_filter'] == 127:
                 ctx.set_source_rgb(0.075, 0, 0.075)
         ctx.fill()
         ctx.stroke()
 
-        # Instrument_filter value
+        # Instrument_filter canvas (value - inverted)
         ctx.move_to(180, 75)
         ctx.arc(180, 70, 42, 3.14 / 2, 3.14 / 2 + 360 * (controls['instrument_filter'] / 127) * (3.14 / 180))
         ctx.close_path()
-        if controls['instrument'] <= 41:                # Piano
-            ctx.set_source_rgb(0.1, 0.025, 0.05)
-        if controls['instrument'] >= 42:                # Synth
-            if controls['instrument'] <= 81:
-                ctx.set_source_rgb(0, 0.05, 0.014)
-        if controls['instrument'] >= 82:                # Sampler
-            ctx.set_source_rgb(0.075, 0, 0.075)
+        ctx.set_source_rgb(0.02, 0.02, 0.02)
         ctx.fill()
         ctx.stroke()
 
         # Instrument_filter frame
         ctx.arc(180, 70, 42, 0, 2 * 3.14)
         if controls['instrument_filter'] == 127:
-            if controls['instrument'] <= 41:            # Piano
-                ctx.set_source_rgb(0.2, 0.05, 0.1)
-            if controls['instrument'] >= 42:            # Synth
-                if controls['instrument'] <= 81:
-                    ctx.set_source_rgb(0, 0.2, 0.14)
-            if controls['instrument'] >= 82:            # Sampler
-                ctx.set_source_rgb(0.15, 0, 0.15)
+            ctx.set_source_rgb(0.032, 0.032, 0.032)
         else:
-            if controls['instrument'] <= 41:            # Piano
+            # Piano
+            if controls['instrument'] <= 41:
                 ctx.set_source_rgb(1, 0.25, 0.5)
-            if controls['instrument'] >= 42:            # Synth
-                if controls['instrument'] <= 81:
+            # Synth
+            if controls['instrument'] >= 42 and controls['instrument'] <= 81:
                     ctx.set_source_rgb(0.05, 0.9, 0.7)
-            if controls['instrument'] >= 82:            # Sampler
+            # Sampler
+            if controls['instrument'] >= 82:
                 ctx.set_source_rgb(0.75, 0, 1)
 
         ctx.set_line_width(5)
@@ -161,13 +153,13 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.set_source_rgb(1, 0.5, 0.1)
         ctx.set_font_size(12)
         ctx.select_font_face(font, normal, bold)
-        s = "MASTER FILTER:"
+        s = "MASTER LPF:"
         [xbearing, ybearing, width, height, dx, dy] = ctx.text_extents(s)
-        ctx.move_to(540 - (width / 2), 15)
+        ctx.move_to(420 - (width / 2), 15)
         ctx.show_text(s)
         ctx.stroke()
 
-        # Master_filter canvas
+        # Master_filter value (canvas - inverted)
         ctx.arc(420, 70, 42, 0, 2 * 3.14)
         ctx.set_source_rgb(1, 0.75, 0.3)
         if controls['master_filter'] == 127:
@@ -175,23 +167,18 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.fill()
         ctx.stroke()
 
-        # Master_filter value
+        # Master_filter canvas (value - inverted)
         ctx.move_to(420, 75)
         ctx.arc(420, 70, 42, 3.14 / 2, 3.14 / 2 + 360 * (controls['master_filter'] / 127) * (3.14 / 180))
         ctx.close_path()
-        ctx.set_source_rgb(0.1, 0.05, 0.01)
+        ctx.set_source_rgb(0.02, 0.02, 0.02)
         ctx.fill()
         ctx.stroke()
-
-        # ctx.move_to(540,75)
-        # ctx.line_to()
-        # ctx.set_line_width(5)
-        # ctx.stroke()
 
         # Master_filter frame
         ctx.arc(420, 70, 42, 0, 2 * 3.14)
         if controls['master_filter'] == 127:
-            ctx.set_source_rgb(0.2, 0.1, 0.02)
+            ctx.set_source_rgb(0.032, 0.032, 0.032)
         else:
             ctx.set_source_rgb(1, 0.5, 0.1)
         ctx.set_line_width(5)
@@ -201,7 +188,7 @@ class MainControlsMode(definitions.PyshaMode):
         # FX MIX
 
         # FX mix title
-        ctx.set_source_rgb(1, 0.5, 0.1)
+        ctx.set_source_rgb(0.75, 0, 1)
         ctx.set_font_size(12)
         ctx.select_font_face(font, normal, bold)
         s = "FX MIX:"
@@ -210,28 +197,28 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.show_text(s)
         ctx.stroke()
 
-        # FX canvas
+        # FX value (canvas inverted)
         ctx.arc(540, 70, 42, 0, 2 * 3.14)
         ctx.set_source_rgb(1, 0.5, 1)
         if controls['fx'] == 127:
-            ctx.set_source_rgb(0.01, 0, 0.01)
+            ctx.set_source_rgb(0.075, 0, 0.075)
         ctx.fill()
         ctx.stroke()
 
-        # Master_filter value
+        # FX canvas (value inverted)
         ctx.move_to(540, 75)
         ctx.arc(540, 70, 42, 3.14 / 2, 3.14 / 2 + 360 * (controls['fx'] / 127) * (3.14 / 180))
         ctx.close_path()
-        ctx.set_source_rgb(0.01, 0, 0.01)
+        ctx.set_source_rgb(0.02, 0.02, 0.02)
         ctx.fill()
         ctx.stroke()
 
-        # Master_filter frame
+        # FX frame
         ctx.arc(540, 70, 42, 0, 2 * 3.14)
         if controls['fx'] == 127:
-            ctx.set_source_rgb(0.1, 0, 0.1)
+            ctx.set_source_rgb(0.032, 0.032, 0.032)
         else:
-            ctx.set_source_rgb(1, 0, 1)
+            ctx.set_source_rgb(0.75, 0, 1)
         ctx.set_line_width(5)
         ctx.stroke()
 
@@ -250,7 +237,7 @@ class MainControlsMode(definitions.PyshaMode):
 
         # Smile canvas
         ctx.arc(660, 70, 42, 0, 2 * 3.14)
-        ctx.set_source_rgb(0.1, 0.1, 0)
+        ctx.set_source_rgb(0.02, 0.02, 0.02)
         if controls['smile'] == 127:
             ctx.set_source_rgb(1, 1, 0.5)
         ctx.fill()
@@ -267,7 +254,7 @@ class MainControlsMode(definitions.PyshaMode):
         # Smile frame
         ctx.arc(660, 70, 42, 0, 2 * 3.14)
         if controls['smile'] == 0:
-            ctx.set_source_rgb(0.2, 0.2, 0)
+            ctx.set_source_rgb(0.032, 0.032, 0.032)
         else:
             ctx.set_source_rgb(1, 1, 0)
         ctx.set_line_width(5)
@@ -288,7 +275,7 @@ class MainControlsMode(definitions.PyshaMode):
 
         # Reverb canvas
         ctx.arc(780, 70, 42, 0, 2 * 3.14)
-        ctx.set_source_rgb(0, 0.1, 0.1)
+        ctx.set_source_rgb(0.02, 0.02, 0.02)
         if controls['reverb'] == 127:
             ctx.set_source_rgb(0.5, 1, 1)
         ctx.fill()
@@ -305,7 +292,7 @@ class MainControlsMode(definitions.PyshaMode):
         # Reverb frame
         ctx.arc(780, 70, 42, 0, 2 * 3.14)
         if controls['reverb'] == 0:
-            ctx.set_source_rgb(0, 0.2, 0.2)
+            ctx.set_source_rgb(0.032, 0.032, 0.032)
         else:
             ctx.set_source_rgb(0, 0.75, 1)
         ctx.set_line_width(5)
@@ -323,7 +310,7 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.show_text(s)
         ctx.stroke()
 
-        # Tape canvas
+        # Tape value (canvas inverted)
         ctx.arc(900, 70, 42, 0, 2 * 3.14)
         ctx.set_source_rgb(1, 0.5, 0.5)
         if controls['tape'] == 127:
@@ -331,18 +318,18 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.fill()
         ctx.stroke()
 
-        # Tape value
+        # Tape canvas (value inverted)
         ctx.move_to(900, 75)
         ctx.arc(900, 70, 42, 3.14 / 2, 3.14 / 2 + 360 * (controls['tape'] / 127) * (3.14 / 180))
         ctx.close_path()
-        ctx.set_source_rgb(0.2, 0, 0)
+        ctx.set_source_rgb(0.02, 0.02, 0.02)
         ctx.fill()
         ctx.stroke()
 
         # Tape frame
         ctx.arc(900, 70, 42, 0, 2 * 3.14)
         if controls['tape'] == 127:
-            ctx.set_source_rgb(0.4, 0, 0)
+            ctx.set_source_rgb(0.032, 0.032, 0.032)
         else:
             ctx.set_source_rgb(1, 0, 0)
         ctx.set_line_width(5)
