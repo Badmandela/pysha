@@ -40,49 +40,43 @@ class MainControlsMode(definitions.PyshaMode):
         s = "INSTRUMENT:"
         [xbearing, ybearing, width, height, dx, dy] = ctx.text_extents(s)
         ctx.move_to(60 - (width / 2), 15)
-        if controls['instrument'] <= 41: ctx.set_source_rgb(1, 0.25, 0.5)           # Piano
-        if controls['instrument'] >= 42:
-            if controls['instrument'] <= 81: ctx.set_source_rgb(0, 1, 0.7)          # Synth
-        if controls['instrument'] >= 82: ctx.set_source_rgb(0.75, 0, 1)             # Sampler
+        # Piano
+        if controls['instrument'] <= 41: ctx.set_source_rgb(1, 0.25, 0.5)
+        # Synth
+        if controls['instrument'] >= 42 and controls['instrument'] <= 81: ctx.set_source_rgb(0, 1, 0.7)
+        # Sampler
+        if controls['instrument'] >= 82: ctx.set_source_rgb(0.75, 0, 1)
         ctx.show_text(s)
 
         # Instrument canvas
         ctx.rectangle(15, 23 + (30 * (controls['instrument'] / 127)), 90, 15)
-        if controls['instrument'] <= 41:            # Piano
-            ctx.set_source_rgb(1, 0.25, 0.5)
-
-        if controls['instrument'] >= 42:            # Synth
-            if controls['instrument'] <= 81:
-                ctx.set_source_rgb(0, 0.9, 0.6)
-        if controls['instrument'] >= 82:            # Sampler
-            ctx.set_source_rgb(0.75, 0, 1)
-
+        # Piano
+        if controls['instrument'] <= 41: ctx.set_source_rgb(1, 0.25, 0.5)
+        # Synth
+        if controls['instrument'] >= 42 and controls['instrument'] <= 81: ctx.set_source_rgb(0, 0.9, 0.6)
+        # Sampler
+        if controls['instrument'] >= 82: ctx.set_source_rgb(0.75, 0, 1)
         ctx.fill()
         ctx.stroke()
 
         # Instruments list
-        # Piano
         ctx.set_source_rgb(1, 1, 1)
         ctx.set_font_size(12)
         ctx.select_font_face(font, cairo.FONT_SLANT_ITALIC, cairo.FONT_WEIGHT_NORMAL)
+
+        # Piano
         s = "PIANO"
         [xbearing, ybearing, width, height, dx, dy] = ctx.text_extents(s)
         ctx.move_to(60 - (width / 2), 35)
         ctx.show_text(s)
 
         # Synth
-        ctx.set_source_rgb(1, 1, 1)
-        ctx.set_font_size(12)
-        ctx.select_font_face(font, cairo.FONT_SLANT_ITALIC, cairo.FONT_WEIGHT_NORMAL)
         s = "SYNTH"
         [xbearing, ybearing, width, height, dx, dy] = ctx.text_extents(s)
         ctx.move_to(60 - (width / 2), 50)
         ctx.show_text(s)
 
         # Sampler
-        ctx.set_source_rgb(1, 1, 1)
-        ctx.set_font_size(12)
-        ctx.select_font_face(font, cairo.FONT_SLANT_ITALIC, cairo.FONT_WEIGHT_NORMAL)
         s = "SAMPLER"
         [xbearing, ybearing, width, height, dx, dy] = ctx.text_extents(s)
         ctx.move_to(60 - (width / 2), 65)
@@ -92,14 +86,13 @@ class MainControlsMode(definitions.PyshaMode):
         # INSTRUMENT_FILTER
 
         # Instrument_filter title
-        if controls['instrument'] <= 41:            # Piano
-            ctx.set_source_rgb(1, 0.25, 0.5)
+        # Piano
+        if controls['instrument'] <= 41: ctx.set_source_rgb(1, 0.25, 0.5)
+        # Synth
+        if controls['instrument'] >= 42 and controls['instrument'] <= 81: ctx.set_source_rgb(0, 1, 0.7)
+        # Sampler
+        if controls['instrument'] >= 82: ctx.set_source_rgb(0.75, 0, 1)
 
-        if controls['instrument'] >= 42:            # Synth
-            if controls['instrument'] <= 81:
-                ctx.set_source_rgb(0, 1, 0.7)
-        if controls['instrument'] >= 82:            # Sampler
-            ctx.set_source_rgb(0.75, 0, 1)
         ctx.set_font_size(12)
         ctx.select_font_face(font, normal, bold)
         s = "INSTR. FILTER:"
