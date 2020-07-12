@@ -5,7 +5,7 @@ import definitions
 
 SETTINGS_BUTTON = push2_python.constants.BUTTON_SETUP
 
-controls = {'instrument': 0, 'instrument_filter': 127, 'master_filter': 127, 'smile': 0, 'reverb': 0, 'tape': 127 }
+controls = {'instrument': 0, 'instrument_filter': 127, 'master_filter': 127, 'fx': 127, 'smile': 0, 'reverb': 0, 'tape': 127 }
 
 max_encoder_value = 127
 
@@ -34,26 +34,34 @@ class MainControlsMode(definitions.PyshaMode):
 
         ####################################################################################
         # INSTRUMENT_SELECTION
-
+        # Instrument title
         ctx.set_font_size(12)
         ctx.select_font_face(font, normal, bold)
         s = "INSTRUMENT:"
         [xbearing, ybearing, width, height, dx, dy] = ctx.text_extents(s)
         ctx.move_to(60 - (width / 2), 15)
-        if controls['instrument'] <= 41: ctx.set_source_rgb(1, 0.25, 0.5)   # Piano
+        if controls['instrument'] <= 41: ctx.set_source_rgb(1, 0.25, 0.5)           # Piano
         if controls['instrument'] >= 42:
-            if controls['instrument'] <= 81: ctx.set_source_rgb(0, 1, 0.7)  # Synth
-        if controls['instrument'] >= 82: ctx.set_source_rgb(0.75, 0, 1)     # Sampler
-
+            if controls['instrument'] <= 81: ctx.set_source_rgb(0, 1, 0.7)          # Synth
+        if controls['instrument'] >= 82: ctx.set_source_rgb(0.75, 0, 1)             # Sampler
         ctx.show_text(s)
 
-        ########## Instruments
+        # Instrument canvas
+        ctx.rectangle(15, 23 + (30 * (controls['instrument'] / 127)), 90, 15)
         if controls['instrument'] <= 41:            # Piano
             ctx.set_source_rgb(1, 0.25, 0.5)
-            ctx.rectangle(15, 23 + (30 * (controls['instrument'] / 127)), 90, 15)
-            ctx.fill()
-            ctx.stroke()
 
+        if controls['instrument'] >= 42:            # Synth
+            if controls['instrument'] <= 81:
+                ctx.set_source_rgb(0, 0.9, 0.6)
+        if controls['instrument'] >= 82:            # Sampler
+            ctx.set_source_rgb(0.75, 0, 1)
+
+        ctx.fill()
+        ctx.stroke()
+
+        # Instruments list
+        # Piano
         ctx.set_source_rgb(1, 1, 1)
         ctx.set_font_size(12)
         ctx.select_font_face(font, cairo.FONT_SLANT_ITALIC, cairo.FONT_WEIGHT_NORMAL)
@@ -62,14 +70,7 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.move_to(60 - (width / 2), 35)
         ctx.show_text(s)
 
-        if controls['instrument'] >= 42:            # Synth
-            if controls['instrument'] <= 81:
-                ctx.set_source_rgb(0, 1, 0.7)
-                # ctx.rectangle(15, 38, 90, 15)
-                ctx.rectangle(15, 23 + (30 * (controls['instrument'] / 127)), 90, 15)
-                ctx.fill()
-                ctx.stroke()
-
+        # Synth
         ctx.set_source_rgb(1, 1, 1)
         ctx.set_font_size(12)
         ctx.select_font_face(font, cairo.FONT_SLANT_ITALIC, cairo.FONT_WEIGHT_NORMAL)
@@ -78,13 +79,7 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.move_to(60 - (width / 2), 50)
         ctx.show_text(s)
 
-        if controls['instrument'] >= 82:            # Sampler
-            ctx.set_source_rgb(0.75, 0, 1)
-            # ctx.rectangle(15, 53, 90, 15)
-            ctx.rectangle(15, 23 + (30 * (controls['instrument'] / 127)), 90, 15)
-            ctx.fill()
-            ctx.stroke()
-
+        # Sampler
         ctx.set_source_rgb(1, 1, 1)
         ctx.set_font_size(12)
         ctx.select_font_face(font, cairo.FONT_SLANT_ITALIC, cairo.FONT_WEIGHT_NORMAL)
@@ -99,6 +94,7 @@ class MainControlsMode(definitions.PyshaMode):
         # Instrument_filter title
         if controls['instrument'] <= 41:            # Piano
             ctx.set_source_rgb(1, 0.25, 0.5)
+
         if controls['instrument'] >= 42:            # Synth
             if controls['instrument'] <= 81:
                 ctx.set_source_rgb(0, 1, 0.7)
@@ -179,7 +175,7 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.stroke()
 
         # Master_filter canvas
-        ctx.arc(540, 70, 42, 0, 2 * 3.14)
+        ctx.arc(420, 70, 42, 0, 2 * 3.14)
         ctx.set_source_rgb(1, 0.75, 0.3)
         if controls['master_filter'] == 127:
             ctx.set_source_rgb(0.1, 0.05, 0.01)
@@ -187,8 +183,8 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.stroke()
 
         # Master_filter value
-        ctx.move_to(540, 75)
-        ctx.arc(540, 70, 42, 3.14 / 2, 3.14 / 2 + 360 * (controls['master_filter'] / 127) * (3.14 / 180))
+        ctx.move_to(420, 75)
+        ctx.arc(420, 70, 42, 3.14 / 2, 3.14 / 2 + 360 * (controls['master_filter'] / 127) * (3.14 / 180))
         ctx.close_path()
         ctx.set_source_rgb(0.1, 0.05, 0.01)
         ctx.fill()
@@ -200,11 +196,49 @@ class MainControlsMode(definitions.PyshaMode):
         # ctx.stroke()
 
         # Master_filter frame
-        ctx.arc(540, 70, 42, 0, 2 * 3.14)
+        ctx.arc(420, 70, 42, 0, 2 * 3.14)
         if controls['master_filter'] == 127:
             ctx.set_source_rgb(0.2, 0.1, 0.02)
         else:
             ctx.set_source_rgb(1, 0.5, 0.1)
+        ctx.set_line_width(5)
+        ctx.stroke()
+
+        ####################################################################################
+        # FX MIX
+
+        # FX mix title
+        ctx.set_source_rgb(1, 0.5, 0.1)
+        ctx.set_font_size(12)
+        ctx.select_font_face(font, normal, bold)
+        s = "FX MIX:"
+        [xbearing, ybearing, width, height, dx, dy] = ctx.text_extents(s)
+        ctx.move_to(540 - (width / 2), 15)
+        ctx.show_text(s)
+        ctx.stroke()
+
+        # FX canvas
+        ctx.arc(540, 70, 42, 0, 2 * 3.14)
+        ctx.set_source_rgb(1, 0.5, 1)
+        if controls['fx'] == 127:
+            ctx.set_source_rgb(0.01, 0, 0.01)
+        ctx.fill()
+        ctx.stroke()
+
+        # Master_filter value
+        ctx.move_to(540, 75)
+        ctx.arc(540, 70, 42, 3.14 / 2, 3.14 / 2 + 360 * (controls['fx'] / 127) * (3.14 / 180))
+        ctx.close_path()
+        ctx.set_source_rgb(0.01, 0, 0.01)
+        ctx.fill()
+        ctx.stroke()
+
+        # Master_filter frame
+        ctx.arc(540, 70, 42, 0, 2 * 3.14)
+        if controls['fx'] == 127:
+            ctx.set_source_rgb(0.1, 0, 0.1)
+        else:
+            ctx.set_source_rgb(1, 0, 1)
         ctx.set_line_width(5)
         ctx.stroke()
 
@@ -447,8 +481,8 @@ class MainControlsMode(definitions.PyshaMode):
         self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_1, definitions.ROOT_KEY)
         self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_2, definitions.ROOT_KEY)
         self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_3, definitions.BLACK)
-        self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_4, definitions.BLACK)
-        self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_5, definitions.ORANGE)
+        self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_4, definitions.ORANGE)
+        self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_5, definitions.PURPLE)
         self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_6, definitions.YELLOW)
         self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_7, definitions.CYAN)
         self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_8, definitions.RED)
@@ -527,13 +561,22 @@ class MainControlsMode(definitions.PyshaMode):
                 else: controls['instrument_filter'] = updated_filter_value
             update_encoder_value(increment)
 
-# encoder 5
-        if encoder_name == push2_python.constants.ENCODER_TRACK5_ENCODER:
+# encoder 4
+        if encoder_name == push2_python.constants.ENCODER_TRACK4_ENCODER:
             def update_encoder_value(increment):
                 updated_filter_value = int(controls['master_filter'] + increment)
                 if updated_filter_value < 0: controls['master_filter'] = 0
                 elif updated_filter_value > max_encoder_value: controls['master_filter'] = max_encoder_value
                 else: controls['master_filter'] = updated_filter_value
+            update_encoder_value(increment)
+
+# encoder 5
+        if encoder_name == push2_python.constants.ENCODER_TRACK5_ENCODER:
+            def update_encoder_value(increment):
+                updated_filter_value = int(controls['fx'] + increment)
+                if updated_filter_value < 0: controls['fx'] = 0
+                elif updated_filter_value > max_encoder_value: controls['fx'] = max_encoder_value
+                else: controls['fx'] = updated_filter_value
             update_encoder_value(increment)
 
 # encoder 6
@@ -571,6 +614,10 @@ class MainControlsMode(definitions.PyshaMode):
 # PRESSED UPP button 2
         if button_name == push2_python.constants.BUTTON_UPPER_ROW_2:
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_2, definitions.BLACK)
+
+# PRESSED UPP button 4
+        if button_name == push2_python.constants.BUTTON_UPPER_ROW_4:
+            self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_4, definitions.BLACK)
 
 # PRESSED UPP button 5
         if button_name == push2_python.constants.BUTTON_UPPER_ROW_5:
@@ -635,10 +682,15 @@ class MainControlsMode(definitions.PyshaMode):
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_2, definitions.ROOT_KEY)
             controls['instrument_filter'] = 127
 
+# RELEASED UPP button 4
+        if button_name == push2_python.constants.BUTTON_UPPER_ROW_4:
+            self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_4, definitions.ORANGE)
+            controls['master_filter'] = 127
+
 # RELEASED UPP button 5
         if button_name == push2_python.constants.BUTTON_UPPER_ROW_5:
-            self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_5, definitions.ORANGE)
-            controls['master_filter'] = 127
+            self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_5, definitions.PURPLE)
+            controls['fx'] = 127
 
 # RELEASED UPP button 6
         if button_name == push2_python.constants.BUTTON_UPPER_ROW_6:
