@@ -389,20 +389,17 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.move_to(540, 140)
         ctx.curve_to(540, 130, 555, 130, 550, 142)
         ctx.curve_to(550, 143, 542, 152, 540, 155)
-
-        ctx.move_to(540, 140)
-        ctx.curve_to(540, 130, 525, 130, 530, 142)
-        ctx.curve_to(530, 143, 538, 152, 540, 155)
+        ctx.curve_to(538, 152, 530, 143, 530, 142)
+        ctx.curve_to(525, 130, 540, 130, 540, 140)
+        ctx.close_path()
 
         # BEAT 2
         ctx.move_to(660, 140)
         ctx.curve_to(660, 130, 675, 130, 670, 142)
         ctx.curve_to(670, 143, 662, 152, 660, 155)
-        ctx.line_to(660, 155)
-
-        ctx.move_to(660, 140)
-        ctx.curve_to(660, 130, 645, 130, 650, 142)
-        ctx.curve_to(650, 143, 658, 152, 660, 155)
+        ctx.curve_to(658, 152, 650, 143, 650, 142)
+        ctx.curve_to(645, 130, 660, 130, 660, 140)
+        ctx.close_path()
 
         ctx.set_line_cap(cairo.LINE_CAP_ROUND)
         ctx.set_source_rgb(1, 0.4, 0)
@@ -638,6 +635,24 @@ class MainControlsMode(definitions.PyshaMode):
 # PRESSED LOW button 6
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_6:
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_LOWER_ROW_6, definitions.BLACK)
+            ctx.move_to(600, 130)
+            ctx.line_to(720, 130)
+            ctx.line_to(720, 160)
+            ctx.line_to(600, 160)
+            ctx.set_source_rgb(1, 0.4, 0)
+            ctx.fill()
+
+            ctx.move_to(660, 140)
+            ctx.curve_to(660, 130, 675, 130, 670, 142)
+            ctx.curve_to(670, 143, 662, 152, 660, 155)
+            ctx.curve_to(658, 152, 650, 143, 650, 142)
+            ctx.curve_to(645, 130, 660, 130, 660, 140)
+            ctx.close_path()
+
+            ctx.set_line_cap(cairo.LINE_CAP_ROUND)
+            ctx.set_source_rgb(0, 0, 0)
+            ctx.set_line_width(2.5)
+            ctx.stroke()
 
 # PRESSED LOW button 7
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_7:
