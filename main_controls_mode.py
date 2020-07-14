@@ -725,6 +725,17 @@ class MainControlsMode(definitions.PyshaMode):
 # RELEASED LOW button 6
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_6:
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_LOWER_ROW_6, definitions.ORANGE)
+            ctx.move_to(660, 140)
+            ctx.curve_to(660, 130, 675, 130, 670, 142)
+            ctx.curve_to(670, 143, 662, 152, 660, 155)
+            ctx.curve_to(658, 152, 650, 143, 650, 142)
+            ctx.curve_to(645, 130, 660, 130, 660, 140)
+            ctx.close_path()
+
+            ctx.set_line_cap(cairo.LINE_CAP_ROUND)
+            ctx.set_source_rgb(1, 0.4, 0)
+            ctx.set_line_width(2.5)
+            ctx.stroke()
 
 # RELEASED LOW button 7
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_7:
