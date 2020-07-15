@@ -183,42 +183,30 @@ class PyramidiMode(PyshaMode):
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_1:
             msg = mido.Message('control_change', control=101, value=127)
             self.app.send_midi(msg)
-            msg = mido.Message('control_change', control=26, value=0)
-            self.app.send_midi(msg)
 
 # PRESSED LOW button 2
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_2:
             msg = mido.Message('control_change', control=102, value=127)
-            self.app.send_midi(msg)
-            msg = mido.Message('control_change', control=26, value=0)
             self.app.send_midi(msg)
 
 # PRESSED LOW button 3
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_3:
             msg = mido.Message('control_change', control=103, value=127)
             self.app.send_midi(msg)
-            msg = mido.Message('control_change', control=26, value=0)
-            self.app.send_midi(msg)
 
 # PRESSED LOW button 4
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_4:
             msg = mido.Message('control_change', control=104, value=127)
-            self.app.send_midi(msg)
-            msg = mido.Message('control_change', control=26, value=0)
             self.app.send_midi(msg)
 
 # PRESSED LOW button 5
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_5:
             msg = mido.Message('control_change', control=105, value=127)
             self.app.send_midi(msg)
-            msg = mido.Message('control_change', control=26, value=0)
-            self.app.send_midi(msg)
 
 # PRESSED LOW button 6
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_6:
             msg = mido.Message('control_change', control=106, value=127)
-            self.app.send_midi(msg)
-            msg = mido.Message('control_change', control=26, value=0)
             self.app.send_midi(msg)
 
 # PRESSED LOW button 7

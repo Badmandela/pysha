@@ -613,32 +613,26 @@ class MainControlsMode(definitions.PyshaMode):
 # PRESSED LOW button 1
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_1:
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_LOWER_ROW_1, definitions.BLACK)
-            controls['fx'] = 0
 
 # PRESSED LOW button 2
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_2:
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_LOWER_ROW_2, definitions.BLACK)
-            controls['fx'] = 0
 
 # PRESSED LOW button 3
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_3:
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_LOWER_ROW_3, definitions.BLACK)
-            controls['fx'] = 0
 
 # PRESSED LOW button 4
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_4:
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_LOWER_ROW_4, definitions.BLACK)
-            controls['fx'] = 0
 
 # PRESSED LOW button 5
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_5:
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_LOWER_ROW_5, definitions.BLACK)
-            controls['fx'] = 0
 
 # PRESSED LOW button 6
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_6:
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_LOWER_ROW_6, definitions.BLACK)
-            controls['fx'] = 0
 
 # PRESSED LOW button 7
         if button_name == push2_python.constants.BUTTON_LOWER_ROW_7:
