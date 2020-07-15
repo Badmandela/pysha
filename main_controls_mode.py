@@ -28,9 +28,7 @@ class MainControlsMode(definitions.PyshaMode):
 
         font = "Verdana"
         normal = cairo.FONT_SLANT_NORMAL
-        medium = cairo.FONT_SLANT_NORMAL
         bold = cairo.FONT_WEIGHT_BOLD
-        italic = cairo.FONT_SLANT_ITALIC
 
         ####################################################################################
         # INSTRUMENT_SELECTION

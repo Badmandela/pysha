@@ -121,8 +121,8 @@ class PyramidiMode(PyshaMode):
         self.clean_currently_notes_being_played()
         self.active_midi_control_ccs = self.synth_midi_control_ccs.get(self.get_current_track_instrument_short_name(),
                                                                        [])
-    # def activate(self):
-    #     self.update_buttons()
+    def activate(self):
+        self.update_buttons()
 
 ##################################################################################
 ############################        BUTTONS        ###############################

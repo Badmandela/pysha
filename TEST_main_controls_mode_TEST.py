@@ -4,8 +4,6 @@ import numpy
 
 import definitions
 
-
-
 SETTINGS_BUTTON = push2_python.constants.BUTTON_SETUP
 
 controls = {'instrument': 0, 'instrument_filter': 127, 'master_filter': 127, 'fx': 127, 'smile': 0, 'reverb': 0, 'tape': 127 }
