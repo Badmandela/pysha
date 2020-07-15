@@ -1,3 +1,5 @@
 git+https://github.com/ffont/push2-python
 pycairo
-psutil
+psutil~=5.7.2
+mido~=1.2.9
+numpy~=1.19.0
