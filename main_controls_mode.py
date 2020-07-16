@@ -466,7 +466,6 @@ class MainControlsMode(definitions.PyshaMode):
         # encoder 1
         if encoder_name == push2_python.constants.ENCODER_TRACK1_ENCODER:
             def update_encoder_value(increment):
-                increment = increment / 2
                 updated_value = int(controls['instr'] + increment)
                 if updated_value < 0:
                     controls['instr'] = 0
@@ -517,7 +516,6 @@ class MainControlsMode(definitions.PyshaMode):
         # encoder 2
         if encoder_name == push2_python.constants.ENCODER_TRACK2_ENCODER:
             def update_encoder_value(increment):
-                increment = increment / 2
                 updated_filter_value = int(controls['instr_lpf'] + increment)
                 if updated_filter_value < 0:
                     controls['instr_lpf'] = 0
@@ -533,7 +531,6 @@ class MainControlsMode(definitions.PyshaMode):
         # encoder 4
         if encoder_name == push2_python.constants.ENCODER_TRACK4_ENCODER:
             def update_encoder_value(increment):
-                increment = increment / 2
                 updated_filter_value = int(controls['master_lpf'] + increment)
                 if updated_filter_value < 0:
                     controls['master_lpf'] = 0
@@ -549,7 +546,6 @@ class MainControlsMode(definitions.PyshaMode):
         # encoder 5
         if encoder_name == push2_python.constants.ENCODER_TRACK5_ENCODER:
             def update_encoder_value(increment):
-                increment = increment / 2
                 updated_filter_value = int(controls['fx'] + increment)
                 if updated_filter_value < 0:
                     controls['fx'] = 0
@@ -565,7 +561,6 @@ class MainControlsMode(definitions.PyshaMode):
         # encoder 6
         if encoder_name == push2_python.constants.ENCODER_TRACK6_ENCODER:
             def update_encoder_value(increment):
-                increment = increment / 2
                 updated_filter_value = int(controls['smile'] + increment)
                 if updated_filter_value < 0:
                     controls['smile'] = 0
@@ -581,7 +576,6 @@ class MainControlsMode(definitions.PyshaMode):
         # encoder 7
         if encoder_name == push2_python.constants.ENCODER_TRACK7_ENCODER:
             def update_encoder_value(increment):
-                increment = increment / 2
                 updated_filter_value = int(controls['reverb'] + increment)
                 if updated_filter_value < 0:
                     controls['reverb'] = 0
@@ -597,7 +591,6 @@ class MainControlsMode(definitions.PyshaMode):
         # encoder 8
         if encoder_name == push2_python.constants.ENCODER_TRACK8_ENCODER:
             def update_encoder_value(increment):
-                increment = increment / 2
                 updated_filter_value = int(controls['tape'] + increment)
                 if updated_filter_value < 0:
                     controls['tape'] = 0
