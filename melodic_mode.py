@@ -218,7 +218,7 @@ class MelodicMode(definitions.PyshaMode):
             # channel AT mode
             self.latest_channel_at_value = (time.time(), velocity)
             msg = mido.Message('aftertouch', value=velocity)
-            self.app.send_midi(msg)
+        self.app.send_midi(msg)
 
     def on_touchstrip(self, value):
         msg = mido.Message('pitchwheel', pitch=value)
