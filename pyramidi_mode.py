@@ -72,6 +72,11 @@ class PyramidiMode(PyshaMode):
     tracks_info = []
     selected_pyramid_track = 0
 
+    value = 64
+    vmin = 0
+    vmax = 127
+    send_midi_func = None
+
     synth_midi_control_ccs = {}
     active_midi_control_ccs = []
 
@@ -88,7 +93,6 @@ class PyramidiMode(PyshaMode):
 
     def get_current_track_instrument_short_name(self):                              # Comment
         return 'MASTER'                                                             # Comment
-
 
     def load_default_layout(self):
         return LAYOUT_INSTRUMENT
@@ -227,17 +231,6 @@ class PyramidiMode(PyshaMode):
         if encoder_name == push2_python.constants.ENCODER_MASTER_ENCODER:
             pass
 
-        if encoder_name == push2_python.constants.ENCODER_TRACK8_ENCODER:
-            if self.value + increment > self.vmax:
-                self.value = self.vmax
-            elif self.value + increment < self.vmin:
-                self.value = self.vmin
-            else:
-                self.value += increment
-
-            msg = mido.Message('control_change', control=self.28, value=self.value)
-            self.app.send_midi_func(msg)
-
         else:
             encoder_num = [
                 push2_python.constants.ENCODER_TRACK1_ENCODER,
@@ -247,6 +240,7 @@ class PyramidiMode(PyshaMode):
                 push2_python.constants.ENCODER_TRACK5_ENCODER,
                 push2_python.constants.ENCODER_TRACK6_ENCODER,
                 push2_python.constants.ENCODER_TRACK7_ENCODER,
+                push2_python.constants.ENCODER_TRACK8_ENCODER,
             ].index(encoder_name)
             if self.active_midi_control_ccs:
                 self.active_midi_control_ccs[encoder_num].update_value(increment)

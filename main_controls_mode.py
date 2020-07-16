@@ -35,8 +35,7 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.set_font_size(12)
         ctx.select_font_face(font, normal, bold)
         s = "INSTRUMENT:"
-        [xbearing, ybearing, width, height, dx, dy] = ctx.text_extents(s)
-        ctx.move_to(60 - (width / 2), 15)
+        ctx.move_to(60 - (ctx.text_extents(s)[2] / 2), 15)
         # Piano
         if controls['instrument'] <= 41:
             ctx.set_source_rgb(1, 0.25, 0.5)
@@ -69,20 +68,17 @@ class MainControlsMode(definitions.PyshaMode):
 
         # Piano
         s = "PIANO"
-        [xbearing, ybearing, width, height, dx, dy] = ctx.text_extents(s)
-        ctx.move_to(60 - (width / 2), 35)
+        ctx.move_to(60 - (ctx.text_extents(s)[2] / 2), 35)
         ctx.show_text(s)
 
         # Synth
         s = "SYNTH"
-        [xbearing, ybearing, width, height, dx, dy] = ctx.text_extents(s)
-        ctx.move_to(60 - (width / 2), 50)
+        ctx.move_to(60 - (ctx.text_extents(s)[2] / 2), 50)
         ctx.show_text(s)
 
         # Sampler
         s = "SAMPLER"
-        [xbearing, ybearing, width, height, dx, dy] = ctx.text_extents(s)
-        ctx.move_to(60 - (width / 2), 65)
+        ctx.move_to(60 - (ctx.text_extents(s)[2] / 2), 65)
         ctx.show_text(s)
 
         # Instrument_filter title
@@ -98,8 +94,7 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.set_font_size(12)
         ctx.select_font_face(font, normal, bold)
         s = "INSTRUMENT LPF:"
-        [xbearing, ybearing, width, height, dx, dy] = ctx.text_extents(s)
-        ctx.move_to(180 - (width / 2), 15)
+        ctx.move_to(180 - (ctx.text_extents(s)[2] / 2), 15)
         ctx.show_text(s)
 
         # Instrument_filter value (canvas - inverted)
@@ -152,8 +147,7 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.set_font_size(12)
         ctx.select_font_face(font, normal, bold)
         s = "MASTER LPF:"
-        [xbearing, ybearing, width, height, dx, dy] = ctx.text_extents(s)
-        ctx.move_to(420 - (width / 2), 15)
+        ctx.move_to(420 - (ctx.text_extents(s)[2] / 2), 15)
         ctx.show_text(s)
         ctx.stroke()
 
@@ -187,8 +181,7 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.set_font_size(12)
         ctx.select_font_face(font, normal, bold)
         s = "FX MIX:"
-        [xbearing, ybearing, width, height, dx, dy] = ctx.text_extents(s)
-        ctx.move_to(540 - (width / 2), 15)
+        ctx.move_to(540 - (ctx.text_extents(s)[2] / 2), 15)
         ctx.show_text(s)
         ctx.stroke()
 
@@ -222,8 +215,7 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.set_font_size(12)
         ctx.select_font_face(font, normal, bold)
         s = "SMILE:"
-        [xbearing, ybearing, width, height, dx, dy] = ctx.text_extents(s)
-        ctx.move_to(660 - (width / 2), 15)
+        ctx.move_to(660 - (ctx.text_extents(s)[2] / 2), 15)
         ctx.show_text(s)
         ctx.stroke()
 
@@ -257,8 +249,7 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.set_font_size(12)
         ctx.select_font_face(font, normal, bold)
         s = "REVERB:"
-        [xbearing, ybearing, width, height, dx, dy] = ctx.text_extents(s)
-        ctx.move_to(780 - (width / 2), 15)
+        ctx.move_to(780 - (ctx.text_extents(s)[2] / 2), 15)
         ctx.show_text(s)
         ctx.stroke()
 
@@ -292,8 +283,7 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.set_font_size(12)
         ctx.select_font_face(font, normal, bold)
         s = "TAPE:"
-        [xbearing, ybearing, width, height, dx, dy] = ctx.text_extents(s)
-        ctx.move_to(900 - (width / 2), 15)
+        ctx.move_to(900 - (ctx.text_extents(s)[2] / 2), 15)
         ctx.show_text(s)
         ctx.stroke()
 
