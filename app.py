@@ -11,7 +11,7 @@ import push2_python
 import definitions
 from main_controls_mode import MainControlsMode
 from melodic_mode import MelodicMode
-from pyramidi_mode import PyramidiMode
+# from pyramidi_mode import PyramidiMode
 from rhythmic_mode import RhythmicMode
 from settings_mode import SettingsMode
 
@@ -61,14 +61,14 @@ class PyshaApp(object):
 
         self.init_modes(settings)
         self.active_modes.append(self.main_controls_mode)
-        self.active_modes.append(self.pyramidi_mode)
+        # self.active_modes.append(self.pyramidi_mode)
         self.toggle_melodic_rhythmic_modes()
 
     def init_modes(self, settings):
         self.melodic_mode = MelodicMode(self, settings=settings)
         self.rhyhtmic_mode = RhythmicMode(self, settings=settings)
         self.settings_mode = SettingsMode(self, settings=settings)
-        self.pyramidi_mode = PyramidiMode(self, settings=settings)
+        # self.pyramidi_mode = PyramidiMode(self, settings=settings)
         self.main_controls_mode = MainControlsMode(self, settings=settings)
 
     def get_all_modes(self):

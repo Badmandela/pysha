@@ -455,6 +455,12 @@ class MainControlsMode(definitions.PyshaMode):
         else:
             self.push.buttons.set_button_color(SETTINGS_BUTTON, definitions.OFF_BTN_COLOR)
 
+    def clean_currently_notes_being_played(self):
+        if self.app.is_mode_active(self.app.melodic_mode):
+            self.app.melodic_mode.remove_all_notes_being_played()
+        elif self.app.is_mode_active(self.app.rhyhtmic_mode):
+            self.app.rhyhtmic_mode.remove_all_notes_being_played()
+
     def on_encoder_rotated(self, encoder_name, increment):
 
         # encoder 1
@@ -473,37 +479,43 @@ class MainControlsMode(definitions.PyshaMode):
             self.app.send_midi(msg)
 
             if controls['instr'] <= 41:
-                definitions.ROOT_KEY = definitions.PINK
-                definitions.LAYOUT_INSTRUMENT = 'lmelodic'
-                definitions.NOTE_ON_COLOR = definitions.SURF
-                self.app.set_melodic_mode()
-                self.app.pads_need_update = True
-                self.update_pads()
-                self.app.buttons_need_update = True
-                self.update_buttons()
-                self.app.melodic_mode.remove_all_notes_being_played()
+                 if not definitions.ROOT_KEY == definitions.PINK:
+                    definitions.ROOT_KEY = definitions.PINK
+                    definitions.NOTE_ON_COLOR = definitions.GREEN
+                    # definitions.LAYOUT_INSTRUMENT = 'lmelodic'
+                    self.clean_currently_notes_being_played()
+                    self.app.set_melodic_mode()
+                    self.app.pads_need_update = True
+                    self.update_pads()
+                    self.app.buttons_need_update = True
+                    self.update_buttons()
+                    # self.app.melodic_mode.remove_all_notes_being_played()
 
             if 42 <= controls['instr'] <= 81:
-                definitions.ROOT_KEY = definitions.GREEN
-                definitions.LAYOUT_INSTRUMENT = 'lmelodic'
-                definitions.NOTE_ON_COLOR = definitions.PINK
-                self.app.set_melodic_mode()
-                self.app.pads_need_update = True
-                self.update_pads()
-                self.app.buttons_need_update = True
-                self.update_buttons()
-                self.app.melodic_mode.remove_all_notes_being_played()
+                if not definitions.ROOT_KEY == definitions.GREEN:
+                    definitions.ROOT_KEY = definitions.GREEN
+                    definitions.NOTE_ON_COLOR = definitions.PINK
+                    # definitions.LAYOUT_INSTRUMENT = 'lmelodic'
+                    self.clean_currently_notes_being_played()
+                    self.app.set_melodic_mode()
+                    self.app.pads_need_update = True
+                    self.update_pads()
+                    self.app.buttons_need_update = True
+                    self.update_buttons()
+                    # self.app.melodic_mode.remove_all_notes_being_played()
 
             if controls['instr'] >= 82:
-                definitions.ROOT_KEY = definitions.PURPLE
-                definitions.LAYOUT_INSTRUMENT = 'lrhytmic'
-                definitions.NOTE_ON_COLOR = definitions.WHITE
-                self.app.set_rhythmic_mode()
-                self.app.pads_need_update = True
-                self.update_pads()
-                self.app.buttons_need_update = True
-                self.update_buttons()
-                self.app.melodic_mode.remove_all_notes_being_played()
+                if not definitions.ROOT_KEY == definitions.PURPLE:
+                    definitions.ROOT_KEY = definitions.PURPLE
+                    definitions.NOTE_ON_COLOR = definitions.WHITE
+                    # definitions.LAYOUT_INSTRUMENT = 'lrhytmic'
+                    self.clean_currently_notes_being_played()
+                    self.app.set_rhythmic_mode()
+                    self.app.pads_need_update = True
+                    self.update_pads()
+                    self.app.buttons_need_update = True
+                    self.update_buttons()
+                    # self.app.melodic_mode.remove_all_notes_being_played()
 
         # encoder 2
         if encoder_name == push2_python.constants.ENCODER_TRACK2_ENCODER:

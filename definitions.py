@@ -4,9 +4,9 @@ PYRAMIDI_CHANNEL = 15
 
 DELAYED_ACTIONS_APPLY_TIME = 1.0  # Encoder changes won't be applied until this time has passed since last moved
 
-LAYOUT_MELODIC = 'lmelodic'
-LAYOUT_RHYTHMIC = 'lrhytmic'
-LAYOUT_INSTRUMENT = 'lmelodic'
+# LAYOUT_MELODIC = 'lmelodic'
+# LAYOUT_RHYTHMIC = 'lrhytmic'
+# LAYOUT_INSTRUMENT = 'lmelodic'
 
 BLACK_RGB = [0, 0, 0]
 GRAY_DARK_RGB = [30, 30, 30]
