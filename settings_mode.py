@@ -245,7 +245,7 @@ class SettingsMode(definitions.PyshaMode):
                 x = curve_x + i * curve_length / n
                 y = curve_y - curve_height * value / 127
                 ctx.line_to(x, y)
-                ctx.line_to(x, curve_y)
+            ctx.line_to(x, curve_y)
             ctx.fill()
 
             current_time = time.time()
