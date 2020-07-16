@@ -36,7 +36,7 @@ class MIDICCControl(object):
         self.send_midi_func = send_midi_func
 
         if self.name == '1':  # INSTRUMENT
-            self.value = 0  # Starting value
+            self.value = 0    # Starting value
 
         if self.name == '2':  # INSTRUMENT FILTER
             self.value = 127  # Starting value
@@ -77,17 +77,18 @@ class PyramidiMode(PyshaMode):
 
     def initialize(self, settings=None):
 
-        for synth_name, data in synth_midi_control_cc_data.items():  # Comment
-            self.synth_midi_control_ccs[synth_name] = []  # Comment
-            for section in data:  # Comment
-                for name, cc_number in section['controls']:  # Comment
+        for synth_name, data in synth_midi_control_cc_data.items():                 # Comment
+            self.synth_midi_control_ccs[synth_name] = []                            # Comment
+            for section in data:                                                    # Comment
+                for name, cc_number in section['controls']:                         # Comment
                     control = MIDICCControl(cc_number, name, self.app.send_midi)
                     self.synth_midi_control_ccs[synth_name].append(control)
 
         self.select_pyramid_track(self.selected_pyramid_track)
 
-    def get_current_track_instrument_short_name(self):  # Comment
-        return 'MASTER'  # Comment
+    def get_current_track_instrument_short_name(self):                              # Comment
+        return 'MASTER'                                                             # Comment
+
 
     def load_default_layout(self):
         return LAYOUT_INSTRUMENT
@@ -110,109 +111,109 @@ class PyramidiMode(PyshaMode):
 
     def on_button_pressed(self, button_name):
 
-        if button_name == push2_python.constants.BUTTON_LOWER_ROW_1:  # Trigger Cue 1
+        if button_name == push2_python.constants.BUTTON_LOWER_ROW_1:        # Trigger Cue 1
             msg = mido.Message('control_change', control=101, value=127)
             self.app.send_midi(msg)
 
-        if button_name == push2_python.constants.BUTTON_LOWER_ROW_2:  # Trigger Cue 2
+        if button_name == push2_python.constants.BUTTON_LOWER_ROW_2:        # Trigger Cue 2
             msg = mido.Message('control_change', control=102, value=127)
             self.app.send_midi(msg)
 
-        if button_name == push2_python.constants.BUTTON_LOWER_ROW_3:  # Trigger Bar 1
+        if button_name == push2_python.constants.BUTTON_LOWER_ROW_3:        # Trigger Bar 1
             msg = mido.Message('control_change', control=103, value=127)
             self.app.send_midi(msg)
 
-        if button_name == push2_python.constants.BUTTON_LOWER_ROW_4:  # Trigger Bar 2
+        if button_name == push2_python.constants.BUTTON_LOWER_ROW_4:        # Trigger Bar 2
             msg = mido.Message('control_change', control=104, value=127)
             self.app.send_midi(msg)
 
-        if button_name == push2_python.constants.BUTTON_LOWER_ROW_5:  # Trigger Beat 1
+        if button_name == push2_python.constants.BUTTON_LOWER_ROW_5:        # Trigger Beat 1
             msg = mido.Message('control_change', control=105, value=127)
             self.app.send_midi(msg)
 
-        if button_name == push2_python.constants.BUTTON_LOWER_ROW_6:  # Trigger Beat 2
+        if button_name == push2_python.constants.BUTTON_LOWER_ROW_6:        # Trigger Beat 2
             msg = mido.Message('control_change', control=106, value=127)
             self.app.send_midi(msg)
 
-        if button_name == push2_python.constants.BUTTON_LOWER_ROW_7:  # Trigger Nudge 1
+        if button_name == push2_python.constants.BUTTON_LOWER_ROW_7:        # Trigger Nudge 1
             msg = mido.Message('control_change', control=107, value=127)
             self.app.send_midi(msg)
 
-        if button_name == push2_python.constants.BUTTON_LOWER_ROW_8:  # Trigger Nudge 2
+        if button_name == push2_python.constants.BUTTON_LOWER_ROW_8:        # Trigger Nudge 2
             msg = mido.Message('control_change', control=108, value=127)
             self.app.send_midi(msg)
 
-        if button_name == push2_python.constants.BUTTON_PLAY:  # Trigger Next song
+        if button_name == push2_python.constants.BUTTON_PLAY:               # Trigger Next song
             msg = mido.Message('control_change', control=109, value=127)
             self.app.send_midi(msg)
 
-        if button_name == push2_python.constants.BUTTON_RECORD:  # Trigger Loop
+        if button_name == push2_python.constants.BUTTON_RECORD:             # Trigger Loop
             msg = mido.Message('control_change', control=100, value=127)
             self.app.send_midi(msg)
 
     def on_button_released(self, button_name):
 
-        if button_name == push2_python.constants.BUTTON_UPPER_ROW_2:  # Reset Instrument filter
+        if button_name == push2_python.constants.BUTTON_UPPER_ROW_2:        # Reset Instrument filter
             msg = mido.Message('control_change', control=22, value=127)
             self.app.send_midi(msg)
 
-        if button_name == push2_python.constants.BUTTON_UPPER_ROW_4:  # Reset Master filter
+        if button_name == push2_python.constants.BUTTON_UPPER_ROW_4:        # Reset Master filter
             msg = mido.Message('control_change', control=24, value=127)
             self.app.send_midi(msg)
 
-        if button_name == push2_python.constants.BUTTON_UPPER_ROW_5:  # Reset FX
+        if button_name == push2_python.constants.BUTTON_UPPER_ROW_5:        # Reset FX
             msg = mido.Message('control_change', control=25, value=127)
             self.app.send_midi(msg)
 
-        if button_name == push2_python.constants.BUTTON_UPPER_ROW_6:  # Reset Smile
+        if button_name == push2_python.constants.BUTTON_UPPER_ROW_6:        # Reset Smile
             msg = mido.Message('control_change', control=26, value=127)
             self.app.send_midi(msg)
 
-        if button_name == push2_python.constants.BUTTON_UPPER_ROW_7:  # Reset Reverb
+        if button_name == push2_python.constants.BUTTON_UPPER_ROW_7:        # Reset Reverb
             msg = mido.Message('control_change', control=27, value=0)
             self.app.send_midi(msg)
 
-        if button_name == push2_python.constants.BUTTON_UPPER_ROW_8:  # Reset Tape
+        if button_name == push2_python.constants.BUTTON_UPPER_ROW_8:        # Reset Tape
             msg = mido.Message('control_change', control=28, value=127)
             self.app.send_midi(msg)
 
-        if button_name == push2_python.constants.BUTTON_LOWER_ROW_1:  # Reset Cue 1
+        if button_name == push2_python.constants.BUTTON_LOWER_ROW_1:        # Reset Cue 1
             msg = mido.Message('control_change', control=101, value=0)
             self.app.send_midi(msg)
 
-        if button_name == push2_python.constants.BUTTON_LOWER_ROW_2:  # Reset Cue 2
+        if button_name == push2_python.constants.BUTTON_LOWER_ROW_2:        # Reset Cue 2
             msg = mido.Message('control_change', control=102, value=0)
             self.app.send_midi(msg)
 
-        if button_name == push2_python.constants.BUTTON_LOWER_ROW_3:  # Reset Bar 1
+        if button_name == push2_python.constants.BUTTON_LOWER_ROW_3:        # Reset Bar 1
             msg = mido.Message('control_change', control=103, value=0)
             self.app.send_midi(msg)
 
-        if button_name == push2_python.constants.BUTTON_LOWER_ROW_4:  # Reset Bar 2
+        if button_name == push2_python.constants.BUTTON_LOWER_ROW_4:        # Reset Bar 2
             msg = mido.Message('control_change', control=104, value=0)
             self.app.send_midi(msg)
 
-        if button_name == push2_python.constants.BUTTON_LOWER_ROW_5:  # Reset Beat 1
+        if button_name == push2_python.constants.BUTTON_LOWER_ROW_5:        # Reset Beat 1
             msg = mido.Message('control_change', control=105, value=0)
             self.app.send_midi(msg)
 
-        if button_name == push2_python.constants.BUTTON_LOWER_ROW_6:  # Reset Beat 2
+        if button_name == push2_python.constants.BUTTON_LOWER_ROW_6:        # Reset Beat 2
             msg = mido.Message('control_change', control=106, value=0)
             self.app.send_midi(msg)
 
-        if button_name == push2_python.constants.BUTTON_LOWER_ROW_7:  # Reset Nudge 1
+        if button_name == push2_python.constants.BUTTON_LOWER_ROW_7:        # Reset Nudge 1
             msg = mido.Message('control_change', control=107, value=0)
             self.app.send_midi(msg)
 
-        if button_name == push2_python.constants.BUTTON_LOWER_ROW_8:  # Reset Nudge 2
+        if button_name == push2_python.constants.BUTTON_LOWER_ROW_8:        # Reset Nudge 2
             msg = mido.Message('control_change', control=108, value=0)
             self.app.send_midi(msg)
 
-        if button_name == push2_python.constants.BUTTON_PLAY:  # Reset Next song
+        if button_name == push2_python.constants.BUTTON_PLAY:               # Reset Next song
             msg = mido.Message('control_change', control=109, value=0)
             self.app.send_midi(msg)
 
-        if button_name == push2_python.constants.BUTTON_RECORD:  # Reset Loop
+        if button_name == push2_python.constants.BUTTON_RECORD:             # Reset Loop
             msg = mido.Message('control_change', control=100, value=0)
             self.app.send_midi(msg)
 
@@ -234,8 +235,7 @@ class PyramidiMode(PyshaMode):
             else:
                 self.value += increment
 
-            msg = mido.Message('control_change', control=self
-            .28, value = self.value)
+            msg = mido.Message('control_change', control=self.28, value=self.value)
             self.app.send_midi_func(msg)
 
         else:
