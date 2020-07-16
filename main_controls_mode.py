@@ -1,12 +1,12 @@
 import cairo
+import mido
 import push2_python
 
 import definitions
 
 SETTINGS_BUTTON = push2_python.constants.BUTTON_SETUP
 
-controls = {'instrument': 0, 'instrument_filter': 127, 'master_filter': 127, 'fx': 127, 'smile': 0, 'reverb': 0,
-            'tape': 127}
+controls = {'instr': 0, 'instr_lpf': 127, 'master_lpf': 127, 'fx': 127, 'smile': 0, 'reverb': 0, 'tape': 127}
 
 max_encoder_value = 127
 
@@ -37,26 +37,26 @@ class MainControlsMode(definitions.PyshaMode):
         s = "INSTRUMENT:"
         ctx.move_to(60 - (ctx.text_extents(s)[2] / 2), 15)
         # Piano
-        if controls['instrument'] <= 41:
+        if controls['instr'] <= 41:
             ctx.set_source_rgb(1, 0.25, 0.5)
         # Synth
-        if 42 <= controls['instrument'] <= 81:
+        if 42 <= controls['instr'] <= 81:
             ctx.set_source_rgb(0, 1, 0.7)
         # Sampler
-        if controls['instrument'] >= 82:
+        if controls['instr'] >= 82:
             ctx.set_source_rgb(0.75, 0, 1)
         ctx.show_text(s)
 
         # Instrument canvas
-        ctx.rectangle(15, 23 + (30 * (controls['instrument'] / 127)), 90, 15)
+        ctx.rectangle(15, 23 + (30 * (controls['instr'] / 127)), 90, 15)
         # Piano
-        if controls['instrument'] <= 41:
+        if controls['instr'] <= 41:
             ctx.set_source_rgb(1, 0.25, 0.5)
         # Synth
-        if 42 <= controls['instrument'] <= 81:
+        if 42 <= controls['instr'] <= 81:
             ctx.set_source_rgb(0, 0.9, 0.6)
         # Sampler
-        if controls['instrument'] >= 82:
+        if controls['instr'] >= 82:
             ctx.set_source_rgb(0.75, 0, 1)
         ctx.fill()
         ctx.stroke()
@@ -83,13 +83,13 @@ class MainControlsMode(definitions.PyshaMode):
 
         # Instrument_filter title
         # Piano
-        if controls['instrument'] <= 41:
+        if controls['instr'] <= 41:
             ctx.set_source_rgb(1, 0.25, 0.5)
         # Synth
-        if 42 <= controls['instrument'] <= 81:
+        if 42 <= controls['instr'] <= 81:
             ctx.set_source_rgb(0, 1, 0.7)
         # Sampler
-        if controls['instrument'] >= 82:
+        if controls['instr'] >= 82:
             ctx.set_source_rgb(0.75, 0, 1)
         ctx.set_font_size(12)
         ctx.select_font_face(font, normal, bold)
@@ -100,26 +100,26 @@ class MainControlsMode(definitions.PyshaMode):
         # Instrument_filter value (canvas - inverted)
         ctx.arc(180, 70, 42, 0, 2 * 3.14)
         # Piano
-        if controls['instrument'] <= 41:
+        if controls['instr'] <= 41:
             ctx.set_source_rgb(1, 0.5, 0.75)
-            if controls['instrument_filter'] == 127:
+            if controls['instr_lpf'] == 127:
                 ctx.set_source_rgb(0.1, 0.025, 0.05)
         # Synth
-        if 42 <= controls['instrument'] <= 81:
+        if 42 <= controls['instr'] <= 81:
             ctx.set_source_rgb(0.5, 1, 0.95)
-            if controls['instrument_filter'] == 127:
+            if controls['instr_lpf'] == 127:
                 ctx.set_source_rgb(0, 0.1, 0.07)
         # Sampler
-        if controls['instrument'] >= 82:
+        if controls['instr'] >= 82:
             ctx.set_source_rgb(0.9, 0.25, 1)
-            if controls['instrument_filter'] == 127:
+            if controls['instr_lpf'] == 127:
                 ctx.set_source_rgb(0.075, 0, 0.075)
         ctx.fill()
         ctx.stroke()
 
         # Instrument_filter canvas (value - inverted)
         ctx.move_to(180, 75)
-        ctx.arc(180, 70, 42, 3.14 / 2, 3.14 / 2 + 360 * (controls['instrument_filter'] / 127) * (3.14 / 180))
+        ctx.arc(180, 70, 42, 3.14 / 2, 3.14 / 2 + 360 * (controls['instr_lpf'] / 127) * (3.14 / 180))
         ctx.close_path()
         ctx.set_source_rgb(0.02, 0.02, 0.02)
         ctx.fill()
@@ -127,17 +127,17 @@ class MainControlsMode(definitions.PyshaMode):
 
         # Instrument_filter frame
         ctx.arc(180, 70, 42, 0, 2 * 3.14)
-        if controls['instrument_filter'] == 127:
+        if controls['instr_lpf'] == 127:
             ctx.set_source_rgb(0.032, 0.032, 0.032)
         else:
             # Piano
-            if controls['instrument'] <= 41:
+            if controls['instr'] <= 41:
                 ctx.set_source_rgb(1, 0.25, 0.5)
             # Synth
-            if 42 <= controls['instrument'] <= 81:
+            if 42 <= controls['instr'] <= 81:
                 ctx.set_source_rgb(0.05, 0.9, 0.7)
             # Sampler
-            if controls['instrument'] >= 82:
+            if controls['instr'] >= 82:
                 ctx.set_source_rgb(0.75, 0, 1)
         ctx.set_line_width(5)
         ctx.stroke()
@@ -154,14 +154,14 @@ class MainControlsMode(definitions.PyshaMode):
         # Master_filter value (canvas - inverted)
         ctx.arc(420, 70, 42, 0, 2 * 3.14)
         ctx.set_source_rgb(1, 0.75, 0.3)
-        if controls['master_filter'] == 127:
+        if controls['master_lpf'] == 127:
             ctx.set_source_rgb(0.1, 0.05, 0.01)
         ctx.fill()
         ctx.stroke()
 
         # Master_filter canvas (value - inverted)
         ctx.move_to(420, 75)
-        ctx.arc(420, 70, 42, 3.14 / 2, 3.14 / 2 + 360 * (controls['master_filter'] / 127) * (3.14 / 180))
+        ctx.arc(420, 70, 42, 3.14 / 2, 3.14 / 2 + 360 * (controls['master_lpf'] / 127) * (3.14 / 180))
         ctx.close_path()
         ctx.set_source_rgb(0.02, 0.02, 0.02)
         ctx.fill()
@@ -169,7 +169,7 @@ class MainControlsMode(definitions.PyshaMode):
 
         # Master_filter frame
         ctx.arc(420, 70, 42, 0, 2 * 3.14)
-        if controls['master_filter'] == 127:
+        if controls['master_lpf'] == 127:
             ctx.set_source_rgb(0.032, 0.032, 0.032)
         else:
             ctx.set_source_rgb(1, 0.5, 0.1)
@@ -460,17 +460,17 @@ class MainControlsMode(definitions.PyshaMode):
         # encoder 1
         if encoder_name == push2_python.constants.ENCODER_TRACK1_ENCODER:
             def update_encoder_value(increment):
-                updated_value = int(controls['instrument'] + increment)
+                updated_value = int(controls['instr'] + increment)
                 if updated_value < 0:
-                    controls['instrument'] = 0
+                    controls['instr'] = 0
                 elif updated_value > max_encoder_value:
-                    controls['instrument'] = max_encoder_value
+                    controls['instr'] = max_encoder_value
                 else:
-                    controls['instrument'] = updated_value
+                    controls['instr'] = updated_value
 
             update_encoder_value(increment)
 
-            if controls['instrument'] <= 41:
+            if controls['instr'] <= 41:
                 definitions.ROOT_KEY = definitions.PINK
                 definitions.LAYOUT_INSTRUMENT = 'lmelodic'
                 definitions.NOTE_ON_COLOR = definitions.SURF
@@ -481,7 +481,7 @@ class MainControlsMode(definitions.PyshaMode):
                 self.update_buttons()
                 self.app.melodic_mode.remove_all_notes_being_played()
 
-            if 42 <= controls['instrument'] <= 81:
+            if 42 <= controls['instr'] <= 81:
                 definitions.ROOT_KEY = definitions.GREEN
                 definitions.LAYOUT_INSTRUMENT = 'lmelodic'
                 definitions.NOTE_ON_COLOR = definitions.PINK
@@ -492,7 +492,7 @@ class MainControlsMode(definitions.PyshaMode):
                 self.update_buttons()
                 self.app.melodic_mode.remove_all_notes_being_played()
 
-            if controls['instrument'] >= 82:
+            if controls['instr'] >= 82:
                 definitions.ROOT_KEY = definitions.PURPLE
                 definitions.LAYOUT_INSTRUMENT = 'lrhytmic'
                 definitions.NOTE_ON_COLOR = definitions.WHITE
@@ -506,26 +506,26 @@ class MainControlsMode(definitions.PyshaMode):
         # encoder 2
         if encoder_name == push2_python.constants.ENCODER_TRACK2_ENCODER:
             def update_encoder_value(increment):
-                updated_filter_value = int(controls['instrument_filter'] + increment)
+                updated_filter_value = int(controls['instr_lpf'] + increment)
                 if updated_filter_value < 0:
-                    controls['instrument_filter'] = 0
+                    controls['instr_lpf'] = 0
                 elif updated_filter_value > max_encoder_value:
-                    controls['instrument_filter'] = max_encoder_value
+                    controls['instr_lpf'] = max_encoder_value
                 else:
-                    controls['instrument_filter'] = updated_filter_value
+                    controls['instr_lpf'] = updated_filter_value
 
             update_encoder_value(increment)
 
         # encoder 4
         if encoder_name == push2_python.constants.ENCODER_TRACK4_ENCODER:
             def update_encoder_value(increment):
-                updated_filter_value = int(controls['master_filter'] + increment)
+                updated_filter_value = int(controls['master_lpf'] + increment)
                 if updated_filter_value < 0:
-                    controls['master_filter'] = 0
+                    controls['master_lpf'] = 0
                 elif updated_filter_value > max_encoder_value:
-                    controls['master_filter'] = max_encoder_value
+                    controls['master_lpf'] = max_encoder_value
                 else:
-                    controls['master_filter'] = updated_filter_value
+                    controls['master_lpf'] = updated_filter_value
 
             update_encoder_value(increment)
 
@@ -577,8 +577,9 @@ class MainControlsMode(definitions.PyshaMode):
                     controls['tape'] = max_encoder_value
                 else:
                     controls['tape'] = updated_filter_value
-
             update_encoder_value(increment)
+            msg = mido.Message('control_change', control=28, value=controls['tape'])
+            self.app.send_midi(msg)
 
     def on_button_pressed(self, button_name):
         if button_name == SETTINGS_BUTTON:
@@ -654,12 +655,12 @@ class MainControlsMode(definitions.PyshaMode):
         # RELEASED UPP button 2
         if button_name == push2_python.constants.BUTTON_UPPER_ROW_2:
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_2, definitions.ROOT_KEY)
-            controls['instrument_filter'] = 127
+            controls['instr_lpf'] = 127
 
         # RELEASED UPP button 4
         if button_name == push2_python.constants.BUTTON_UPPER_ROW_4:
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_4, definitions.ORANGE)
-            controls['master_filter'] = 127
+            controls['master_lpf'] = 127
 
         # RELEASED UPP button 5
         if button_name == push2_python.constants.BUTTON_UPPER_ROW_5:
