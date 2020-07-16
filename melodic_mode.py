@@ -189,7 +189,6 @@ class MelodicMode(definitions.PyshaMode):
         self.push.pads.set_pads_color(color_matrix)
         # self.update_pads()
 
-
     def on_pad_pressed(self, pad_n, pad_ij, velocity):
         midi_note = self.pad_ij_to_midi_note(pad_ij)
         if midi_note is not None:
@@ -214,11 +213,12 @@ class MelodicMode(definitions.PyshaMode):
             midi_note = self.pad_ij_to_midi_note(pad_ij)
             if midi_note is not None:
                 msg = mido.Message('polytouch', note=midi_note, value=velocity)
+                self.app.send_midi(msg)
         else:
             # channel AT mode
             self.latest_channel_at_value = (time.time(), velocity)
             msg = mido.Message('aftertouch', value=velocity)
-        self.app.send_midi(msg)
+            self.app.send_midi(msg)
 
     def on_touchstrip(self, value):
         msg = mido.Message('pitchwheel', pitch=value)

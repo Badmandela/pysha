@@ -11,13 +11,11 @@ import push2_python
 import definitions
 from main_controls_mode import MainControlsMode
 from melodic_mode import MelodicMode
-# from pyramidi_mode import PyramidiMode
 from rhythmic_mode import RhythmicMode
 from settings_mode import SettingsMode
 
 
 class PyshaApp(object):
-
     # midi
     midi_out = None
     available_midi_out_device_names = []
@@ -61,18 +59,17 @@ class PyshaApp(object):
 
         self.init_modes(settings)
         self.active_modes.append(self.main_controls_mode)
-        # self.active_modes.append(self.pyramidi_mode)
         self.toggle_melodic_rhythmic_modes()
 
     def init_modes(self, settings):
         self.melodic_mode = MelodicMode(self, settings=settings)
         self.rhyhtmic_mode = RhythmicMode(self, settings=settings)
         self.settings_mode = SettingsMode(self, settings=settings)
-        # self.pyramidi_mode = PyramidiMode(self, settings=settings)
         self.main_controls_mode = MainControlsMode(self, settings=settings)
 
     def get_all_modes(self):
-        return [getattr(self, element) for element in vars(self) if isinstance(getattr(self, element), definitions.PyshaMode)]
+        return [getattr(self, element) for element in vars(self) if
+                isinstance(getattr(self, element), definitions.PyshaMode)]
 
     def is_mode_active(self, mode):
         return mode in self.active_modes
@@ -95,7 +92,7 @@ class PyshaApp(object):
             self.melodic_mode.deactivate()
             self.rhyhtmic_mode.activate()
         elif self.is_mode_active(self.rhyhtmic_mode):
-            # Switch to melodic mdoe
+            # Switch to melodic mode
             self.active_modes = [mode for mode in self.active_modes if mode != self.rhyhtmic_mode]
             self.active_modes += [self.melodic_mode]
             self.rhyhtmic_mode.deactivate()
@@ -109,7 +106,6 @@ class PyshaApp(object):
     def set_melodic_mode(self):
         if self.is_mode_active(self.rhyhtmic_mode):
             self.toggle_melodic_rhythmic_modes()
-
 
     def set_rhythmic_mode(self):
         if self.is_mode_active(self.melodic_mode):
@@ -189,13 +185,13 @@ class PyshaApp(object):
             self.midi_out_channel = 15 if not wrap else 0
 
     def set_midi_in_device_by_index(self, device_idx):
-        if device_idx >= 0 and device_idx < len(self.available_midi_in_device_names):
+        if 0 <= device_idx < len(self.available_midi_in_device_names):
             self.init_midi_in(self.available_midi_in_device_names[device_idx])
         else:
             self.init_midi_in(None)
 
     def set_midi_out_device_by_index(self, device_idx):
-        if device_idx >= 0 and device_idx < len(self.available_midi_out_device_names):
+        if 0 <= device_idx < len(self.available_midi_out_device_names):
             self.init_midi_out(self.available_midi_out_device_names[device_idx])
         else:
             self.init_midi_out(None)
@@ -208,8 +204,10 @@ class PyshaApp(object):
             self.midi_out.send(msg)
 
     def midi_in_handler(self, msg):
-        if hasattr(msg, 'channel'):  # This will rule out sysex and other "strange" messages that don't have channel info
-            if self.midi_in_channel == -1 or msg.channel == self.midi_in_channel:   # If midi input channel is set to -1 (all) or a specific channel
+        # This will rule out sysex and other "strange" messages that don't have channel info
+        if hasattr(msg, 'channel'):
+            # If midi input channel is set to -1 (all) or a specific channel
+            if self.midi_in_channel == -1 or msg.channel == self.midi_in_channel:
 
                 # Forward message to the MIDI out
                 self.send_midi(msg)
@@ -301,6 +299,7 @@ class PyshaApp(object):
             print('Exiting Pysha...')
             self.push.f_stop.set()
 
+    # noinspection PyMethodMayBeStatic
     def on_midi_push_connection_established(self):
         # Do initial configuration of Push
         print('Doing initial Push config...')
@@ -326,7 +325,7 @@ def on_encoder_rotated(_, encoder_name, increment):
         for mode in app.active_modes:
             mode.on_encoder_rotated(encoder_name, increment)
     except NameError:
-       print('app object not yet ready!')
+        print('app object not yet ready!')
 
 
 @push2_python.on_pad_pressed()
@@ -335,7 +334,7 @@ def on_pad_pressed(_, pad_n, pad_ij, velocity):
         for mode in app.active_modes:
             mode.on_pad_pressed(pad_n, pad_ij, velocity)
     except NameError:
-       print('app object not yet ready!')
+        print('app object not yet ready!')
 
 
 @push2_python.on_pad_released()
@@ -344,7 +343,7 @@ def on_pad_released(_, pad_n, pad_ij, velocity):
         for mode in app.active_modes:
             mode.on_pad_released(pad_n, pad_ij, velocity)
     except NameError:
-       print('app object not yet ready!')
+        print('app object not yet ready!')
 
 
 @push2_python.on_pad_aftertouch()
@@ -353,7 +352,7 @@ def on_pad_aftertouch(_, pad_n, pad_ij, velocity):
         for mode in app.active_modes:
             mode.on_pad_aftertouch(pad_n, pad_ij, velocity)
     except NameError:
-       print('app object not yet ready!')
+        print('app object not yet ready!')
 
 
 @push2_python.on_button_pressed()
@@ -362,7 +361,8 @@ def on_button_pressed(_, name):
         for mode in app.active_modes:
             mode.on_button_pressed(name)
     except NameError:
-       print('app object not yet ready!')
+        print('app object not yet ready!')
+
 
 @push2_python.on_button_released()
 def on_button_released(_, name):
@@ -370,7 +370,7 @@ def on_button_released(_, name):
         for mode in app.active_modes:
             mode.on_button_released(name)
     except NameError:
-       print('app object not yet ready!')
+        print('app object not yet ready!')
 
 
 @push2_python.on_touchstrip()
@@ -379,7 +379,7 @@ def on_touchstrip(_, value):
         for mode in app.active_modes:
             mode.on_touchstrip(value)
     except NameError:
-       print('app object not yet ready!')
+        print('app object not yet ready!')
 
 
 @push2_python.on_midi_connected()
@@ -387,7 +387,8 @@ def on_midi_connected(_):
     try:
         app.on_midi_push_connection_established()
     except NameError:
-       print('app object not yet ready!')
+        print('app object not yet ready!')
+
 
 @push2_python.on_sustain_pedal()
 def on_sustain_pedal(_, sustain_on):
@@ -395,7 +396,8 @@ def on_sustain_pedal(_, sustain_on):
         for mode in app.active_modes:
             mode.on_sustain_pedal(sustain_on)
     except NameError:
-       print('app object not yet ready!')
+        print('app object not yet ready!')
+
 
 # Run app main loop
 if __name__ == "__main__":

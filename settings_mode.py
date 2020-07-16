@@ -56,14 +56,12 @@ class SettingsMode(definitions.PyshaMode):
         current_time = time.time()
         if self.app.midi_in_tmp_device_idx is not None:
             # Means we are in the process of changing the MIDI in device
-            if current_time - self.encoders_state[push2_python.constants.ENCODER_TRACK1_ENCODER][
-                'last_message_received'] > definitions.DELAYED_ACTIONS_APPLY_TIME:
+            if current_time - self.encoders_state[push2_python.constants.ENCODER_TRACK1_ENCODER]['last_message_received'] > definitions.DELAYED_ACTIONS_APPLY_TIME:
                 self.app.set_midi_in_device_by_index(self.app.midi_in_tmp_device_idx)
                 self.app.midi_in_tmp_device_idx = None
         if self.app.midi_out_tmp_device_idx is not None:
             # Means we are in the process of changing the MIDI in device
-            if current_time - self.encoders_state[push2_python.constants.ENCODER_TRACK3_ENCODER][
-                'last_message_received'] > definitions.DELAYED_ACTIONS_APPLY_TIME:
+            if current_time - self.encoders_state[push2_python.constants.ENCODER_TRACK3_ENCODER]['last_message_received'] > definitions.DELAYED_ACTIONS_APPLY_TIME:
                 self.app.set_midi_out_device_by_index(self.app.midi_out_tmp_device_idx)
                 self.app.midi_out_tmp_device_idx = None
 
@@ -135,30 +133,30 @@ class SettingsMode(definitions.PyshaMode):
 
                 elif i == 1:  # Poly AT/channel AT
                     show_title(ctx, part_x, h, 'AFTERTOUCH')
-                    show_value(ctx, part_x, h, 'polyAT' if self.app.melodic_mode.use_poly_at else 'channel', color)
+                    show_value(ctx, part_x, h, 'Poly AT' if self.app.melodic_mode.use_poly_at else 'Channel AT', color)
 
                 elif i == 2:  # Channel AT range start
                     if self.app.melodic_mode.last_time_at_params_edited is not None:
                         color = definitions.get_color_rgb_float(definitions.FONT_COLOR_DELAYED_ACTIONS)
-                    show_title(ctx, part_x, h, 'cAT START')
+                    show_title(ctx, part_x, h, 'Channel AT START')
                     show_value(ctx, part_x, h, self.app.melodic_mode.channel_at_range_start, color)
 
                 elif i == 3:  # Channel AT range end
                     if self.app.melodic_mode.last_time_at_params_edited is not None:
                         color = definitions.get_color_rgb_float(definitions.FONT_COLOR_DELAYED_ACTIONS)
-                    show_title(ctx, part_x, h, 'cAT END')
+                    show_title(ctx, part_x, h, 'Channel AT END')
                     show_value(ctx, part_x, h, self.app.melodic_mode.channel_at_range_end, color)
 
                 elif i == 4:  # Poly AT range
                     if self.app.melodic_mode.last_time_at_params_edited is not None:
                         color = definitions.get_color_rgb_float(definitions.FONT_COLOR_DELAYED_ACTIONS)
-                    show_title(ctx, part_x, h, 'pAT RANGE')
+                    show_title(ctx, part_x, h, 'Poly AT RANGE')
                     show_value(ctx, part_x, h, self.app.melodic_mode.poly_at_max_range, color)
 
                 elif i == 5:  # Poly AT curve
                     if self.app.melodic_mode.last_time_at_params_edited is not None:
                         color = definitions.get_color_rgb_float(definitions.FONT_COLOR_DELAYED_ACTIONS)
-                    show_title(ctx, part_x, h, 'pAT CURVE')
+                    show_title(ctx, part_x, h, 'Poly AT CURVE')
                     show_value(ctx, part_x, h, self.app.melodic_mode.poly_at_curve_bending, color)
 
             elif self.current_page == 1:  # MIDI settings
@@ -226,11 +224,6 @@ class SettingsMode(definitions.PyshaMode):
                     show_title(ctx, part_x, h, 'VERSION')
                     show_value(ctx, part_x, h, 'Niklas Pysha ' + definitions.VERSION, color)
 
-                # elif i == 2:  # Software update
-                #     show_title(ctx, part_x, h, 'SW UPDATE')
-                #     if self.is_running_sw_update:
-                #         show_value(ctx, part_x, h, 'Running... ', color)
-
                 elif i == 3:  # FPS indicator
                     show_title(ctx, part_x, h, 'FPS')
                     show_value(ctx, part_x, h, self.app.actual_frame_rate, color)
@@ -252,7 +245,7 @@ class SettingsMode(definitions.PyshaMode):
                 x = curve_x + i * curve_length / n
                 y = curve_y - curve_height * value / 127
                 ctx.line_to(x, y)
-            ctx.line_to(x, curve_y)
+                ctx.line_to(x, curve_y)
             ctx.fill()
 
             current_time = time.time()
@@ -276,7 +269,8 @@ class SettingsMode(definitions.PyshaMode):
         if self.current_page == 0:  # Performance settings
             if encoder_name == push2_python.constants.ENCODER_TRACK1_ENCODER:
                 self.app.melodic_mode.set_root_midi_note(self.app.melodic_mode.root_midi_note + increment)
-                self.app.pads_need_update = True  # Using async update method because we don't really need immediate response here
+                # Using async update method because we don't really need immediate response here
+                self.app.pads_need_update = True
 
             elif encoder_name == push2_python.constants.ENCODER_TRACK2_ENCODER:
                 if increment >= 3:  # Only respond to "big" increments
@@ -393,31 +387,3 @@ class SettingsMode(definitions.PyshaMode):
             if button_name == push2_python.constants.BUTTON_UPPER_ROW_1:
                 # Save current settings
                 self.app.save_current_settings_to_file()
-            # elif button_name == push2_python.constants.BUTTON_UPPER_ROW_3:
-            #     # Run software update code
-            #     self.is_running_sw_update = True
-            #     run_sw_update()
-
-
-# def restart_program():
-#     """Restarts the current program, with file objects and descriptors cleanup
-#        Source: https://stackoverflow.com/questions/11329917/restart-python-script-from-within-itself
-#     """
-#     try:
-#         p = psutil.Process(os.getpid())
-#         for handler in p.get_open_files() + p.connections():
-#             os.close(handler.fd)
-#     except Exception as e:
-#         print(e)
-#     python = sys.executable
-#     os.execl(python, python, *sys.argv)
-
-
-# def run_sw_update():
-#     """Runs "git pull" in the current directory to retrieve latest code definitions.VERSION and then
-#     restarts the process"""
-#     print('Running SW update...')
-#     print('- pulling from repository')
-#     os.system('git pull')
-#     print('- restarting process')
-#     restart_program()

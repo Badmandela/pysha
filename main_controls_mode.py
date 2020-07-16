@@ -466,6 +466,7 @@ class MainControlsMode(definitions.PyshaMode):
         # encoder 1
         if encoder_name == push2_python.constants.ENCODER_TRACK1_ENCODER:
             def update_encoder_value(increment):
+                increment = increment / 2
                 updated_value = int(controls['instr'] + increment)
                 if updated_value < 0:
                     controls['instr'] = 0
@@ -479,30 +480,26 @@ class MainControlsMode(definitions.PyshaMode):
             self.app.send_midi(msg)
 
             if controls['instr'] <= 41:
-                 if not definitions.ROOT_KEY == definitions.PINK:
+                if not definitions.ROOT_KEY == definitions.PINK:
                     definitions.ROOT_KEY = definitions.PINK
                     definitions.NOTE_ON_COLOR = definitions.GREEN
-                    # definitions.LAYOUT_INSTRUMENT = 'lmelodic'
                     self.clean_currently_notes_being_played()
                     self.app.set_melodic_mode()
                     self.app.pads_need_update = True
                     self.update_pads()
                     self.app.buttons_need_update = True
                     self.update_buttons()
-                    # self.app.melodic_mode.remove_all_notes_being_played()
 
             if 42 <= controls['instr'] <= 81:
                 if not definitions.ROOT_KEY == definitions.GREEN:
                     definitions.ROOT_KEY = definitions.GREEN
                     definitions.NOTE_ON_COLOR = definitions.PINK
-                    # definitions.LAYOUT_INSTRUMENT = 'lmelodic'
                     self.clean_currently_notes_being_played()
                     self.app.set_melodic_mode()
                     self.app.pads_need_update = True
                     self.update_pads()
                     self.app.buttons_need_update = True
                     self.update_buttons()
-                    # self.app.melodic_mode.remove_all_notes_being_played()
 
             if controls['instr'] >= 82:
                 if not definitions.ROOT_KEY == definitions.PURPLE:
@@ -520,6 +517,7 @@ class MainControlsMode(definitions.PyshaMode):
         # encoder 2
         if encoder_name == push2_python.constants.ENCODER_TRACK2_ENCODER:
             def update_encoder_value(increment):
+                increment = increment / 2
                 updated_filter_value = int(controls['instr_lpf'] + increment)
                 if updated_filter_value < 0:
                     controls['instr_lpf'] = 0
@@ -527,6 +525,7 @@ class MainControlsMode(definitions.PyshaMode):
                     controls['instr_lpf'] = max_encoder_value
                 else:
                     controls['instr_lpf'] = updated_filter_value
+
             update_encoder_value(increment)
             msg = mido.Message('control_change', control=22, value=controls['instr_lpf'])
             self.app.send_midi(msg)
@@ -534,6 +533,7 @@ class MainControlsMode(definitions.PyshaMode):
         # encoder 4
         if encoder_name == push2_python.constants.ENCODER_TRACK4_ENCODER:
             def update_encoder_value(increment):
+                increment = increment / 2
                 updated_filter_value = int(controls['master_lpf'] + increment)
                 if updated_filter_value < 0:
                     controls['master_lpf'] = 0
@@ -541,6 +541,7 @@ class MainControlsMode(definitions.PyshaMode):
                     controls['master_lpf'] = max_encoder_value
                 else:
                     controls['master_lpf'] = updated_filter_value
+
             update_encoder_value(increment)
             msg = mido.Message('control_change', control=24, value=controls['master_lpf'])
             self.app.send_midi(msg)
@@ -548,6 +549,7 @@ class MainControlsMode(definitions.PyshaMode):
         # encoder 5
         if encoder_name == push2_python.constants.ENCODER_TRACK5_ENCODER:
             def update_encoder_value(increment):
+                increment = increment / 2
                 updated_filter_value = int(controls['fx'] + increment)
                 if updated_filter_value < 0:
                     controls['fx'] = 0
@@ -555,6 +557,7 @@ class MainControlsMode(definitions.PyshaMode):
                     controls['fx'] = max_encoder_value
                 else:
                     controls['fx'] = updated_filter_value
+
             update_encoder_value(increment)
             msg = mido.Message('control_change', control=25, value=controls['fx'])
             self.app.send_midi(msg)
@@ -562,6 +565,7 @@ class MainControlsMode(definitions.PyshaMode):
         # encoder 6
         if encoder_name == push2_python.constants.ENCODER_TRACK6_ENCODER:
             def update_encoder_value(increment):
+                increment = increment / 2
                 updated_filter_value = int(controls['smile'] + increment)
                 if updated_filter_value < 0:
                     controls['smile'] = 0
@@ -569,6 +573,7 @@ class MainControlsMode(definitions.PyshaMode):
                     controls['smile'] = max_encoder_value
                 else:
                     controls['smile'] = updated_filter_value
+
             update_encoder_value(increment)
             msg = mido.Message('control_change', control=26, value=controls['smile'])
             self.app.send_midi(msg)
@@ -576,6 +581,7 @@ class MainControlsMode(definitions.PyshaMode):
         # encoder 7
         if encoder_name == push2_python.constants.ENCODER_TRACK7_ENCODER:
             def update_encoder_value(increment):
+                increment = increment / 2
                 updated_filter_value = int(controls['reverb'] + increment)
                 if updated_filter_value < 0:
                     controls['reverb'] = 0
@@ -583,6 +589,7 @@ class MainControlsMode(definitions.PyshaMode):
                     controls['reverb'] = max_encoder_value
                 else:
                     controls['reverb'] = updated_filter_value
+
             update_encoder_value(increment)
             msg = mido.Message('control_change', control=27, value=controls['reverb'])
             self.app.send_midi(msg)
@@ -590,6 +597,7 @@ class MainControlsMode(definitions.PyshaMode):
         # encoder 8
         if encoder_name == push2_python.constants.ENCODER_TRACK8_ENCODER:
             def update_encoder_value(increment):
+                increment = increment / 2
                 updated_filter_value = int(controls['tape'] + increment)
                 if updated_filter_value < 0:
                     controls['tape'] = 0
@@ -597,6 +605,7 @@ class MainControlsMode(definitions.PyshaMode):
                     controls['tape'] = max_encoder_value
                 else:
                     controls['tape'] = updated_filter_value
+
             update_encoder_value(increment)
             msg = mido.Message('control_change', control=28, value=controls['tape'])
             self.app.send_midi(msg)
