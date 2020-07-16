@@ -63,7 +63,7 @@ class PyshaApp(object):
         self.active_modes.append(self.main_controls_mode)
         self.active_modes.append(self.pyramidi_mode)
         self.toggle_melodic_rhythmic_modes()
-        
+
     def init_modes(self, settings):
         self.melodic_mode = MelodicMode(self, settings=settings)
         self.rhyhtmic_mode = RhythmicMode(self, settings=settings)
@@ -210,9 +210,9 @@ class PyshaApp(object):
     def midi_in_handler(self, msg):
         if hasattr(msg, 'channel'):  # This will rule out sysex and other "strange" messages that don't have channel info
             if self.midi_in_channel == -1 or msg.channel == self.midi_in_channel:   # If midi input channel is set to -1 (all) or a specific channel
-                
+
                 # Forward message to the MIDI out
-                self.send_midi(msg)  
+                self.send_midi(msg)
 
                 # Forward the midi message to the active modes
                 for mode in self.active_modes:
@@ -242,11 +242,11 @@ class PyshaApp(object):
             w, h = push2_python.constants.DISPLAY_LINE_PIXELS, push2_python.constants.DISPLAY_N_LINES
             surface = cairo.ImageSurface(cairo.FORMAT_RGB16_565, w, h)
             ctx = cairo.Context(surface)
-            
+
             # Call all active modes to write to context
             for mode in self.active_modes:
                 mode.update_display(ctx, w, h)
-            
+
             # Convert cairo data to numpy array and send to push
             buf = surface.get_data()
             frame = numpy.ndarray(shape=(h, w), dtype=numpy.uint16, buffer=buf).transpose()
@@ -254,9 +254,9 @@ class PyshaApp(object):
 
     def check_for_delayed_actions(self):
         # If MIDI not configured, make sure we try sending messages so it gets configured
-        if not self.push.midi_is_configured():  
+        if not self.push.midi_is_configured():
             self.push.configure_midi()
-        
+
         # Call dalyed actions in active modes
         for mode in self.active_modes:
             mode.check_for_delayed_actions()
@@ -286,8 +286,6 @@ class PyshaApp(object):
                     self.current_frame_rate_measurement = 0
                     self.current_frame_rate_measurement_second = now
                     print('{0} fps'.format(self.actual_frame_rate))
-                    print(definitions.ROOT_KEY)
-                    print(definitions.LAYOUT_INSTRUMENT)
 
                 # Check if any delayed actions need to be applied
                 self.check_for_delayed_actions()
@@ -316,7 +314,7 @@ class PyshaApp(object):
         # Initialize all buttons to black, initialize all pads to off
         app.push.buttons.set_all_buttons_color(color=definitions.BLACK)
         app.push.pads.set_all_pads_to_color(color=definitions.BLACK)
-        
+
         app.update_push2_buttons()
         app.update_push2_pads()
 
@@ -389,7 +387,7 @@ def on_midi_connected(_):
     try:
         app.on_midi_push_connection_established()
     except NameError:
-       print('app object not yet ready!') 
+       print('app object not yet ready!')
 
 @push2_python.on_sustain_pedal()
 def on_sustain_pedal(_, sustain_on):

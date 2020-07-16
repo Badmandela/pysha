@@ -37,14 +37,11 @@ class RhythmicMode(MelodicMode):
                 corresponding_midi_note = self.pad_ij_to_midi_note([i, j])
                 cell_color = definitions.ROOT_KEY
 
-                # This is the main 4x4 grid
-
-                ### 1/4 ### (Upper-left 4x4)
+                # 1/4 (Upper-left 4x4)
                 if i <= 4 and j < 4:
                     cell_color = definitions.BLACK
 
-                ### SPARKLE LAYOUT ### (Bottom-left 4x4)
-
+                # SPARKLE (Bottom-left 4x4)
                 # ROW 1
                 elif i == 4 and j == 0:
                     cell_color = definitions.BLACK
@@ -57,35 +54,35 @@ class RhythmicMode(MelodicMode):
 
                 # ROW 2
                 elif i == 5 and j == 0:
-                    cell_color = definitions.SPARKLE_5_COLOR
+                    cell_color = definitions.S5
                 elif i == 5 and j == 1:
-                    cell_color = definitions.SPARKLE_6_COLOR
+                    cell_color = definitions.S6
                 elif i == 5 and j == 2:
-                    cell_color = definitions.SPARKLE_7_COLOR
+                    cell_color = definitions.S7
                 elif i == 5 and j == 3:
-                    cell_color = definitions.SPARKLE_8_COLOR
+                    cell_color = definitions.S8
 
                 # ROW 3
                 elif i == 6 and j == 0:
-                    cell_color = definitions.SPARKLE_2_COLOR
+                    cell_color = definitions.S2
                 elif i == 6 and j == 1:
-                    cell_color = definitions.SPARKLE_3_COLOR
+                    cell_color = definitions.S3
                 elif i == 6 and j == 2:
-                    cell_color = definitions.SPARKLE_4_COLOR
+                    cell_color = definitions.S4
                 elif i == 6 and j == 3:
-                    cell_color = definitions.SPARKLE_5_COLOR
+                    cell_color = definitions.S5
 
                 # ROW 4
                 elif i == 7 and j == 0:
-                    cell_color = definitions.SPARKLE_1_COLOR
+                    cell_color = definitions.S1
                 elif i == 7 and j == 1:
-                    cell_color = definitions.SPARKLE_1_COLOR
+                    cell_color = definitions.S1
                 elif i == 7 and j == 2:
                     cell_color = definitions.BLACK
                 elif i == 7 and j == 3:
-                    cell_color = definitions.SPARKLE_6_COLOR
+                    cell_color = definitions.S6
 
-                ### DRUM LAYOUT ### (Upper-right 4x4)
+                # DRUM (Upper-right 4x4)
                 # ROW 1
                 elif i == 0 and j == 4:
                     cell_color = definitions.CRASH_COLOR
@@ -126,7 +123,7 @@ class RhythmicMode(MelodicMode):
                 elif i == 3 and j == 7:
                     cell_color = definitions.STICK_COLOR
 
-                ### 4/4 ### (Bottom-right 4x4)
+                # 4/4 (Bottom-right 4x4)
                 elif i >= 4 and j >= 4:
                     cell_color = definitions.BLACK
 
