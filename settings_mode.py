@@ -196,6 +196,7 @@ class SettingsMode(definitions.PyshaMode):
                             name = "{0} {1}".format(self.app.midi_out_tmp_device_idx + 1,
                                                     self.app.available_midi_out_device_names[
                                                         self.app.midi_out_tmp_device_idx])
+
                     else:
                         if self.app.midi_out is not None:
                             name = "{0} {1}".format(
@@ -204,6 +205,15 @@ class SettingsMode(definitions.PyshaMode):
                         else:
                             color = definitions.get_color_rgb_float(definitions.FONT_COLOR_DISABLED)
                             name = "None"
+
+                    if 'iConnectAUDIO2+ USB1' in name:
+                        name = 'iCA2 USB1'
+                        color = definitions.get_color_rgb_float(definitions.GREEN)
+
+                    if 'iConnectAUDIO2+ DIN' in name:
+                        name = 'iCA2 DIN'
+                        color = definitions.get_color_rgb_float(definitions.RED)
+
                     show_title(ctx, part_x, h, 'OUT DEVICE')
                     show_value(ctx, part_x, h, name, color)
 
@@ -245,7 +255,7 @@ class SettingsMode(definitions.PyshaMode):
                 x = curve_x + i * curve_length / n
                 y = curve_y - curve_height * value / 127
                 ctx.line_to(x, y)
-            ctx.line_to(x, curve_y)
+            ctx.line_to(w - 8, curve_y)
             ctx.fill()
 
             current_time = time.time()

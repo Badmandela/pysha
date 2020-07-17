@@ -16,6 +16,9 @@ from settings_mode import SettingsMode
 
 
 class PyshaApp(object):
+    # Banned midi names
+    # banned_names = "Ableton Push", "Midi Through", "RtMidi"
+
     # midi
     midi_out = None
     available_midi_out_device_names = []
@@ -54,7 +57,7 @@ class PyshaApp(object):
         self.use_push2_display = settings.get('use_push2_display', True)
 
         self.init_midi_in(device_name=settings.get('default_midi_in_device_name', None))
-        self.init_midi_out(device_name=settings.get('default_midi_out_device_name', None))
+        self.init_midi_out(device_name=settings.get('default_midi_out_device_name', "iConnectAUDIO2+ USB1"))
         self.init_push()
 
         self.init_modes(settings)
@@ -128,12 +131,21 @@ class PyshaApp(object):
 
     def init_midi_in(self, device_name=None):
         print('Configuring MIDI in...')
-        self.available_midi_in_device_names = [name for name in mido.get_input_names() if 'Ableton Push' not in name]
+        # noinspection PyUnresolvedReferences
+        self.available_midi_in_device_names = [name for name in mido.get_input_names() if not any([banned_names in name for banned_names in ["Ableton Push", "Midi Through", "RtMidi"]])]
+        # self.available_midi_in_device_names = [name for name in mido.get_input_names() if 'Ableton Push' not in name]
+        #
+        # if "Midi Through" in device_name:
+        #     device_name = None
+        #
+        # if 'RtMidi' in device_name:
+        #     device_name = None
 
         if device_name is not None:
             if self.midi_in is not None:
                 self.midi_in.callback = None  # Disable current callback (if any)
             try:
+                # noinspection PyUnresolvedReferences
                 self.midi_in = mido.open_input(device_name)
                 self.midi_in.callback = self.midi_in_handler
                 print('Receiving MIDI in from "{0}"'.format(device_name))
@@ -152,10 +164,12 @@ class PyshaApp(object):
 
     def init_midi_out(self, device_name=None):
         print('Configuring MIDI out...')
-        self.available_midi_out_device_names = [name for name in mido.get_output_names() if 'Ableton Push' not in name]
+        # noinspection PyUnresolvedReferences
+        self.available_midi_out_device_names = [name for name in mido.get_output_names() if not any([banned_names in name for banned_names in ["Ableton Push", "Midi Through", "RtMidi", "iConnectAUDIO2+ DIN"]])]
 
         if device_name is not None:
             try:
+                # noinspection PyUnresolvedReferences
                 self.midi_out = mido.open_output(device_name)
                 print('Will send MIDI to "{0}"'.format(device_name))
             except IOError:
