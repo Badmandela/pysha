@@ -6,10 +6,13 @@ import definitions
 
 SETTINGS_BUTTON = push2_python.constants.BUTTON_SETUP
 
-controls = {'instr': 0, 'instr_lpf': 127, 'master_lpf': 127, 'fx': 127, 'smile': 0, 'reverb': 0, 'tape': 127}
+controls = {'instr': 0, 'instr_lpf': 127, 'instr_vol': 96, 'master_lpf': 127, 'fx': 127, 'smile': 0, 'reverb': 0, 'tape': 127}
 
 max_encoder_value = 127
-
+piano_max = 31
+synth_min = 32
+synth_max = 95
+sampler_min = 96
 
 class MainControlsMode(definitions.PyshaMode):
 
@@ -36,27 +39,21 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.select_font_face(font, normal, bold)
         s = "INSTRUMENT:"
         ctx.move_to(60 - (ctx.text_extents(s)[2] / 2), 15)
-        # Piano
-        if controls['instr'] <= 41:
+        if controls['instr'] <= piano_max:
             ctx.set_source_rgb(1, 0.25, 0.5)
-        # Synth
-        if 42 <= controls['instr'] <= 81:
+        if synth_min <= controls['instr'] <= synth_max:
             ctx.set_source_rgb(0, 1, 0.7)
-        # Sampler
-        if controls['instr'] >= 82:
+        if controls['instr'] >= sampler_min:
             ctx.set_source_rgb(0.75, 0, 1)
         ctx.show_text(s)
 
         # Instrument canvas
         ctx.rectangle(15, 23 + (30 * (controls['instr'] / 127)), 90, 15)
-        # Piano
-        if controls['instr'] <= 41:
+        if controls['instr'] <= piano_max:
             ctx.set_source_rgb(1, 0.25, 0.5)
-        # Synth
-        if 42 <= controls['instr'] <= 81:
+        if synth_min <= controls['instr'] <= synth_max:
             ctx.set_source_rgb(0, 0.9, 0.6)
-        # Sampler
-        if controls['instr'] >= 82:
+        if controls['instr'] >= sampler_min:
             ctx.set_source_rgb(0.75, 0, 1)
         ctx.fill()
         ctx.stroke()
@@ -82,14 +79,11 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.show_text(s)
 
         # Instrument_filter title
-        # Piano
-        if controls['instr'] <= 41:
+        if controls['instr'] <= piano_max:
             ctx.set_source_rgb(1, 0.25, 0.5)
-        # Synth
-        if 42 <= controls['instr'] <= 81:
+        if synth_min <= controls['instr'] <= synth_max:
             ctx.set_source_rgb(0, 1, 0.7)
-        # Sampler
-        if controls['instr'] >= 82:
+        if controls['instr'] >= sampler_min:
             ctx.set_source_rgb(0.75, 0, 1)
         ctx.set_font_size(12)
         ctx.select_font_face(font, normal, bold)
@@ -99,26 +93,17 @@ class MainControlsMode(definitions.PyshaMode):
 
         # Instrument_filter value (canvas - inverted)
         ctx.arc(180, 70, 42, 0, 2 * 3.14)
-        # Piano
-        if controls['instr'] <= 41:
-            ctx.set_source_rgb(1, 0.5, 0.75)
-            if controls['instr_lpf'] == 127:
-                ctx.set_source_rgb(0.1, 0.025, 0.05)
-        # Synth
-        if 42 <= controls['instr'] <= 81:
-            ctx.set_source_rgb(0.5, 1, 0.95)
-            if controls['instr_lpf'] == 127:
-                ctx.set_source_rgb(0, 0.1, 0.07)
-        # Sampler
-        if controls['instr'] >= 82:
-            ctx.set_source_rgb(0.9, 0.25, 1)
-            if controls['instr_lpf'] == 127:
-                ctx.set_source_rgb(0.075, 0, 0.075)
+        if controls['instr'] <= piano_max:
+            ctx.set_source_rgb(0.5, 0.125, 0.25)
+        if synth_min <= controls['instr'] <= synth_max:
+            ctx.set_source_rgb(0, 0.5, 0.45)
+        if controls['instr'] >= sampler_min:
+            ctx.set_source_rgb(0.425, 0, 0.5)
         ctx.fill()
         ctx.stroke()
 
         # Instrument_filter canvas (value - inverted)
-        ctx.move_to(180, 75)
+        ctx.move_to(180, 70)
         ctx.arc(180, 70, 42, 3.14 / 2, 3.14 / 2 + 360 * (controls['instr_lpf'] / 127) * (3.14 / 180))
         ctx.close_path()
         ctx.set_source_rgb(0.02, 0.02, 0.02)
@@ -126,20 +111,106 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.stroke()
 
         # Instrument_filter frame
-        ctx.arc(180, 70, 42, 0, 2 * 3.14)
+        ctx.arc(180, 70, 40, 0, 2 * 3.14)
         if controls['instr_lpf'] == 127:
             ctx.set_source_rgb(0.032, 0.032, 0.032)
         else:
-            # Piano
-            if controls['instr'] <= 41:
+            if controls['instr'] <= piano_max:
                 ctx.set_source_rgb(1, 0.25, 0.5)
-            # Synth
-            if 42 <= controls['instr'] <= 81:
+            if synth_min <= controls['instr'] <= synth_max:
                 ctx.set_source_rgb(0.05, 0.9, 0.7)
-            # Sampler
-            if controls['instr'] >= 82:
+            if controls['instr'] >= sampler_min:
                 ctx.set_source_rgb(0.75, 0, 1)
-        ctx.set_line_width(5)
+        ctx.set_line_width(10)
+        ctx.stroke()
+
+        # Instrument filter indicator
+        pos1 = 3.14 / 2 + 360 * ((controls['instr_lpf'] - 5) / 127) * (3.14 / 180)
+        pos2 = 3.14 / 2 + 360 * ((controls['instr_lpf'] + 5) / 127) * (3.14 / 180)
+
+        if controls['instr_lpf'] == 127:
+            ctx.set_source_rgb(0.032, 0.032, 0.032)
+        else:
+            if controls['instr'] <= piano_max:
+                ctx.set_source_rgb(1, 0.25, 0.5)
+            if synth_min <= controls['instr'] <= synth_max:
+                ctx.set_source_rgb(0.05, 0.9, 0.7)
+            if controls['instr'] >= sampler_min:
+                ctx.set_source_rgb(0.75, 0, 1)
+        ctx.arc(180, 70, 42, pos1, pos2)
+        ctx.line_to(180, 70)
+        ctx.fill()
+
+        if controls['instr_lpf'] == 127:
+            ctx.set_source_rgb(0.032, 0.032, 0.032)
+        else:
+            if controls['instr'] <= piano_max:
+                ctx.set_source_rgb(1, 0.5, 0.75)
+            if synth_min <= controls['instr'] <= synth_max:
+                ctx.set_source_rgb(0.5, 1, 0.95)
+            if controls['instr'] >= sampler_min:
+                ctx.set_source_rgb(0.9, 0.25, 1)
+
+        ctx.arc(180, 70, 40, pos1, pos2)
+        ctx.set_line_width(12)
+        ctx.stroke()
+
+        # Instrument volume
+        pos1 = 3.14 / 2 + 360 * ((controls['instr_vol'] - 5) / 127) * (3.14 / 180)
+        pos2 = 3.14 / 2 + 360 * ((controls['instr_vol'] + 5) / 127) * (3.14 / 180)
+
+        # Instrument_volume title
+        ctx.set_font_size(12)
+        if controls['instr'] <= piano_max:
+            ctx.set_source_rgb(1, 0.25, 0.5)
+        if synth_min <= controls['instr'] <= synth_max:
+            ctx.set_source_rgb(0, 1, 0.7)
+        if controls['instr'] >= sampler_min:
+            ctx.set_source_rgb(0.75, 0, 1)
+        ctx.select_font_face(font, normal, bold)
+        s = "INSTR. LVL:"
+        ctx.move_to(300 - (ctx.text_extents(s)[2] / 2), 15)
+        ctx.show_text(s)
+
+        # Instrument_volume canvas
+        ctx.set_source_rgb(0.02, 0.02, 0.02)
+        ctx.arc(300, 70, 42, 0, 2 * 3.14)
+        ctx.fill()
+        ctx.stroke()
+
+        # Instrument_volume frame
+        ctx.arc(300, 70, 40, 0, 2 * 3.14)
+        ctx.set_source_rgb(0.032, 0.032, 0.032)
+        ctx.set_line_width(10)
+        ctx.stroke()
+
+        # Instrument_volume indicator
+        if controls['instr_vol'] == 0:
+            ctx.set_source_rgb(0.032, 0.032, 0.032)
+        else:
+            if controls['instr'] <= piano_max:
+                ctx.set_source_rgb(0.5, 0.125, 0.25)
+            if synth_min <= controls['instr'] <= synth_max:
+                ctx.set_source_rgb(0, 0.5, 0.45)
+            if controls['instr'] >= sampler_min:
+                ctx.set_source_rgb(0.425, 0, 0.5)
+
+        ctx.arc(300, 70, 42, pos1, pos2)
+        ctx.line_to(300, 70)
+        ctx.fill()
+
+        if controls['instr_vol'] == 0:
+            ctx.set_source_rgb(0.032, 0.032, 0.032)
+        else:
+            if controls['instr'] <= piano_max:
+                ctx.set_source_rgb(1, 0.25, 0.5)
+            if synth_min <= controls['instr'] <= synth_max:
+                ctx.set_source_rgb(0, 1, 0.7)
+            if controls['instr'] >= sampler_min:
+                ctx.set_source_rgb(0.75, 0, 1)
+
+        ctx.arc(300, 70, 40, pos1, pos2)
+        ctx.set_line_width(12)
         ctx.stroke()
 
         # Master_filter title
@@ -153,14 +224,14 @@ class MainControlsMode(definitions.PyshaMode):
 
         # Master_filter value (canvas - inverted)
         ctx.arc(420, 70, 42, 0, 2 * 3.14)
-        ctx.set_source_rgb(1, 0.75, 0.3)
+        ctx.set_source_rgb(0.5, 0.25, 0.05)
         if controls['master_lpf'] == 127:
             ctx.set_source_rgb(0.1, 0.05, 0.01)
         ctx.fill()
         ctx.stroke()
 
         # Master_filter canvas (value - inverted)
-        ctx.move_to(420, 75)
+        ctx.move_to(420, 70)
         ctx.arc(420, 70, 42, 3.14 / 2, 3.14 / 2 + 360 * (controls['master_lpf'] / 127) * (3.14 / 180))
         ctx.close_path()
         ctx.set_source_rgb(0.02, 0.02, 0.02)
@@ -168,33 +239,53 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.stroke()
 
         # Master_filter frame
-        ctx.arc(420, 70, 42, 0, 2 * 3.14)
+        ctx.arc(420, 70, 40, 0, 2 * 3.14)
         if controls['master_lpf'] == 127:
             ctx.set_source_rgb(0.032, 0.032, 0.032)
         else:
             ctx.set_source_rgb(1, 0.5, 0.1)
-        ctx.set_line_width(5)
+        ctx.set_line_width(10)
         ctx.stroke()
+
+        # Master filter indicator
+        pos1 = 3.14 / 2 + 360 * ((controls['master_lpf'] - 5) / 127) * (3.14 / 180)
+        pos2 = 3.14 / 2 + 360 * ((controls['master_lpf'] + 5) / 127) * (3.14 / 180)
+
+        ctx.arc(420, 70, 42, pos1, pos2)
+        ctx.line_to(420, 70)
+        ctx.fill()
+
+        if controls['master_lpf'] == 127:
+            ctx.set_source_rgb(0.032, 0.032, 0.032)
+        else:
+            ctx.set_source_rgb(1, 0.75, 0.3)
+        ctx.arc(420, 70, 40, pos1, pos2)
+        ctx.set_line_width(12)
+        ctx.stroke()
+
+        # FX
+        pos1 = 3.14 / 2 + 360 * ((controls['fx'] - 5) / 127) * (3.14 / 180)
+        pos2 = 3.14 / 2 + 360 * ((controls['fx'] + 5) / 127) * (3.14 / 180)
 
         # FX mix title
         ctx.set_source_rgb(0.75, 0, 1)
         ctx.set_font_size(12)
         ctx.select_font_face(font, normal, bold)
-        s = "FX MIX:"
+        s = "FX LVL:"
         ctx.move_to(540 - (ctx.text_extents(s)[2] / 2), 15)
         ctx.show_text(s)
         ctx.stroke()
 
         # FX value (canvas inverted)
         ctx.arc(540, 70, 42, 0, 2 * 3.14)
-        ctx.set_source_rgb(1, 0.5, 1)
+        ctx.set_source_rgb(0.35, 0, 0.5)
         if controls['fx'] == 127:
             ctx.set_source_rgb(0.075, 0, 0.075)
         ctx.fill()
         ctx.stroke()
 
         # FX canvas (value inverted)
-        ctx.move_to(540, 75)
+        ctx.move_to(540, 70)
         ctx.arc(540, 70, 42, 3.14 / 2, 3.14 / 2 + 360 * (controls['fx'] / 127) * (3.14 / 180))
         ctx.close_path()
         ctx.set_source_rgb(0.02, 0.02, 0.02)
@@ -202,13 +293,30 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.stroke()
 
         # FX frame
-        ctx.arc(540, 70, 42, 0, 2 * 3.14)
+        ctx.arc(540, 70, 40, 0, 2 * 3.14)
         if controls['fx'] == 127:
             ctx.set_source_rgb(0.032, 0.032, 0.032)
         else:
             ctx.set_source_rgb(0.75, 0, 1)
-        ctx.set_line_width(5)
+        ctx.set_line_width(10)
         ctx.stroke()
+
+        # FX indicator
+        ctx.arc(540, 70, 42, pos1, pos2)
+        ctx.line_to(540, 70)
+        ctx.fill()
+
+        if controls['fx'] == 127:
+            ctx.set_source_rgb(0.032, 0.032, 0.032)
+        else:
+            ctx.set_source_rgb(1, 0.5, 1)
+        ctx.arc(540, 70, 40, pos1, pos2)
+        ctx.set_line_width(12)
+        ctx.stroke()
+
+        # Smile
+        pos1 = 3.14 / 2 + 360 * ((controls['smile'] - 5) / 127) * (3.14 / 180)
+        pos2 = 3.14 / 2 + 360 * ((controls['smile'] + 5) / 127) * (3.14 / 180)
 
         # Smile title
         ctx.set_source_rgb(1, 1, 0)
@@ -222,27 +330,43 @@ class MainControlsMode(definitions.PyshaMode):
         # Smile canvas
         ctx.arc(660, 70, 42, 0, 2 * 3.14)
         ctx.set_source_rgb(0.02, 0.02, 0.02)
-        if controls['smile'] == 127:
-            ctx.set_source_rgb(1, 1, 0.5)
+        # if controls['smile'] == 127:
+        #     ctx.set_source_rgb(0.5, 0.5, 0)
         ctx.fill()
         ctx.stroke()
 
         # Smile value
-        ctx.move_to(660, 75)
+        ctx.move_to(660, 70)
         ctx.arc(660, 70, 42, 3.14 / 2, 3.14 / 2 + 360 * (controls['smile'] / 127) * (3.14 / 180))
         ctx.close_path()
-        ctx.set_source_rgb(1, 1, 0.5)
+        ctx.set_source_rgb(0.5, 0.5, 0)
         ctx.fill()
         ctx.stroke()
 
         # Smile frame
-        ctx.arc(660, 70, 42, 0, 2 * 3.14)
+        ctx.arc(660, 70, 40, 0, 2 * 3.14)
         if controls['smile'] == 0:
             ctx.set_source_rgb(0.032, 0.032, 0.032)
         else:
             ctx.set_source_rgb(1, 1, 0)
-        ctx.set_line_width(5)
+        ctx.set_line_width(10)
         ctx.stroke()
+
+        # Smile indicator
+        ctx.arc(660, 70, 42, pos1, pos2)
+        ctx.line_to(660, 70)
+        ctx.fill()
+        if controls['smile'] == 0:
+            ctx.set_source_rgb(0.032, 0.032, 0.032)
+        else:
+            ctx.set_source_rgb(1, 1, 0.5)
+        ctx.arc(660, 70, 40, pos1, pos2)
+        ctx.set_line_width(12)
+        ctx.stroke()
+
+        # Reverb
+        pos1 = 3.14 / 2 + 360 * ((controls['reverb'] - 5) / 127) * (3.14 / 180)
+        pos2 = 3.14 / 2 + 360 * ((controls['reverb'] + 5) / 127) * (3.14 / 180)
 
         # Reverb title
         ctx.set_source_rgb(0, 1, 1)
@@ -262,21 +386,37 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.stroke()
 
         # Reverb value
-        ctx.move_to(780, 75)
+        ctx.move_to(780, 70)
         ctx.arc(780, 70, 42, 3.14 / 2, 3.14 / 2 + 360 * (controls['reverb'] / 127) * (3.14 / 180))
         ctx.close_path()
-        ctx.set_source_rgb(0.5, 1, 1)
+        ctx.set_source_rgb(0, 0.425, 0.5)
         ctx.fill()
         ctx.stroke()
 
         # Reverb frame
-        ctx.arc(780, 70, 42, 0, 2 * 3.14)
+        ctx.arc(780, 70, 40, 0, 2 * 3.14)
         if controls['reverb'] == 0:
             ctx.set_source_rgb(0.032, 0.032, 0.032)
         else:
             ctx.set_source_rgb(0, 0.75, 1)
-        ctx.set_line_width(5)
+        ctx.set_line_width(10)
         ctx.stroke()
+
+        # Reverb indicator
+        ctx.arc(780, 70, 42, pos1, pos2)
+        ctx.line_to(780, 70)
+        ctx.fill()
+        if controls['reverb'] == 0:
+            ctx.set_source_rgb(0.032, 0.032, 0.032)
+        else:
+            ctx.set_source_rgb(0.5, 1, 1)
+        ctx.arc(780, 70, 40, pos1, pos2)
+        ctx.set_line_width(12)
+        ctx.stroke()
+
+        # Tape
+        pos1 = 3.14 / 2 + 360 * ((controls['tape'] - 5) / 127) * (3.14 / 180)
+        pos2 = 3.14 / 2 + 360 * ((controls['tape'] + 5) / 127) * (3.14 / 180)
 
         # Tape title
         ctx.set_source_rgb(1, 0, 0)
@@ -289,14 +429,14 @@ class MainControlsMode(definitions.PyshaMode):
 
         # Tape value (canvas inverted)
         ctx.arc(900, 70, 42, 0, 2 * 3.14)
-        ctx.set_source_rgb(1, 0.5, 0.5)
+        ctx.set_source_rgb(0.5, 0, 0)
         if controls['tape'] == 127:
             ctx.set_source_rgb(0.2, 0, 0)
         ctx.fill()
         ctx.stroke()
 
         # Tape canvas (value inverted)
-        ctx.move_to(900, 75)
+        ctx.move_to(900, 70)
         ctx.arc(900, 70, 42, 3.14 / 2, 3.14 / 2 + 360 * (controls['tape'] / 127) * (3.14 / 180))
         ctx.close_path()
         ctx.set_source_rgb(0.02, 0.02, 0.02)
@@ -304,12 +444,24 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.stroke()
 
         # Tape frame
-        ctx.arc(900, 70, 42, 0, 2 * 3.14)
+        ctx.arc(900, 70, 40, 0, 2 * 3.14)
         if controls['tape'] == 127:
             ctx.set_source_rgb(0.032, 0.032, 0.032)
         else:
             ctx.set_source_rgb(1, 0, 0)
-        ctx.set_line_width(5)
+        ctx.set_line_width(10)
+        ctx.stroke()
+
+        # Tape indicator
+        ctx.arc(900, 70, 42, pos1, pos2)
+        ctx.line_to(900, 70)
+        ctx.fill()
+        if controls['tape'] == 127:
+            ctx.set_source_rgb(0.032, 0.032, 0.032)
+        else:
+            ctx.set_source_rgb(1, 0.5, 0.5)
+        ctx.arc(900, 70, 40, pos1, pos2)
+        ctx.set_line_width(12)
         ctx.stroke()
 
         # CUE 1
@@ -430,7 +582,7 @@ class MainControlsMode(definitions.PyshaMode):
         self.push.buttons.set_button_color(push2_python.constants.BUTTON_SETUP, definitions.OFF_BTN_COLOR)
         self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_1, definitions.ROOT_KEY)
         self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_2, definitions.ROOT_KEY)
-        self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_3, definitions.BLACK)
+        self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_3, definitions.ROOT_KEY)
         self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_4, definitions.ORANGE)
         self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_5, definitions.PURPLE)
         self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_6, definitions.YELLOW)
@@ -528,6 +680,21 @@ class MainControlsMode(definitions.PyshaMode):
             msg = mido.Message('control_change', control=22, value=controls['instr_lpf'])
             self.app.send_midi(msg)
 
+        # encoder 3
+        if encoder_name == push2_python.constants.ENCODER_TRACK3_ENCODER:
+            def update_encoder_value(increment):
+                updated_filter_value = int(controls['instr_vol'] + increment)
+                if updated_filter_value < 0:
+                    controls['instr_vol'] = 0
+                elif updated_filter_value > max_encoder_value:
+                    controls['instr_vol'] = max_encoder_value
+                else:
+                    controls['instr_vol'] = updated_filter_value
+
+            update_encoder_value(increment)
+            msg = mido.Message('control_change', control=23, value=controls['instr_vol'])
+            self.app.send_midi(msg)
+
         # encoder 4
         if encoder_name == push2_python.constants.ENCODER_TRACK4_ENCODER:
             def update_encoder_value(increment):
@@ -611,6 +778,10 @@ class MainControlsMode(definitions.PyshaMode):
         # PRESSED UPP button 2
         if button_name == push2_python.constants.BUTTON_UPPER_ROW_2:
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_2, definitions.BLACK)
+
+        # PRESSED UPP button 3
+        if button_name == push2_python.constants.BUTTON_UPPER_ROW_3:
+            self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_3, definitions.BLACK)
 
         # PRESSED UPP button 4
         if button_name == push2_python.constants.BUTTON_UPPER_ROW_4:
@@ -698,28 +869,35 @@ class MainControlsMode(definitions.PyshaMode):
         if button_name == push2_python.constants.BUTTON_UPPER_ROW_2:
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_2, definitions.ROOT_KEY)
             controls['instr_lpf'] = 127
-            msg = mido.Message('control_change', control=22, value=127)
+            msg = mido.Message('control_change', control=22, value=controls['instr_lpf'])
+            self.app.send_midi(msg)
+
+        # RELEASED UPP button 3
+        if button_name == push2_python.constants.BUTTON_UPPER_ROW_3:
+            self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_3, definitions.ROOT_KEY)
+            controls['instr_vol'] = 0
+            msg = mido.Message('control_change', control=23, value=controls['instr_vol'])
             self.app.send_midi(msg)
 
         # RELEASED UPP button 4
         if button_name == push2_python.constants.BUTTON_UPPER_ROW_4:
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_4, definitions.ORANGE)
             controls['master_lpf'] = 127
-            msg = mido.Message('control_change', control=24, value=127)
+            msg = mido.Message('control_change', control=24, value=controls['master_lpf'])
             self.app.send_midi(msg)
 
         # RELEASED UPP button 5
         if button_name == push2_python.constants.BUTTON_UPPER_ROW_5:
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_5, definitions.PURPLE)
             controls['fx'] = 127
-            msg = mido.Message('control_change', control=25, value=127)
+            msg = mido.Message('control_change', control=25, value=controls['fx'])
             self.app.send_midi(msg)
 
         # RELEASED UPP button 6
         if button_name == push2_python.constants.BUTTON_UPPER_ROW_6:
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_6, definitions.YELLOW)
             controls['smile'] = 0
-            msg = mido.Message('control_change', control=26, value=0)
+            msg = mido.Message('control_change', control=26, value=controls['smile'])
             self.app.send_midi(msg)
 
         # RELEASED UPP button 7
