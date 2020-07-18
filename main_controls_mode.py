@@ -25,68 +25,76 @@ class MainControlsMode(definitions.PyshaMode):
     # def generate_display_frame():
     def update_display(self, ctx, w, h):
 
+        # Start of drawing code
+
         # Initial black rectangle
         ctx.rectangle(0, 0, w, h)
         ctx.set_source_rgb(0, 0, 0)
         ctx.fill()
 
-        font = "Verdana"
-        normal = cairo.FONT_SLANT_NORMAL
-        bold = cairo.FONT_WEIGHT_BOLD
+        # Colors
+        screen_black = [0, 0, 0]
+        screen_dark = [0.05, 0.05, 0.05]
 
-        # Instrument title
         ctx.set_font_size(12)
-        ctx.select_font_face(font, normal, bold)
+        ctx.select_font_face("Verdana", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_BOLD)
+
+        # Instrument QUASI-GLOBALS
+        title = "INSTRUMENT:"
+        control = controls['instr']
+        color_piano = [1, 0.25, 0.5]
+        color_piano_dark = [0.5, 0.125, 0.25]
+        color_piano_light = [1, 0.75, 0.75]
+        color_synth = [0, 1, 0.7]
+        color_synth_dark = [0, 0.5, 0.45]
+        color_synth_light = [0.75, 1, 1]
+        color_sampler = [1, 0, 0.9]
+        color_sampler_dark = [0.5, 0, 0.45]
+        color_sampler_light = [1, 0.75, 1]
+        center_x = 60
+
         s = "INSTRUMENT:"
-        ctx.move_to(60 - (ctx.text_extents(s)[2] / 2), 15)
+        ctx.move_to(center_x - (ctx.text_extents(s)[2] / 2), 15)
         if controls['instr'] <= piano_max:
-            ctx.set_source_rgb(1, 0.25, 0.5)
+            ctx.set_source_rgb(*color_piano)
         if synth_min <= controls['instr'] <= synth_max:
-            ctx.set_source_rgb(0, 1, 0.7)
+            ctx.set_source_rgb(*color_synth)
         if controls['instr'] >= sampler_min:
-            ctx.set_source_rgb(0.75, 0, 1)
+            ctx.set_source_rgb(*color_sampler)
         ctx.show_text(s)
 
         # Instrument canvas
         ctx.rectangle(15, 23 + (30 * (controls['instr'] / 127)), 90, 15)
         if controls['instr'] <= piano_max:
-            ctx.set_source_rgb(1, 0.25, 0.5)
+            ctx.set_source_rgb(*color_piano)
         if synth_min <= controls['instr'] <= synth_max:
-            ctx.set_source_rgb(0, 0.9, 0.6)
+            ctx.set_source_rgb(*color_synth)
         if controls['instr'] >= sampler_min:
-            ctx.set_source_rgb(0.75, 0, 1)
+            ctx.set_source_rgb(*color_sampler)
         ctx.fill()
         ctx.stroke()
 
         # Instruments list
         ctx.set_source_rgb(1, 1, 1)
-        ctx.set_font_size(12)
-        ctx.select_font_face(font, cairo.FONT_SLANT_ITALIC, cairo.FONT_WEIGHT_NORMAL)
-
-        # Piano
+        ctx.select_font_face("Verdana", cairo.FONT_SLANT_ITALIC, cairo.FONT_WEIGHT_NORMAL)
         s = "PIANO"
-        ctx.move_to(60 - (ctx.text_extents(s)[2] / 2), 35)
+        ctx.move_to(center_x - (ctx.text_extents(s)[2] / 2), 35)
         ctx.show_text(s)
-
-        # Synth
         s = "SYNTH"
-        ctx.move_to(60 - (ctx.text_extents(s)[2] / 2), 50)
+        ctx.move_to(center_x - (ctx.text_extents(s)[2] / 2), 50)
         ctx.show_text(s)
-
-        # Sampler
         s = "SAMPLER"
-        ctx.move_to(60 - (ctx.text_extents(s)[2] / 2), 65)
+        ctx.move_to(center_x - (ctx.text_extents(s)[2] / 2), 65)
         ctx.show_text(s)
+        ctx.select_font_face("Verdana", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_BOLD)
 
         # Instrument_filter title
         if controls['instr'] <= piano_max:
-            ctx.set_source_rgb(1, 0.25, 0.5)
+            ctx.set_source_rgb(*color_piano)
         if synth_min <= controls['instr'] <= synth_max:
-            ctx.set_source_rgb(0, 1, 0.7)
+            ctx.set_source_rgb(*color_synth)
         if controls['instr'] >= sampler_min:
-            ctx.set_source_rgb(0.75, 0, 1)
-        ctx.set_font_size(12)
-        ctx.select_font_face(font, normal, bold)
+            ctx.set_source_rgb(*color_sampler)
         s = "INSTRUMENT LPF:"
         ctx.move_to(180 - (ctx.text_extents(s)[2] / 2), 15)
         ctx.show_text(s)
@@ -94,11 +102,11 @@ class MainControlsMode(definitions.PyshaMode):
         # Instrument_filter value (canvas - inverted)
         ctx.arc(180, 70, 42, 0, 2 * 3.14)
         if controls['instr'] <= piano_max:
-            ctx.set_source_rgb(0.5, 0.125, 0.25)
+            ctx.set_source_rgb(*color_piano_dark)
         if synth_min <= controls['instr'] <= synth_max:
-            ctx.set_source_rgb(0, 0.5, 0.45)
+            ctx.set_source_rgb(*color_synth_dark)
         if controls['instr'] >= sampler_min:
-            ctx.set_source_rgb(0.425, 0, 0.5)
+            ctx.set_source_rgb(*color_sampler_dark)
         ctx.fill()
         ctx.stroke()
 
@@ -106,21 +114,21 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.move_to(180, 70)
         ctx.arc(180, 70, 42, 3.14 / 2, 3.14 / 2 + 360 * (controls['instr_lpf'] / 127) * (3.14 / 180))
         ctx.close_path()
-        ctx.set_source_rgb(0.02, 0.02, 0.02)
+        ctx.set_source_rgb(*screen_black)
         ctx.fill()
         ctx.stroke()
 
         # Instrument_filter frame
         ctx.arc(180, 70, 40, 0, 2 * 3.14)
         if controls['instr_lpf'] == 127:
-            ctx.set_source_rgb(0.032, 0.032, 0.032)
+            ctx.set_source_rgb(*screen_dark)
         else:
             if controls['instr'] <= piano_max:
-                ctx.set_source_rgb(1, 0.25, 0.5)
+                ctx.set_source_rgb(*color_piano)
             if synth_min <= controls['instr'] <= synth_max:
-                ctx.set_source_rgb(0.05, 0.9, 0.7)
+                ctx.set_source_rgb(*color_synth)
             if controls['instr'] >= sampler_min:
-                ctx.set_source_rgb(0.75, 0, 1)
+                ctx.set_source_rgb(*color_sampler)
         ctx.set_line_width(10)
         ctx.stroke()
 
@@ -128,29 +136,48 @@ class MainControlsMode(definitions.PyshaMode):
         pos1 = 3.14 / 2 + 360 * ((controls['instr_lpf'] - 5) / 127) * (3.14 / 180)
         pos2 = 3.14 / 2 + 360 * ((controls['instr_lpf'] + 5) / 127) * (3.14 / 180)
 
+        # Instrument filter indicator frame
+        ctx.set_line_cap(cairo.LINE_CAP_ROUND)
         if controls['instr_lpf'] == 127:
-            ctx.set_source_rgb(0.032, 0.032, 0.032)
+            ctx.set_source_rgb(*screen_dark)
         else:
             if controls['instr'] <= piano_max:
-                ctx.set_source_rgb(1, 0.25, 0.5)
+                ctx.set_source_rgb(*color_piano_light)
             if synth_min <= controls['instr'] <= synth_max:
-                ctx.set_source_rgb(0.05, 0.9, 0.7)
+                ctx.set_source_rgb(*color_synth_light)
             if controls['instr'] >= sampler_min:
-                ctx.set_source_rgb(0.75, 0, 1)
+                ctx.set_source_rgb(*color_sampler_light)
+        ctx.move_to(180, 70)
+        ctx.arc(180, 70, 46, pos1, pos2)
+        ctx.line_to(180, 70)
+        ctx.set_line_width(3)
+        ctx.stroke()
+        ctx.set_line_cap(cairo.LINE_CAP_BUTT)
+
+        # Instrument filter indicator inner
+        if controls['instr_lpf'] == 127:
+            ctx.set_source_rgb(*screen_dark)
+        else:
+            if controls['instr'] <= piano_max:
+                ctx.set_source_rgb(*color_piano)
+            if synth_min <= controls['instr'] <= synth_max:
+                ctx.set_source_rgb(*color_synth)
+            if controls['instr'] >= sampler_min:
+                ctx.set_source_rgb(*color_sampler)
         ctx.arc(180, 70, 42, pos1, pos2)
         ctx.line_to(180, 70)
         ctx.fill()
 
+        # Instrument filter indicator outer
         if controls['instr_lpf'] == 127:
-            ctx.set_source_rgb(0.032, 0.032, 0.032)
+            ctx.set_source_rgb(*screen_dark)
         else:
             if controls['instr'] <= piano_max:
-                ctx.set_source_rgb(1, 0.5, 0.75)
+                ctx.set_source_rgb(*color_piano_light)
             if synth_min <= controls['instr'] <= synth_max:
-                ctx.set_source_rgb(0.5, 1, 0.95)
+                ctx.set_source_rgb(*color_synth_light)
             if controls['instr'] >= sampler_min:
-                ctx.set_source_rgb(0.9, 0.25, 1)
-
+                ctx.set_source_rgb(*color_sampler_light)
         ctx.arc(180, 70, 40, pos1, pos2)
         ctx.set_line_width(12)
         ctx.stroke()
@@ -158,309 +185,506 @@ class MainControlsMode(definitions.PyshaMode):
         # Instrument volume
         pos1 = 3.14 / 2 + 360 * ((controls['instr_vol'] - 5) / 127) * (3.14 / 180)
         pos2 = 3.14 / 2 + 360 * ((controls['instr_vol'] + 5) / 127) * (3.14 / 180)
+        center_x = 300
 
         # Instrument_volume title
-        ctx.set_font_size(12)
         if controls['instr'] <= piano_max:
-            ctx.set_source_rgb(1, 0.25, 0.5)
+            ctx.set_source_rgb(*color_piano)
         if synth_min <= controls['instr'] <= synth_max:
-            ctx.set_source_rgb(0, 1, 0.7)
+            ctx.set_source_rgb(*color_synth)
         if controls['instr'] >= sampler_min:
-            ctx.set_source_rgb(0.75, 0, 1)
-        ctx.select_font_face(font, normal, bold)
+            ctx.set_source_rgb(*color_sampler)
         s = "INSTR. LVL:"
         ctx.move_to(300 - (ctx.text_extents(s)[2] / 2), 15)
         ctx.show_text(s)
 
-        # Instrument_volume canvas
-        ctx.set_source_rgb(0.02, 0.02, 0.02)
-        ctx.arc(300, 70, 42, 0, 2 * 3.14)
+        ctx.stroke()
+
+        # Instrument_volume value 1 (inverted canvas)
+        if controls['instr_vol'] >= 100:
+            ctx.set_source_rgb(*color_piano_light)
+        else:
+            ctx.set_source_rgb(*screen_dark)
+        ctx.arc(300, 70, 42, 2 * 3.14, 3.14 / 2 + 360 * (controls['instr_vol'] / 127) * (3.14 / 180))
+        ctx.line_to(300, 70)
         ctx.fill()
         ctx.stroke()
 
-        # Instrument_volume frame
-        ctx.arc(300, 70, 40, 0, 2 * 3.14)
-        ctx.set_source_rgb(0.032, 0.032, 0.032)
+        # Instrument_volume value 2 (inverted canvas)
+        if controls['instr_vol'] <= 90:
+            ctx.set_source_rgb(*color_piano_dark)
+        if controls['instr_vol'] >= 100:
+            ctx.set_source_rgb(*color_piano_dark)
+        ctx.arc(300, 70, 42, 3.14 / 2 + 360 * (controls['instr_vol'] / 127) * (3.14 / 180), 2 * 3.14)
+        ctx.line_to(300, 70)
+        ctx.fill()
+        ctx.stroke()
+
+        # ## Instrument_volume frame
+        ctx.arc(300, 70, 40, 0.5 * 3.14, 2 * 3.14)
+        if controls['instr_vol'] <= 90:
+            if controls['instr'] <= piano_max:
+                ctx.set_source_rgb(*color_piano)
+            if synth_min <= controls['instr'] <= synth_max:
+                ctx.set_source_rgb(*color_synth)
+            if controls['instr'] >= sampler_min:
+                ctx.set_source_rgb(*color_sampler)
+        elif controls['instr_vol'] >= 100:
+            ctx.set_source_rgb(*screen_dark)
+            if controls['instr'] <= piano_max:
+                ctx.set_source_rgb(*color_piano_light)
+            if synth_min <= controls['instr'] <= synth_max:
+                ctx.set_source_rgb(*color_synth_light)
+            if controls['instr'] >= sampler_min:
+                ctx.set_source_rgb(*color_sampler_light)
+        else:
+            ctx.set_source_rgb(*screen_dark)
+
         ctx.set_line_width(10)
         ctx.stroke()
 
-        # Instrument_volume indicator
-        if controls['instr_vol'] == 0:
-            ctx.set_source_rgb(0.032, 0.032, 0.032)
-        else:
+        # Instrument_volume frame 2 !!!
+        ctx.arc(300, 70, 40, 0 * 3.14, 0.5 * 3.14)
+        if controls['instr_vol'] <= 90:
             if controls['instr'] <= piano_max:
-                ctx.set_source_rgb(0.5, 0.125, 0.25)
+                ctx.set_source_rgb(*color_piano_dark)
             if synth_min <= controls['instr'] <= synth_max:
-                ctx.set_source_rgb(0, 0.5, 0.45)
+                ctx.set_source_rgb(*color_synth_dark)
             if controls['instr'] >= sampler_min:
-                ctx.set_source_rgb(0.425, 0, 0.5)
+                ctx.set_source_rgb(*color_sampler_dark)
+        elif controls['instr_vol'] >= 100:
+            ctx.set_source_rgb(*screen_dark)
+            if controls['instr'] <= piano_max:
+                ctx.set_source_rgb(*color_piano_light)
+            if synth_min <= controls['instr'] <= synth_max:
+                ctx.set_source_rgb(*color_synth_light)
+            if controls['instr'] >= sampler_min:
+                ctx.set_source_rgb(*color_sampler_light)
+        else:
+            ctx.set_source_rgb(*screen_dark)
+
+        ctx.set_line_width(10)
+        ctx.stroke()
+
+        # Instrument indicator frame
+        ctx.set_line_cap(cairo.LINE_CAP_ROUND)
+        if controls['instr_vol'] <= 90:
+            if controls['instr'] <= piano_max:
+                ctx.set_source_rgb(*color_piano_light)
+            if synth_min <= controls['instr'] <= synth_max:
+                ctx.set_source_rgb(*color_synth_light)
+            if controls['instr'] >= sampler_min:
+                ctx.set_source_rgb(*color_sampler_light)
+        elif controls['instr_vol'] >= 100:
+            if controls['instr'] <= piano_max:
+                ctx.set_source_rgb(*color_piano)
+            if synth_min <= controls['instr'] <= synth_max:
+                ctx.set_source_rgb(*color_synth)
+            if controls['instr'] >= sampler_min:
+                ctx.set_source_rgb(*color_sampler)
+        else:
+            ctx.set_source_rgb(*screen_dark)
+        ctx.move_to(center_x, 70)
+        ctx.arc(center_x, 70, 46, pos1, pos2)
+        ctx.line_to(center_x, 70)
+        ctx.set_line_width(3)
+        ctx.stroke()
+        ctx.set_line_cap(cairo.LINE_CAP_BUTT)
+
+        # Instrument_volume indicator inner
+        if controls['instr_vol'] <= 90:
+            if controls['instr'] <= piano_max:
+                ctx.set_source_rgb(*color_piano)
+            if synth_min <= controls['instr'] <= synth_max:
+                ctx.set_source_rgb(*color_synth)
+            if controls['instr'] >= sampler_min:
+                ctx.set_source_rgb(*color_sampler)
+        elif controls['instr_vol'] >= 100:
+            ctx.set_source_rgb(*screen_dark)
+            if controls['instr'] <= piano_max:
+                ctx.set_source_rgb(*color_piano_light)
+            if synth_min <= controls['instr'] <= synth_max:
+                ctx.set_source_rgb(*color_synth_light)
+            if controls['instr'] >= sampler_min:
+                ctx.set_source_rgb(*color_sampler_light)
+        else:
+            ctx.set_source_rgb(*screen_dark)
 
         ctx.arc(300, 70, 42, pos1, pos2)
         ctx.line_to(300, 70)
         ctx.fill()
 
-        if controls['instr_vol'] == 0:
-            ctx.set_source_rgb(0.032, 0.032, 0.032)
-        else:
+        # Instrument_volume indicator outer
+        if controls['instr_vol'] <= 90:
             if controls['instr'] <= piano_max:
-                ctx.set_source_rgb(1, 0.25, 0.5)
+                ctx.set_source_rgb(*color_piano_light)
             if synth_min <= controls['instr'] <= synth_max:
-                ctx.set_source_rgb(0, 1, 0.7)
+                ctx.set_source_rgb(*color_synth_light)
             if controls['instr'] >= sampler_min:
-                ctx.set_source_rgb(0.75, 0, 1)
+                ctx.set_source_rgb(*color_sampler_light)
+        elif controls['instr_vol'] >= 100:
+            if controls['instr'] <= piano_max:
+                ctx.set_source_rgb(*color_piano)
+            if synth_min <= controls['instr'] <= synth_max:
+                ctx.set_source_rgb(*color_synth)
+            if controls['instr'] >= sampler_min:
+                ctx.set_source_rgb(*color_sampler)
+        else:
+            ctx.set_source_rgb(*screen_dark)
 
         ctx.arc(300, 70, 40, pos1, pos2)
         ctx.set_line_width(12)
         ctx.stroke()
 
+        # Master filter QUASI-GLOBALS
+        title = "MASTER LPF:"
+        control = controls['master_lpf']
+        color = [1, 0.5, 0.1]
+        color_light = [1, 0.75, 0.64]
+        color_dark = [0.5, 0.25, 0.05]
+        center_x = 420
+
+        pos1 = 3.14 / 2 + 360 * ((control - 5) / 127) * (3.14 / 180)
+        pos2 = 3.14 / 2 + 360 * ((control + 5) / 127) * (3.14 / 180)
+
         # Master_filter title
-        ctx.set_source_rgb(1, 0.5, 0.1)
-        ctx.set_font_size(12)
-        ctx.select_font_face(font, normal, bold)
-        s = "MASTER LPF:"
-        ctx.move_to(420 - (ctx.text_extents(s)[2] / 2), 15)
-        ctx.show_text(s)
+        ctx.move_to(center_x - (ctx.text_extents(title)[2] / 2), 15)
+        ctx.set_source_rgb(*color)
+        ctx.show_text(title)
         ctx.stroke()
 
         # Master_filter value (canvas - inverted)
-        ctx.arc(420, 70, 42, 0, 2 * 3.14)
-        ctx.set_source_rgb(0.5, 0.25, 0.05)
-        if controls['master_lpf'] == 127:
-            ctx.set_source_rgb(0.1, 0.05, 0.01)
+        ctx.arc(center_x, 70, 42, 0, 2 * 3.14)
+        ctx.set_source_rgb(*color_dark)
+        # pattern = cairo.LinearGradient(center_x - 36, 70, center_x + 36, 70)
+        # pattern.add_color_stop_rgb(0, *color)
+        # pattern.add_color_stop_rgb(1, *color_dark)
+        # ctx.set_source(pattern)
         ctx.fill()
         ctx.stroke()
 
         # Master_filter canvas (value - inverted)
-        ctx.move_to(420, 70)
-        ctx.arc(420, 70, 42, 3.14 / 2, 3.14 / 2 + 360 * (controls['master_lpf'] / 127) * (3.14 / 180))
+        ctx.move_to(center_x, 70)
+        ctx.arc(center_x, 70, 42, 3.14 / 2, 3.14 / 2 + 360 * (control / 127) * (3.14 / 180))
         ctx.close_path()
-        ctx.set_source_rgb(0.02, 0.02, 0.02)
+        ctx.set_source_rgb(*screen_black)
         ctx.fill()
         ctx.stroke()
 
         # Master_filter frame
-        ctx.arc(420, 70, 40, 0, 2 * 3.14)
-        if controls['master_lpf'] == 127:
-            ctx.set_source_rgb(0.032, 0.032, 0.032)
+        ctx.arc(center_x, 70, 40, 0, 2 * 3.14)
+        if control == 127:
+            ctx.set_source_rgb(*screen_dark)
         else:
-            ctx.set_source_rgb(1, 0.5, 0.1)
+            ctx.set_source_rgb(*color)
         ctx.set_line_width(10)
         ctx.stroke()
 
-        # Master filter indicator
-        pos1 = 3.14 / 2 + 360 * ((controls['master_lpf'] - 5) / 127) * (3.14 / 180)
-        pos2 = 3.14 / 2 + 360 * ((controls['master_lpf'] + 5) / 127) * (3.14 / 180)
+        # Master filter indicator frame
+        ctx.set_line_cap(cairo.LINE_CAP_ROUND)
+        if control == 127:
+            ctx.set_source_rgb(*screen_dark)
+        else:
+            ctx.set_source_rgb(*color_light)
+        ctx.move_to(center_x, 70)
+        ctx.arc(center_x, 70, 46, pos1, pos2)
+        ctx.line_to(center_x, 70)
+        ctx.set_line_width(3)
+        ctx.stroke()
+        ctx.set_line_cap(cairo.LINE_CAP_BUTT)
 
-        ctx.arc(420, 70, 42, pos1, pos2)
-        ctx.line_to(420, 70)
+        # Master filter indicator
+        if control == 127:
+            ctx.set_source_rgb(*screen_dark)
+        else:
+            ctx.set_source_rgb(1, 0.5, 0.1)
+        ctx.arc(center_x, 70, 42, pos1, pos2)
+        ctx.line_to(center_x, 70)
         ctx.fill()
 
-        if controls['master_lpf'] == 127:
-            ctx.set_source_rgb(0.032, 0.032, 0.032)
+        if control == 127:
+            ctx.set_source_rgb(*screen_dark)
         else:
-            ctx.set_source_rgb(1, 0.75, 0.3)
-        ctx.arc(420, 70, 40, pos1, pos2)
+            ctx.set_source_rgb(*color_light)
+        ctx.arc(center_x, 70, 40, pos1, pos2)
         ctx.set_line_width(12)
         ctx.stroke()
 
-        # FX
-        pos1 = 3.14 / 2 + 360 * ((controls['fx'] - 5) / 127) * (3.14 / 180)
-        pos2 = 3.14 / 2 + 360 * ((controls['fx'] + 5) / 127) * (3.14 / 180)
+        # FX QUASI-GLOBALS
+        title = "FX LVL:"
+        control = controls['fx']
+        color = [0.75, 0, 1]
+        color_light = [1, 0.64, 1]
+        color_dark = [0.35, 0, 0.5]
+        center_x = 540
 
-        # FX mix title
-        ctx.set_source_rgb(0.75, 0, 1)
-        ctx.set_font_size(12)
-        ctx.select_font_face(font, normal, bold)
-        s = "FX LVL:"
-        ctx.move_to(540 - (ctx.text_extents(s)[2] / 2), 15)
-        ctx.show_text(s)
+        pos1 = 3.14 / 2 + 360 * ((control - 5) / 127) * (3.14 / 180)
+        pos2 = 3.14 / 2 + 360 * ((control + 5) / 127) * (3.14 / 180)
+
+        # FX title
+        ctx.set_source_rgb(*color)
+        ctx.move_to(center_x - (ctx.text_extents(title)[2] / 2), 15)
+        ctx.show_text(title)
         ctx.stroke()
 
         # FX value (canvas inverted)
-        ctx.arc(540, 70, 42, 0, 2 * 3.14)
-        ctx.set_source_rgb(0.35, 0, 0.5)
-        if controls['fx'] == 127:
-            ctx.set_source_rgb(0.075, 0, 0.075)
+        ctx.arc(center_x, 70, 42, 0, 2 * 3.14)
+        ctx.set_source_rgb(*color_dark)
         ctx.fill()
         ctx.stroke()
 
         # FX canvas (value inverted)
-        ctx.move_to(540, 70)
-        ctx.arc(540, 70, 42, 3.14 / 2, 3.14 / 2 + 360 * (controls['fx'] / 127) * (3.14 / 180))
+        ctx.move_to(center_x, 70)
+        ctx.arc(center_x, 70, 42, 3.14 / 2, 3.14 / 2 + 360 * (controls['fx'] / 127) * (3.14 / 180))
         ctx.close_path()
-        ctx.set_source_rgb(0.02, 0.02, 0.02)
+        ctx.set_source_rgb(*screen_black)
         ctx.fill()
         ctx.stroke()
 
         # FX frame
-        ctx.arc(540, 70, 40, 0, 2 * 3.14)
+        ctx.arc(center_x, 70, 40, 0, 2 * 3.14)
         if controls['fx'] == 127:
-            ctx.set_source_rgb(0.032, 0.032, 0.032)
+            ctx.set_source_rgb(*screen_dark)
         else:
-            ctx.set_source_rgb(0.75, 0, 1)
+            ctx.set_source_rgb(*color)
         ctx.set_line_width(10)
         ctx.stroke()
 
+        # FX indicator frame
+        ctx.set_line_cap(cairo.LINE_CAP_ROUND)
+        if control == 127:
+            ctx.set_source_rgb(*screen_dark)
+        else:
+            ctx.set_source_rgb(*color_light)
+        ctx.move_to(center_x, 70)
+        ctx.arc(center_x, 70, 46, pos1, pos2)
+        ctx.line_to(center_x, 70)
+        ctx.set_line_width(3)
+        ctx.stroke()
+        ctx.set_line_cap(cairo.LINE_CAP_BUTT)
+
         # FX indicator
-        ctx.arc(540, 70, 42, pos1, pos2)
-        ctx.line_to(540, 70)
+        if control == 127:
+            ctx.set_source_rgb(*screen_dark)
+        else:
+            ctx.set_source_rgb(*color)
+        ctx.arc(center_x, 70, 42, pos1, pos2)
+        ctx.line_to(center_x, 70)
         ctx.fill()
 
         if controls['fx'] == 127:
-            ctx.set_source_rgb(0.032, 0.032, 0.032)
+            ctx.set_source_rgb(*screen_dark)
         else:
-            ctx.set_source_rgb(1, 0.5, 1)
-        ctx.arc(540, 70, 40, pos1, pos2)
+            ctx.set_source_rgb(*color_light)
+        ctx.arc(center_x, 70, 40, pos1, pos2)
         ctx.set_line_width(12)
         ctx.stroke()
 
-        # Smile
-        pos1 = 3.14 / 2 + 360 * ((controls['smile'] - 5) / 127) * (3.14 / 180)
-        pos2 = 3.14 / 2 + 360 * ((controls['smile'] + 5) / 127) * (3.14 / 180)
+        # Smile QUASI-GLOBALS
+        title = "SMILE:"
+        control = controls['smile']
+        color = [1, 1, 0]
+        color_light = [1, 1, 0.75]
+        color_dark = [0.5, 0.5, 0]
+        center_x = 660
+
+        pos1 = 3.14 / 2 + 360 * ((control - 5) / 127) * (3.14 / 180)
+        pos2 = 3.14 / 2 + 360 * ((control + 5) / 127) * (3.14 / 180)
 
         # Smile title
-        ctx.set_source_rgb(1, 1, 0)
-        ctx.set_font_size(12)
-        ctx.select_font_face(font, normal, bold)
-        s = "SMILE:"
-        ctx.move_to(660 - (ctx.text_extents(s)[2] / 2), 15)
-        ctx.show_text(s)
+        ctx.set_source_rgb(*color)
+        ctx.move_to(center_x - (ctx.text_extents(title)[2] / 2), 15)
+        ctx.show_text(title)
         ctx.stroke()
 
         # Smile canvas
-        ctx.arc(660, 70, 42, 0, 2 * 3.14)
-        ctx.set_source_rgb(0.02, 0.02, 0.02)
-        # if controls['smile'] == 127:
-        #     ctx.set_source_rgb(0.5, 0.5, 0)
+        ctx.arc(center_x, 70, 42, 0, 2 * 3.14)
+        ctx.set_source_rgb(*screen_black)
         ctx.fill()
         ctx.stroke()
 
         # Smile value
-        ctx.move_to(660, 70)
-        ctx.arc(660, 70, 42, 3.14 / 2, 3.14 / 2 + 360 * (controls['smile'] / 127) * (3.14 / 180))
+        ctx.move_to(center_x, 70)
+        ctx.arc(center_x, 70, 42, 3.14 / 2, 3.14 / 2 + 360 * (control / 127) * (3.14 / 180))
         ctx.close_path()
-        ctx.set_source_rgb(0.5, 0.5, 0)
+        ctx.set_source_rgb(*color_dark)
         ctx.fill()
         ctx.stroke()
 
         # Smile frame
-        ctx.arc(660, 70, 40, 0, 2 * 3.14)
-        if controls['smile'] == 0:
-            ctx.set_source_rgb(0.032, 0.032, 0.032)
+        ctx.arc(center_x, 70, 40, 0, 2 * 3.14)
+        if control == 0:
+            ctx.set_source_rgb(*screen_dark)
         else:
-            ctx.set_source_rgb(1, 1, 0)
+            ctx.set_source_rgb(*color)
         ctx.set_line_width(10)
         ctx.stroke()
 
-        # Smile indicator
-        ctx.arc(660, 70, 42, pos1, pos2)
-        ctx.line_to(660, 70)
-        ctx.fill()
-        if controls['smile'] == 0:
-            ctx.set_source_rgb(0.032, 0.032, 0.032)
+        # Smile indicator frame
+        ctx.set_line_cap(cairo.LINE_CAP_ROUND)
+        if control == 0:
+            ctx.set_source_rgb(*screen_dark)
         else:
-            ctx.set_source_rgb(1, 1, 0.5)
-        ctx.arc(660, 70, 40, pos1, pos2)
+            ctx.set_source_rgb(*color_light)
+        ctx.move_to(center_x, 70)
+        ctx.arc(center_x, 70, 46, pos1, pos2)
+        ctx.line_to(center_x, 70)
+        ctx.set_line_width(3)
+        ctx.stroke()
+        ctx.set_line_cap(cairo.LINE_CAP_BUTT)
+
+        # Smile indicator
+        if control == 0:
+            ctx.set_source_rgb(*screen_dark)
+        else:
+            ctx.set_source_rgb(*color)
+        ctx.arc(center_x, 70, 42, pos1, pos2)
+        ctx.line_to(center_x, 70)
+        ctx.fill()
+        if control == 0:
+            ctx.set_source_rgb(*screen_dark)
+        else:
+            ctx.set_source_rgb(*color_light)
+        ctx.arc(center_x, 70, 40, pos1, pos2)
         ctx.set_line_width(12)
         ctx.stroke()
+
+        # Reverb QUASI-GLOBALS
+        title = "REVERB:"
+        control = controls['reverb']
+        color = [0, 0.85, 1]
+        color_light = [0.75, 1, 1]
+        color_dark = [0, 0.425, 0.5]
+        center_x = 780
 
         # Reverb
         pos1 = 3.14 / 2 + 360 * ((controls['reverb'] - 5) / 127) * (3.14 / 180)
         pos2 = 3.14 / 2 + 360 * ((controls['reverb'] + 5) / 127) * (3.14 / 180)
 
         # Reverb title
-        ctx.set_source_rgb(0, 1, 1)
-        ctx.set_font_size(12)
-        ctx.select_font_face(font, normal, bold)
-        s = "REVERB:"
-        ctx.move_to(780 - (ctx.text_extents(s)[2] / 2), 15)
-        ctx.show_text(s)
+        ctx.set_source_rgb(*color)
+        ctx.move_to(center_x - (ctx.text_extents(title)[2] / 2), 15)
+        ctx.show_text(title)
         ctx.stroke()
 
         # Reverb canvas
-        ctx.arc(780, 70, 42, 0, 2 * 3.14)
-        ctx.set_source_rgb(0.02, 0.02, 0.02)
-        if controls['reverb'] == 127:
-            ctx.set_source_rgb(0.5, 1, 1)
+        ctx.arc(center_x, 70, 42, 0, 2 * 3.14)
+        ctx.set_source_rgb(*screen_black)
         ctx.fill()
         ctx.stroke()
 
         # Reverb value
-        ctx.move_to(780, 70)
-        ctx.arc(780, 70, 42, 3.14 / 2, 3.14 / 2 + 360 * (controls['reverb'] / 127) * (3.14 / 180))
+        ctx.move_to(center_x, 70)
+        ctx.arc(center_x, 70, 42, 3.14 / 2, 3.14 / 2 + 360 * (controls['reverb'] / 127) * (3.14 / 180))
         ctx.close_path()
-        ctx.set_source_rgb(0, 0.425, 0.5)
+        ctx.set_source_rgb(*color_dark)
         ctx.fill()
         ctx.stroke()
 
         # Reverb frame
-        ctx.arc(780, 70, 40, 0, 2 * 3.14)
+        ctx.arc(center_x, 70, 40, 0, 2 * 3.14)
         if controls['reverb'] == 0:
-            ctx.set_source_rgb(0.032, 0.032, 0.032)
+            ctx.set_source_rgb(*screen_dark)
         else:
-            ctx.set_source_rgb(0, 0.75, 1)
+            ctx.set_source_rgb(*color)
         ctx.set_line_width(10)
         ctx.stroke()
 
+        # Reverb indicator frame
+        ctx.set_line_cap(cairo.LINE_CAP_ROUND)
+        if control == 0:
+            ctx.set_source_rgb(*screen_dark)
+        else:
+            ctx.set_source_rgb(*color_light)
+        ctx.move_to(center_x, 70)
+        ctx.arc(center_x, 70, 46, pos1, pos2)
+        ctx.line_to(center_x, 70)
+        ctx.set_line_width(3)
+        ctx.stroke()
+        ctx.set_line_cap(cairo.LINE_CAP_BUTT)
+
         # Reverb indicator
-        ctx.arc(780, 70, 42, pos1, pos2)
-        ctx.line_to(780, 70)
+        if controls['reverb'] == 0:
+            ctx.set_source_rgb(*screen_dark)
+        else:
+            ctx.set_source_rgb(*color)
+        ctx.arc(center_x, 70, 42, pos1, pos2)
+        ctx.line_to(center_x, 70)
         ctx.fill()
         if controls['reverb'] == 0:
-            ctx.set_source_rgb(0.032, 0.032, 0.032)
+            ctx.set_source_rgb(*screen_dark)
         else:
-            ctx.set_source_rgb(0.5, 1, 1)
-        ctx.arc(780, 70, 40, pos1, pos2)
+            ctx.set_source_rgb(*color_light)
+        ctx.arc(center_x, 70, 40, pos1, pos2)
         ctx.set_line_width(12)
         ctx.stroke()
 
-        # Tape
+        # Tape QUASI-GLOBALS
+        title = "TAPE:"
+        control = controls['tape']
+        color = [1, 0.25, 0.25]
+        color_light = [1, 0.75, 0.75]
+        color_dark = [0.5, 0, 0]
+        center_x = 900
+
         pos1 = 3.14 / 2 + 360 * ((controls['tape'] - 5) / 127) * (3.14 / 180)
         pos2 = 3.14 / 2 + 360 * ((controls['tape'] + 5) / 127) * (3.14 / 180)
 
         # Tape title
-        ctx.set_source_rgb(1, 0, 0)
-        ctx.set_font_size(12)
-        ctx.select_font_face(font, normal, bold)
-        s = "TAPE:"
-        ctx.move_to(900 - (ctx.text_extents(s)[2] / 2), 15)
-        ctx.show_text(s)
+        ctx.set_source_rgb(*color)
+        ctx.move_to(center_x - (ctx.text_extents(title)[2] / 2), 15)
+        ctx.show_text(title)
         ctx.stroke()
 
         # Tape value (canvas inverted)
-        ctx.arc(900, 70, 42, 0, 2 * 3.14)
-        ctx.set_source_rgb(0.5, 0, 0)
-        if controls['tape'] == 127:
-            ctx.set_source_rgb(0.2, 0, 0)
+        ctx.arc(center_x, 70, 42, 0, 2 * 3.14)
+        ctx.set_source_rgb(*color_dark)
         ctx.fill()
         ctx.stroke()
 
         # Tape canvas (value inverted)
-        ctx.move_to(900, 70)
-        ctx.arc(900, 70, 42, 3.14 / 2, 3.14 / 2 + 360 * (controls['tape'] / 127) * (3.14 / 180))
+        ctx.move_to(center_x, 70)
+        ctx.arc(center_x, 70, 42, 3.14 / 2, 3.14 / 2 + 360 * (controls['tape'] / 127) * (3.14 / 180))
         ctx.close_path()
-        ctx.set_source_rgb(0.02, 0.02, 0.02)
+        ctx.set_source_rgb(*screen_black)
         ctx.fill()
         ctx.stroke()
 
         # Tape frame
-        ctx.arc(900, 70, 40, 0, 2 * 3.14)
+        ctx.arc(center_x, 70, 40, 0, 2 * 3.14)
         if controls['tape'] == 127:
-            ctx.set_source_rgb(0.032, 0.032, 0.032)
+            ctx.set_source_rgb(*screen_dark)
         else:
-            ctx.set_source_rgb(1, 0, 0)
+            ctx.set_source_rgb(*color)
         ctx.set_line_width(10)
         ctx.stroke()
 
+        # Tape indicator frame
+        ctx.set_line_cap(cairo.LINE_CAP_ROUND)
+        if control == 127:
+            ctx.set_source_rgb(*screen_dark)
+        else:
+            ctx.set_source_rgb(*color_light)
+        ctx.move_to(center_x, 70)
+        ctx.arc(center_x, 70, 46, pos1, pos2)
+        ctx.line_to(center_x, 70)
+        ctx.set_line_width(3)
+        ctx.stroke()
+        ctx.set_line_cap(cairo.LINE_CAP_BUTT)
+
         # Tape indicator
-        ctx.arc(900, 70, 42, pos1, pos2)
-        ctx.line_to(900, 70)
+        if controls['tape'] == 127:
+            ctx.set_source_rgb(*screen_dark)
+        else:
+            ctx.set_source_rgb(*color)
+        ctx.arc(center_x, 70, 42, pos1, pos2)
+        ctx.line_to(center_x, 70)
         ctx.fill()
         if controls['tape'] == 127:
-            ctx.set_source_rgb(0.032, 0.032, 0.032)
+            ctx.set_source_rgb(*screen_dark)
         else:
-            ctx.set_source_rgb(1, 0.5, 0.5)
-        ctx.arc(900, 70, 40, pos1, pos2)
+            ctx.set_source_rgb(*color_light)
+        ctx.arc(center_x, 70, 40, pos1, pos2)
         ctx.set_line_width(12)
         ctx.stroke()
 
