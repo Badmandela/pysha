@@ -1006,7 +1006,7 @@ class MainControlsMode(definitions.PyshaMode):
             msg = mido.Message('control_change', control=21, value=controls['instr'])
             self.app.send_midi(msg)
 
-            if controls['instr'] <= 41:
+            if controls['instr'] <= 31:
                 if not definitions.ROOT_KEY == definitions.PINK:
                     definitions.ROOT_KEY = definitions.PINK
                     definitions.NOTE_ON_COLOR = definitions.GREEN
@@ -1017,7 +1017,7 @@ class MainControlsMode(definitions.PyshaMode):
                     self.app.buttons_need_update = True
                     self.update_buttons()
 
-            if 42 <= controls['instr'] <= 81:
+            if 32 <= controls['instr'] <= 95:
                 if not definitions.ROOT_KEY == definitions.GREEN:
                     definitions.ROOT_KEY = definitions.GREEN
                     definitions.NOTE_ON_COLOR = definitions.PINK
@@ -1028,7 +1028,7 @@ class MainControlsMode(definitions.PyshaMode):
                     self.app.buttons_need_update = True
                     self.update_buttons()
 
-            if controls['instr'] >= 82:
+            if controls['instr'] >= 96:
                 if not definitions.ROOT_KEY == definitions.PURPLE:
                     definitions.ROOT_KEY = definitions.PURPLE
                     definitions.NOTE_ON_COLOR = definitions.WHITE
