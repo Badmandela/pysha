@@ -420,7 +420,7 @@ else:
 
 # Smile indicator
 # Inner
-if control == 127:
+if control == 0:
     ctx.set_source_rgb(*screen_dark)
 else:
     ctx.set_source_rgb(*color)
@@ -429,7 +429,7 @@ ctx.line_to(center_x, center_y)
 ctx.fill()
 
 # Outer
-if control == 127:
+if control == 0:
     pass
 else:
     ctx.set_source_rgba(1, 1, 1, 0.64)
@@ -509,7 +509,7 @@ else:
 
 # Reverb indicator
 # Inner
-if control == 127:
+if control == 0:
     ctx.set_source_rgb(*screen_dark)
 else:
     ctx.set_source_rgb(*color)
@@ -518,7 +518,7 @@ ctx.line_to(center_x, center_y)
 ctx.fill()
 
 # Outer
-if control == 127:
+if control == 0:
     pass
 else:
     ctx.set_source_rgba(1, 1, 1, 0.64)
@@ -557,7 +557,7 @@ ctx.fill()
 ctx.stroke()
 
 # Tape frame
-if controls['fx'] == 127:
+if control == 127:
     ctx.arc(center_x, center_y, rad, 0, 2 * 3.14)
     ctx.set_source_rgb(*screen_dark)
     ctx.set_line_width(10)
