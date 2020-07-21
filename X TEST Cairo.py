@@ -1,7 +1,7 @@
 import cairo
 import push2_python
 
-controls = {'instr':0, 'instr_lpf': 64, 'master_lpf': 64, 'fx': 64, 'smile': 64, 'reverb': 64, 'tape': 64}
+controls = {'instr': 0, 'instr_lpf': 0, 'master_lpf': 64, 'fx': 64, 'smile': 64, 'reverb': 64, 'tape': 64}
 transport = {'cue1': 0, 'cue2': 0, 'bar1': 0, 'bar2': 0, 'beat1': 0, 'beat2': 0, 'nudge1': 0, 'nudge2': 0}
 
 w, h = push2_python.constants.DISPLAY_LINE_PIXELS, push2_python.constants.DISPLAY_N_LINES
@@ -155,22 +155,23 @@ pos1 = 3.14 / 2 + 360 * ((controls['instr_lpf'] - 5) / 127) * (3.14 / 180)
 pos2 = 3.14 / 2 + 360 * ((controls['instr_lpf'] + 5) / 127) * (3.14 / 180)
 
 # Instrument_filter indicator inner
-if controls['instr_lpf'] == 127:
+if control == 127:
     ctx.set_source_rgb(*screen_dark)
 else:
     ctx.set_source_rgb(*color)
-ctx.arc(center_x, center_y, rad, pos1, pos2)
+ctx.arc(center_x, center_y, rad + 6, pos1, pos2)
 ctx.line_to(center_x, center_y)
 ctx.fill()
 
 # Instrument_filter indicator outer
-if controls['instr_lpf'] == 127:
-    ctx.set_source_rgb(*screen_dark)
+if control == 127:
+    pass
 else:
     ctx.set_source_rgba(1, 1, 1, 0.64)
-ctx.arc(center_x, center_y, rad, pos1, pos2)
-ctx.set_line_width(12)
-ctx.stroke()
+    ctx.arc(center_x, center_y, rad, pos1, pos2)
+    ctx.set_line_width(12)
+    ctx.stroke()
+
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Master filter QUASI-GLOBALS
@@ -242,21 +243,23 @@ else:
     ctx.stroke()
 
 # Master filter indicator
+# Inner
 if control == 127:
     ctx.set_source_rgb(*screen_dark)
 else:
-    ctx.set_source_rgb(1, 0.5, 0.1)
-ctx.arc(center_x, center_y, rad, pos1, pos2)
+    ctx.set_source_rgb(*color)
+ctx.arc(center_x, center_y, rad + 6, pos1, pos2)
 ctx.line_to(center_x, center_y)
 ctx.fill()
 
+# Outer
 if control == 127:
-    ctx.set_source_rgb(*screen_dark)
+    pass
 else:
     ctx.set_source_rgba(1, 1, 1, 0.64)
-ctx.arc(center_x, center_y, rad, pos1, pos2)
-ctx.set_line_width(12)
-ctx.stroke()
+    ctx.arc(center_x, center_y, rad, pos1, pos2)
+    ctx.set_line_width(12)
+    ctx.stroke()
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # FX QUASI-GLOBALS
@@ -328,21 +331,23 @@ else:
     ctx.stroke()
 
 # FX indicator
+# Inner
 if control == 127:
     ctx.set_source_rgb(*screen_dark)
 else:
     ctx.set_source_rgb(*color)
-ctx.arc(center_x, center_y, rad, pos1, pos2)
+ctx.arc(center_x, center_y, rad + 6, pos1, pos2)
 ctx.line_to(center_x, center_y)
 ctx.fill()
 
-if controls['fx'] == 127:
-    ctx.set_source_rgb(*screen_dark)
+# Outer
+if control == 127:
+    pass
 else:
     ctx.set_source_rgba(1, 1, 1, 0.64)
-ctx.arc(center_x, center_y, rad, pos1, pos2)
-ctx.set_line_width(12)
-ctx.stroke()
+    ctx.arc(center_x, center_y, rad, pos1, pos2)
+    ctx.set_line_width(12)
+    ctx.stroke()
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Smile QUASI-GLOBALS
@@ -414,20 +419,23 @@ else:
     ctx.stroke()
 
 # Smile indicator
-if control == 0:
+# Inner
+if control == 127:
     ctx.set_source_rgb(*screen_dark)
 else:
     ctx.set_source_rgb(*color)
-ctx.arc(center_x, center_y, rad, pos1, pos2)
+ctx.arc(center_x, center_y, rad + 6, pos1, pos2)
 ctx.line_to(center_x, center_y)
 ctx.fill()
-if control == 0:
-    ctx.set_source_rgb(*screen_dark)
+
+# Outer
+if control == 127:
+    pass
 else:
     ctx.set_source_rgba(1, 1, 1, 0.64)
-ctx.arc(center_x, center_y, rad, pos1, pos2)
-ctx.set_line_width(12)
-ctx.stroke()
+    ctx.arc(center_x, center_y, rad, pos1, pos2)
+    ctx.set_line_width(12)
+    ctx.stroke()
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Reverb QUASI-GLOBALS
@@ -500,20 +508,23 @@ else:
     ctx.stroke()
 
 # Reverb indicator
-if controls['reverb'] == 0:
+# Inner
+if control == 127:
     ctx.set_source_rgb(*screen_dark)
 else:
     ctx.set_source_rgb(*color)
-ctx.arc(center_x, center_y, rad, pos1, pos2)
+ctx.arc(center_x, center_y, rad + 6, pos1, pos2)
 ctx.line_to(center_x, center_y)
 ctx.fill()
-if controls['reverb'] == 0:
-    ctx.set_source_rgb(*screen_dark)
+
+# Outer
+if control == 127:
+    pass
 else:
     ctx.set_source_rgba(1, 1, 1, 0.64)
-ctx.arc(center_x, center_y, rad, pos1, pos2)
-ctx.set_line_width(12)
-ctx.stroke()
+    ctx.arc(center_x, center_y, rad, pos1, pos2)
+    ctx.set_line_width(12)
+    ctx.stroke()
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Tape QUASI-GLOBALS
@@ -585,20 +596,23 @@ else:
     ctx.stroke()
 
 # Tape indicator
-if controls['tape'] == 127:
+# Inner
+if control == 127:
     ctx.set_source_rgb(*screen_dark)
 else:
     ctx.set_source_rgb(*color)
-ctx.arc(center_x, center_y, rad, pos1, pos2)
+ctx.arc(center_x, center_y, rad + 6, pos1, pos2)
 ctx.line_to(center_x, center_y)
 ctx.fill()
-if controls['tape'] == 127:
-    ctx.set_source_rgb(*screen_dark)
+
+# Outer
+if control == 127:
+    pass
 else:
     ctx.set_source_rgba(1, 1, 1, 0.64)
-ctx.arc(center_x, center_y, rad, pos1, pos2)
-ctx.set_line_width(12)
-ctx.stroke()
+    ctx.arc(center_x, center_y, rad, pos1, pos2)
+    ctx.set_line_width(12)
+    ctx.stroke()
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # CUE 1
@@ -620,7 +634,7 @@ if transport['cue1'] == 0:
     ctx.set_source_rgb(*color)
     ctx.stroke()
 elif transport['cue1'] == 127:
-    ctx.rectangle(x_min, y_min, x_max, y_max)
+    ctx.rectangle(x_min, y_min, 120, 30)
     pat = cairo.LinearGradient(x_min, y_min, x_min, y_max)
     pat.add_color_stop_rgb(0, 0, 0, 0)
     pat.add_color_stop_rgb(0.75, *color)
@@ -656,7 +670,7 @@ if transport['cue2'] == 0:
     ctx.stroke()
 
 elif transport['cue2'] == 127:
-    ctx.rectangle(x_min, y_min, x_max, y_max)
+    ctx.rectangle(x_min, y_min, 120, 30)
     pat = cairo.LinearGradient(x_min, y_min, x_min, y_max)
     pat.add_color_stop_rgb(0, 0, 0, 0)
     pat.add_color_stop_rgb(0.75, *color)
@@ -693,7 +707,7 @@ if transport['bar1'] == 0:
     ctx.stroke()
 
 else:
-    ctx.rectangle(x_min, y_min, x_max, y_max)
+    ctx.rectangle(x_min, y_min, 120, 30)
     pat = cairo.LinearGradient(x_min, y_min, x_min, y_max)
     pat.add_color_stop_rgb(0, 0, 0, 0)
     pat.add_color_stop_rgb(0.75, *color)
@@ -732,7 +746,7 @@ if transport['bar2'] == 0:
     ctx.stroke()
 
 else:
-    ctx.rectangle(x_min, y_min, x_max, y_max)
+    ctx.rectangle(x_min, y_min, 120, 30)
     pat = cairo.LinearGradient(x_min, y_min, x_min, y_max)
     pat.add_color_stop_rgb(0, 0, 0, 0)
     pat.add_color_stop_rgb(0.75, *color)
@@ -771,7 +785,7 @@ if transport['beat1'] == 0:
     ctx.stroke()
 
 elif transport['beat1'] == 127:
-    ctx.rectangle(x_min, y_min, x_max, y_max)
+    ctx.rectangle(x_min, y_min, 120, 30)
     pat = cairo.LinearGradient(x_min, y_min, x_min, y_max)
     pat.add_color_stop_rgb(0, 0, 0, 0)
     pat.add_color_stop_rgb(0.75, *color)
@@ -808,7 +822,7 @@ if transport['beat2'] == 0:
     ctx.stroke()
 
 elif transport['beat2'] == 127:
-    ctx.rectangle(x_min, y_min, x_max, y_max)
+    ctx.rectangle(x_min, y_min, 120, 30)
     pat = cairo.LinearGradient(x_min, y_min, x_min, y_max)
     pat.add_color_stop_rgb(0, 0, 0, 0)
     pat.add_color_stop_rgb(0.75, *color)
@@ -854,7 +868,7 @@ if transport['nudge1'] == 0:
     ctx.stroke()
 
 elif transport['nudge1'] == 127:
-    ctx.rectangle(x_min, y_min, x_max, y_max)
+    ctx.rectangle(x_min, y_min, 120, 30)
     pat = cairo.LinearGradient(x_min, y_min, x_min, y_max)
     pat.add_color_stop_rgb(0, 0, 0, 0)
     pat.add_color_stop_rgb(0.75, *color)
@@ -908,7 +922,7 @@ if transport['nudge2'] == 0:
     ctx.stroke()
 
 elif transport['nudge2'] == 127:
-    ctx.rectangle(x_min, y_min, x_max, y_max)
+    ctx.rectangle(x_min, y_min, 120, 30)
     pat = cairo.LinearGradient(x_min, y_min, x_min, y_max)
     pat.add_color_stop_rgb(0, 0, 0, 0)
     pat.add_color_stop_rgb(0.75, *color)

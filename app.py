@@ -16,8 +16,6 @@ from settings_mode import SettingsMode
 
 
 class PyshaApp(object):
-    # Banned midi names
-    # banned_names = "Ableton Push", "Midi Through", "RtMidi"
 
     # midi
     midi_out = None

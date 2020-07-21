@@ -173,22 +173,22 @@ class MainControlsMode(definitions.PyshaMode):
         pos2 = 3.14 / 2 + 360 * ((controls['instr_lpf'] + 5) / 127) * (3.14 / 180)
 
         # Instrument_filter indicator inner
-        if controls['instr_lpf'] == 127:
+        if control == 127:
             ctx.set_source_rgb(*screen_dark)
         else:
             ctx.set_source_rgb(*color)
-        ctx.arc(center_x, center_y, rad, pos1, pos2)
+        ctx.arc(center_x, center_y, rad + 6, pos1, pos2)
         ctx.line_to(center_x, center_y)
         ctx.fill()
 
         # Instrument_filter indicator outer
-        if controls['instr_lpf'] == 127:
-            ctx.set_source_rgb(*screen_dark)
+        if control == 127:
+            pass
         else:
             ctx.set_source_rgba(1, 1, 1, 0.64)
-        ctx.arc(center_x, center_y, rad, pos1, pos2)
-        ctx.set_line_width(12)
-        ctx.stroke()
+            ctx.arc(center_x, center_y, rad, pos1, pos2)
+            ctx.set_line_width(12)
+            ctx.stroke()
 
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
         # Master filter QUASI-GLOBALS
@@ -260,21 +260,23 @@ class MainControlsMode(definitions.PyshaMode):
             ctx.stroke()
 
         # Master filter indicator
+        # Inner
         if control == 127:
             ctx.set_source_rgb(*screen_dark)
         else:
-            ctx.set_source_rgb(1, 0.5, 0.1)
-        ctx.arc(center_x, center_y, rad, pos1, pos2)
+            ctx.set_source_rgb(*color)
+        ctx.arc(center_x, center_y, rad + 6, pos1, pos2)
         ctx.line_to(center_x, center_y)
         ctx.fill()
 
+        # Outer
         if control == 127:
-            ctx.set_source_rgb(*screen_dark)
+            pass
         else:
             ctx.set_source_rgba(1, 1, 1, 0.64)
-        ctx.arc(center_x, center_y, rad, pos1, pos2)
-        ctx.set_line_width(12)
-        ctx.stroke()
+            ctx.arc(center_x, center_y, rad, pos1, pos2)
+            ctx.set_line_width(12)
+            ctx.stroke()
 
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
         # FX QUASI-GLOBALS
@@ -346,21 +348,23 @@ class MainControlsMode(definitions.PyshaMode):
             ctx.stroke()
 
         # FX indicator
+        # Inner
         if control == 127:
             ctx.set_source_rgb(*screen_dark)
         else:
             ctx.set_source_rgb(*color)
-        ctx.arc(center_x, center_y, rad, pos1, pos2)
+        ctx.arc(center_x, center_y, rad + 6, pos1, pos2)
         ctx.line_to(center_x, center_y)
         ctx.fill()
 
-        if controls['fx'] == 127:
-            ctx.set_source_rgb(*screen_dark)
+        # Outer
+        if control == 127:
+            pass
         else:
             ctx.set_source_rgba(1, 1, 1, 0.64)
-        ctx.arc(center_x, center_y, rad, pos1, pos2)
-        ctx.set_line_width(12)
-        ctx.stroke()
+            ctx.arc(center_x, center_y, rad, pos1, pos2)
+            ctx.set_line_width(12)
+            ctx.stroke()
 
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
         # Smile QUASI-GLOBALS
@@ -432,20 +436,23 @@ class MainControlsMode(definitions.PyshaMode):
             ctx.stroke()
 
         # Smile indicator
-        if control == 0:
+        # Inner
+        if control == 127:
             ctx.set_source_rgb(*screen_dark)
         else:
             ctx.set_source_rgb(*color)
-        ctx.arc(center_x, center_y, rad, pos1, pos2)
+        ctx.arc(center_x, center_y, rad + 6, pos1, pos2)
         ctx.line_to(center_x, center_y)
         ctx.fill()
-        if control == 0:
-            ctx.set_source_rgb(*screen_dark)
+
+        # Outer
+        if control == 127:
+            pass
         else:
             ctx.set_source_rgba(1, 1, 1, 0.64)
-        ctx.arc(center_x, center_y, rad, pos1, pos2)
-        ctx.set_line_width(12)
-        ctx.stroke()
+            ctx.arc(center_x, center_y, rad, pos1, pos2)
+            ctx.set_line_width(12)
+            ctx.stroke()
 
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
         # Reverb QUASI-GLOBALS
@@ -518,20 +525,23 @@ class MainControlsMode(definitions.PyshaMode):
             ctx.stroke()
 
         # Reverb indicator
-        if controls['reverb'] == 0:
+        # Inner
+        if control == 127:
             ctx.set_source_rgb(*screen_dark)
         else:
             ctx.set_source_rgb(*color)
-        ctx.arc(center_x, center_y, rad, pos1, pos2)
+        ctx.arc(center_x, center_y, rad + 6, pos1, pos2)
         ctx.line_to(center_x, center_y)
         ctx.fill()
-        if controls['reverb'] == 0:
-            ctx.set_source_rgb(*screen_dark)
+
+        # Outer
+        if control == 127:
+            pass
         else:
             ctx.set_source_rgba(1, 1, 1, 0.64)
-        ctx.arc(center_x, center_y, rad, pos1, pos2)
-        ctx.set_line_width(12)
-        ctx.stroke()
+            ctx.arc(center_x, center_y, rad, pos1, pos2)
+            ctx.set_line_width(12)
+            ctx.stroke()
 
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
         # Tape QUASI-GLOBALS
@@ -603,20 +613,23 @@ class MainControlsMode(definitions.PyshaMode):
             ctx.stroke()
 
         # Tape indicator
-        if controls['tape'] == 127:
+        # Inner
+        if control == 127:
             ctx.set_source_rgb(*screen_dark)
         else:
             ctx.set_source_rgb(*color)
-        ctx.arc(center_x, center_y, rad, pos1, pos2)
+        ctx.arc(center_x, center_y, rad + 6, pos1, pos2)
         ctx.line_to(center_x, center_y)
         ctx.fill()
-        if controls['tape'] == 127:
-            ctx.set_source_rgb(*screen_dark)
+
+        # Outer
+        if control == 127:
+            pass
         else:
             ctx.set_source_rgba(1, 1, 1, 0.64)
-        ctx.arc(center_x, center_y, rad, pos1, pos2)
-        ctx.set_line_width(12)
-        ctx.stroke()
+            ctx.arc(center_x, center_y, rad, pos1, pos2)
+            ctx.set_line_width(12)
+            ctx.stroke()
 
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
         # CUE 1
@@ -638,7 +651,7 @@ class MainControlsMode(definitions.PyshaMode):
             ctx.set_source_rgb(*color)
             ctx.stroke()
         elif transport['cue1'] == 127:
-            ctx.rectangle(x_min, y_min, x_max, y_max)
+            ctx.rectangle(x_min, y_min, 120, 30)
             pat = cairo.LinearGradient(x_min, y_min, x_min, y_max)
             pat.add_color_stop_rgb(0, 0, 0, 0)
             pat.add_color_stop_rgb(0.75, *color)
@@ -674,7 +687,7 @@ class MainControlsMode(definitions.PyshaMode):
             ctx.stroke()
 
         elif transport['cue2'] == 127:
-            ctx.rectangle(x_min, y_min, x_max, y_max)
+            ctx.rectangle(x_min, y_min, 120, 30)
             pat = cairo.LinearGradient(x_min, y_min, x_min, y_max)
             pat.add_color_stop_rgb(0, 0, 0, 0)
             pat.add_color_stop_rgb(0.75, *color)
@@ -711,7 +724,7 @@ class MainControlsMode(definitions.PyshaMode):
             ctx.stroke()
 
         else:
-            ctx.rectangle(x_min, y_min, x_max, y_max)
+            ctx.rectangle(x_min, y_min, 120, 30)
             pat = cairo.LinearGradient(x_min, y_min, x_min, y_max)
             pat.add_color_stop_rgb(0, 0, 0, 0)
             pat.add_color_stop_rgb(0.75, *color)
@@ -750,7 +763,7 @@ class MainControlsMode(definitions.PyshaMode):
             ctx.stroke()
 
         else:
-            ctx.rectangle(x_min, y_min, x_max, y_max)
+            ctx.rectangle(x_min, y_min, 120, 30)
             pat = cairo.LinearGradient(x_min, y_min, x_min, y_max)
             pat.add_color_stop_rgb(0, 0, 0, 0)
             pat.add_color_stop_rgb(0.75, *color)
@@ -789,7 +802,7 @@ class MainControlsMode(definitions.PyshaMode):
             ctx.stroke()
 
         elif transport['beat1'] == 127:
-            ctx.rectangle(x_min, y_min, x_max, y_max)
+            ctx.rectangle(x_min, y_min, 120, 30)
             pat = cairo.LinearGradient(x_min, y_min, x_min, y_max)
             pat.add_color_stop_rgb(0, 0, 0, 0)
             pat.add_color_stop_rgb(0.75, *color)
@@ -826,7 +839,7 @@ class MainControlsMode(definitions.PyshaMode):
             ctx.stroke()
 
         elif transport['beat2'] == 127:
-            ctx.rectangle(x_min, y_min, x_max, y_max)
+            ctx.rectangle(x_min, y_min, 120, 30)
             pat = cairo.LinearGradient(x_min, y_min, x_min, y_max)
             pat.add_color_stop_rgb(0, 0, 0, 0)
             pat.add_color_stop_rgb(0.75, *color)
@@ -872,7 +885,7 @@ class MainControlsMode(definitions.PyshaMode):
             ctx.stroke()
 
         elif transport['nudge1'] == 127:
-            ctx.rectangle(x_min, y_min, x_max, y_max)
+            ctx.rectangle(x_min, y_min, 120, 30)
             pat = cairo.LinearGradient(x_min, y_min, x_min, y_max)
             pat.add_color_stop_rgb(0, 0, 0, 0)
             pat.add_color_stop_rgb(0.75, *color)
@@ -926,7 +939,7 @@ class MainControlsMode(definitions.PyshaMode):
             ctx.stroke()
 
         elif transport['nudge2'] == 127:
-            ctx.rectangle(x_min, y_min, x_max, y_max)
+            ctx.rectangle(x_min, y_min, 120, 30)
             pat = cairo.LinearGradient(x_min, y_min, x_min, y_max)
             pat.add_color_stop_rgb(0, 0, 0, 0)
             pat.add_color_stop_rgb(0.75, *color)
