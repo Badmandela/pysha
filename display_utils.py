@@ -4,7 +4,7 @@ import cairo
 def show_title(ctx, x, h, text, color=[1, 1, 1]):
     text = str(text)
     ctx.set_source_rgb(*color)
-    ctx.select_font_face("Verdana", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
+    ctx.select_font_face("Verdana", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_BOLD)
     font_size = h//12
     ctx.set_font_size(font_size)
     ctx.move_to(x + 3, 15)
@@ -14,8 +14,8 @@ def show_title(ctx, x, h, text, color=[1, 1, 1]):
 def show_value(ctx, x, h, text, color=[1, 1, 1]):
     text = str(text)
     ctx.set_source_rgb(*color)
-    ctx.select_font_face("Verdana", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
-    font_size = h//8
+    ctx.select_font_face("Verdana", cairo.FONT_SLANT_ITALIC, cairo.FONT_WEIGHT_NORMAL)
+    font_size = 12
     ctx.set_font_size(font_size)
     ctx.move_to(x + 3, 45)
     ctx.show_text(text)

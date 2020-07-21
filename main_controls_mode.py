@@ -15,7 +15,6 @@ synth_min = 32
 synth_max = 95
 sampler_min = 96
 
-
 class MainControlsMode(definitions.PyshaMode):
 
     def activate(self):
@@ -44,12 +43,14 @@ class MainControlsMode(definitions.PyshaMode):
         synth_max = 95
         sampler_min = 96
         rad = 45
+        line = 10
         center_y = 75
 
         # Textfont
         ctx.set_font_size(12)
         ctx.select_font_face("Verdana", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_BOLD)
 
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
         # Instrument QUASI-GLOBALS
         title = "INSTRUMENT:"
         control = controls['instr']
@@ -59,8 +60,6 @@ class MainControlsMode(definitions.PyshaMode):
             color = [0.1, 1, 0.7]
         else:  # controls['instr'] >= sampler_min
             color = [1, 0.1, 0.9]
-        color_dark = [divide / 2 for divide in color]
-        color_light = [1, 1, 1]
         center_x = 60
 
         title = "INSTRUMENT:"
@@ -68,26 +67,37 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.set_source_rgb(*color)
         ctx.show_text(title)
 
-        # Instrument canvas
-        ctx.rectangle(15, 23 + (30 * (controls['instr'] / 127)), 90, 15)
+        # Instrument selector canvas
         ctx.set_source_rgb(*color)
+        ctx.rectangle(5, 23 + (30 * (controls['instr'] / 127)), 112, 15)
         ctx.fill()
-        ctx.stroke()
 
         # Instruments list
-        ctx.set_source_rgb(1, 1, 1)
         ctx.select_font_face("Verdana", cairo.FONT_SLANT_ITALIC, cairo.FONT_WEIGHT_NORMAL)
-        s = "PIANO"
+        s = "ELECTRIC PIANO"
         ctx.move_to(center_x - (ctx.text_extents(s)[2] / 2), 35)
+        if controls['instr'] <= piano_max:
+            ctx.set_source_rgba(1, 1, 1, 1)
+        else:
+            ctx.set_source_rgba(1, 1, 1, 0.25)
         ctx.show_text(s)
-        s = "SYNTH"
+        s = "SYNTHESIZER"
         ctx.move_to(center_x - (ctx.text_extents(s)[2] / 2), 50)
+        if synth_min <= controls['instr'] <= synth_max:
+            ctx.set_source_rgba(1, 1, 1, 1)
+        else:
+            ctx.set_source_rgba(1, 1, 1, 0.25)
         ctx.show_text(s)
         s = "SAMPLER"
         ctx.move_to(center_x - (ctx.text_extents(s)[2] / 2), 65)
+        if controls['instr'] >= sampler_min:
+            ctx.set_source_rgba(1, 1, 1, 1)
+        else:
+            ctx.set_source_rgba(1, 1, 1, 0.25)
         ctx.show_text(s)
         ctx.select_font_face("Verdana", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_BOLD)
 
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
         # Instrument_filter QUASI-GLOBALS
         title = "INSTRUMENT LPF:"
         control = controls['instr_lpf']
@@ -98,19 +108,16 @@ class MainControlsMode(definitions.PyshaMode):
             color = [0.1, 1, 0.7]
         elif controls['instr'] >= sampler_min:
             color = [1, 0.1, 0.9]
-        color_dark = [divide / 2 for divide in color]
-        color_light = [1, 1, 1]
         center_x = 180
 
         # Instrument_filter title
         ctx.set_source_rgb(*color)
-        s = "INSTRUMENT LPF:"
-        ctx.move_to(center_x - (ctx.text_extents(s)[2] / 2), 15)
-        ctx.show_text(s)
+        ctx.move_to(center_x - (ctx.text_extents(title)[2] / 2), 15)
+        ctx.show_text(title)
 
         # Instrument_filter value (canvas - inverted)
         ctx.arc(center_x, center_y, rad, 0, 2 * 3.14)
-        ctx.set_source_rgb(*color_dark)
+        ctx.set_source_rgba(*color, 0.5)
         ctx.fill()
         ctx.stroke()
 
@@ -123,41 +130,49 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.stroke()
 
         # Instrument_filter frame
-        ctx.arc(center_x, center_y, rad, 0, 2 * 3.14)
         if control == 127:
+            ctx.arc(center_x, center_y, rad, 0, 2 * 3.14)
             ctx.set_source_rgb(*screen_dark)
+            ctx.set_line_width(10)
+            ctx.stroke()
         else:
+            ctx.set_source_rgb(*color)
+            ctx.arc(center_x, center_y, rad, 0, 2 * 3.14)
+            ctx.set_line_width(line - 1)
+            ctx.stroke()
+
             pat = cairo.MeshPattern()
             pat.begin_patch()
-            pat.move_to(center_x, center_y - 50)
-            pat.line_to(center_x - 60, center_y - 50)
-            pat.line_to(center_x - 60, center_y + 50)
-            pat.line_to(center_x + 200, center_y + 200)
-            pat.set_corner_color_rgb(0, *color)
-            pat.set_corner_color_rgb(1, *color)
-            pat.set_corner_color_rgb(2, *color)
-            pat.set_corner_color_rgb(3, *color_light)
+            pat.move_to(center_x, center_y - (rad / 4 + (line / 2)))
+            pat.line_to(center_x - (rad + (line / 2)), center_y - (rad / 4 + (line / 2)))
+            pat.line_to(center_x - (rad + (line / 2)), center_y + (rad + (line / 2)))
+            pat.line_to(center_x, center_y + (rad + (line / 2)))
+            pat.set_corner_color_rgba(0, *color, 1)
+            pat.set_corner_color_rgba(1, *color, 1)
+            pat.set_corner_color_rgba(2, *color, 1)
+            pat.set_corner_color_rgba(3, 1, 1, 1, 0.5)
             pat.end_patch()
             pat.begin_patch()
-            pat.move_to(center_x, center_y + 500)
-            pat.line_to(center_x + 60, center_y + 50)
-            pat.line_to(center_x + 60, center_y - 50)
-            pat.line_to(center_x, center_y - 50)
-            pat.set_corner_color_rgb(0, *color_dark)
-            pat.set_corner_color_rgb(1, *color)
-            pat.set_corner_color_rgb(2, *color)
-            pat.set_corner_color_rgb(3, *color)
+            pat.move_to(center_x, center_y + (rad + (line / 2)))
+            pat.line_to(center_x + (rad + (line / 2)), center_y + (rad + (line / 2)))
+            pat.line_to(center_x + (rad + (line / 2)), center_y - (rad / 4 + (line / 2)))
+            pat.line_to(center_x, center_y - (rad / 4 + (line / 2)))
+            pat.set_corner_color_rgba(0, 0, 0, 0, 0.5)
+            pat.set_corner_color_rgba(1, *color, 1)
+            pat.set_corner_color_rgba(2, *color, 1)
+            pat.set_corner_color_rgba(3, *color, 1)
             pat.end_patch()
             ctx.set_source(pat)
 
-        ctx.set_line_width(10)
-        ctx.stroke()
+            ctx.arc(center_x, center_y, rad, 0, 2 * 3.14)
+            ctx.set_line_width(line)
+            ctx.stroke()
 
-        # Instrument filter indicator
+        # Instrument_filter indicator
         pos1 = 3.14 / 2 + 360 * ((controls['instr_lpf'] - 5) / 127) * (3.14 / 180)
         pos2 = 3.14 / 2 + 360 * ((controls['instr_lpf'] + 5) / 127) * (3.14 / 180)
 
-        # Instrument filter indicator inner
+        # Instrument_filter indicator inner
         if controls['instr_lpf'] == 127:
             ctx.set_source_rgb(*screen_dark)
         else:
@@ -166,21 +181,20 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.line_to(center_x, center_y)
         ctx.fill()
 
-        # Instrument filter indicator outer
+        # Instrument_filter indicator outer
         if controls['instr_lpf'] == 127:
             ctx.set_source_rgb(*screen_dark)
         else:
-            ctx.set_source_rgb(*color_light)
+            ctx.set_source_rgba(1, 1, 1, 0.64)
         ctx.arc(center_x, center_y, rad, pos1, pos2)
         ctx.set_line_width(12)
         ctx.stroke()
 
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
         # Master filter QUASI-GLOBALS
         title = "MASTER LPF:"
         control = controls['master_lpf']
         color = [1, 0.5, 0.1]
-        color_dark = [divide / 2 for divide in color]
-        color_light = [1, 1, 1]
         center_x = 420
 
         pos1 = 3.14 / 2 + 360 * ((control - 5) / 127) * (3.14 / 180)
@@ -194,7 +208,7 @@ class MainControlsMode(definitions.PyshaMode):
 
         # Master_filter value (canvas - inverted)
         ctx.arc(center_x, center_y, rad, 0, 2 * 3.14)
-        ctx.set_source_rgb(*color_dark)
+        ctx.set_source_rgba(*color, 0.5)
         ctx.fill()
         ctx.stroke()
 
@@ -207,47 +221,43 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.stroke()
 
         # Master_filter frame
-        ctx.arc(center_x, center_y, rad, 0, 2 * 3.14)
         if control == 127:
+            ctx.arc(center_x, center_y, rad, 0, 2 * 3.14)
             ctx.set_source_rgb(*screen_dark)
+            ctx.set_line_width(10)
+            ctx.stroke()
         else:
+            ctx.set_source_rgb(*color)
+            ctx.arc(center_x, center_y, rad, 0, 2 * 3.14)
+            ctx.set_line_width(line - 1)
+            ctx.stroke()
+
             pat = cairo.MeshPattern()
             pat.begin_patch()
-            pat.move_to(center_x, center_y - 50)
-            pat.line_to(center_x - 60, center_y - 50)
-            pat.line_to(center_x - 60, center_y + 50)
-            pat.line_to(center_x + 200, center_y + 200)
-            pat.set_corner_color_rgb(0, *color)
-            pat.set_corner_color_rgb(1, *color)
-            pat.set_corner_color_rgb(2, *color)
-            pat.set_corner_color_rgb(3, *color_light)
+            pat.move_to(center_x, center_y - (rad / 4 + (line / 2)))
+            pat.line_to(center_x - (rad + (line / 2)), center_y - (rad / 4 + (line / 2)))
+            pat.line_to(center_x - (rad + (line / 2)), center_y + (rad + (line / 2)))
+            pat.line_to(center_x, center_y + (rad + (line / 2)))
+            pat.set_corner_color_rgba(0, *color, 1)
+            pat.set_corner_color_rgba(1, *color, 1)
+            pat.set_corner_color_rgba(2, *color, 1)
+            pat.set_corner_color_rgba(3, 1, 1, 1, 0.5)
             pat.end_patch()
             pat.begin_patch()
-            pat.move_to(center_x, center_y + 500)
-            pat.line_to(center_x + 60, center_y + 50)
-            pat.line_to(center_x + 60, center_y - 50)
-            pat.line_to(center_x, center_y - 50)
-            pat.set_corner_color_rgb(0, *color_dark)
-            pat.set_corner_color_rgb(1, *color)
-            pat.set_corner_color_rgb(2, *color)
-            pat.set_corner_color_rgb(3, *color)
+            pat.move_to(center_x, center_y + (rad + (line / 2)))
+            pat.line_to(center_x + (rad + (line / 2)), center_y + (rad + (line / 2)))
+            pat.line_to(center_x + (rad + (line / 2)), center_y - (rad / 4 + (line / 2)))
+            pat.line_to(center_x, center_y - (rad / 4 + (line / 2)))
+            pat.set_corner_color_rgba(0, 0, 0, 0, 0.5)
+            pat.set_corner_color_rgba(1, *color, 1)
+            pat.set_corner_color_rgba(2, *color, 1)
+            pat.set_corner_color_rgba(3, *color, 1)
             pat.end_patch()
             ctx.set_source(pat)
-        ctx.set_line_width(10)
-        ctx.stroke()
 
-        # # Master filter indicator frame
-        # ctx.set_line_cap(cairo.LINE_CAP_ROUND)
-        # if control == 127:
-        #     ctx.set_source_rgb(*screen_dark)
-        # else:
-        #     ctx.set_source_rgb(*color_light)
-        # ctx.move_to(center_x, center_y)
-        # ctx.arc(center_x, center_y, 46, pos1, pos2)
-        # ctx.line_to(center_x, center_y)
-        # ctx.set_line_width(3)
-        # ctx.stroke()
-        # ctx.set_line_cap(cairo.LINE_CAP_BUTT)
+            ctx.arc(center_x, center_y, rad, 0, 2 * 3.14)
+            ctx.set_line_width(line)
+            ctx.stroke()
 
         # Master filter indicator
         if control == 127:
@@ -261,17 +271,16 @@ class MainControlsMode(definitions.PyshaMode):
         if control == 127:
             ctx.set_source_rgb(*screen_dark)
         else:
-            ctx.set_source_rgb(*color_light)
+            ctx.set_source_rgba(1, 1, 1, 0.64)
         ctx.arc(center_x, center_y, rad, pos1, pos2)
         ctx.set_line_width(12)
         ctx.stroke()
 
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
         # FX QUASI-GLOBALS
         title = "FX LVL:"
         control = controls['fx']
         color = [0.75, 0.1, 1]
-        color_dark = [divide / 2 for divide in color]
-        color_light = [1, 1, 1]
         center_x = 540
 
         pos1 = 3.14 / 2 + 360 * ((control - 5) / 127) * (3.14 / 180)
@@ -285,7 +294,7 @@ class MainControlsMode(definitions.PyshaMode):
 
         # FX value (canvas inverted)
         ctx.arc(center_x, center_y, rad, 0, 2 * 3.14)
-        ctx.set_source_rgb(*color_dark)
+        ctx.set_source_rgba(*color, 0.5)
         ctx.fill()
         ctx.stroke()
 
@@ -298,34 +307,43 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.stroke()
 
         # FX frame
-        ctx.arc(center_x, center_y, rad, 0, 2 * 3.14)
-        if controls['fx'] == 127:
+        if control == 127:
+            ctx.arc(center_x, center_y, rad, 0, 2 * 3.14)
             ctx.set_source_rgb(*screen_dark)
+            ctx.set_line_width(10)
+            ctx.stroke()
         else:
+            ctx.set_source_rgb(*color)
+            ctx.arc(center_x, center_y, rad, 0, 2 * 3.14)
+            ctx.set_line_width(line - 1)
+            ctx.stroke()
+
             pat = cairo.MeshPattern()
             pat.begin_patch()
-            pat.move_to(center_x, center_y - 50)
-            pat.line_to(center_x - 60, center_y - 50)
-            pat.line_to(center_x - 60, center_y + 50)
-            pat.line_to(center_x + 200, center_y + 200)
-            pat.set_corner_color_rgb(0, *color)
-            pat.set_corner_color_rgb(1, *color)
-            pat.set_corner_color_rgb(2, *color)
-            pat.set_corner_color_rgb(3, *color_light)
+            pat.move_to(center_x, center_y - (rad / 4 + (line / 2)))
+            pat.line_to(center_x - (rad + (line / 2)), center_y - (rad / 4 + (line / 2)))
+            pat.line_to(center_x - (rad + (line / 2)), center_y + (rad + (line / 2)))
+            pat.line_to(center_x, center_y + (rad + (line / 2)))
+            pat.set_corner_color_rgba(0, *color, 1)
+            pat.set_corner_color_rgba(1, *color, 1)
+            pat.set_corner_color_rgba(2, *color, 1)
+            pat.set_corner_color_rgba(3, 1, 1, 1, 0.5)
             pat.end_patch()
             pat.begin_patch()
-            pat.move_to(center_x, center_y + 500)
-            pat.line_to(center_x + 60, center_y + 50)
-            pat.line_to(center_x + 60, center_y - 50)
-            pat.line_to(center_x, center_y - 50)
-            pat.set_corner_color_rgb(0, *color_dark)
-            pat.set_corner_color_rgb(1, *color)
-            pat.set_corner_color_rgb(2, *color)
-            pat.set_corner_color_rgb(3, *color)
+            pat.move_to(center_x, center_y + (rad + (line / 2)))
+            pat.line_to(center_x + (rad + (line / 2)), center_y + (rad + (line / 2)))
+            pat.line_to(center_x + (rad + (line / 2)), center_y - (rad / 4 + (line / 2)))
+            pat.line_to(center_x, center_y - (rad / 4 + (line / 2)))
+            pat.set_corner_color_rgba(0, 0, 0, 0, 0.5)
+            pat.set_corner_color_rgba(1, *color, 1)
+            pat.set_corner_color_rgba(2, *color, 1)
+            pat.set_corner_color_rgba(3, *color, 1)
             pat.end_patch()
             ctx.set_source(pat)
-        ctx.set_line_width(10)
-        ctx.stroke()
+
+            ctx.arc(center_x, center_y, rad, 0, 2 * 3.14)
+            ctx.set_line_width(line)
+            ctx.stroke()
 
         # FX indicator
         if control == 127:
@@ -339,17 +357,16 @@ class MainControlsMode(definitions.PyshaMode):
         if controls['fx'] == 127:
             ctx.set_source_rgb(*screen_dark)
         else:
-            ctx.set_source_rgb(*color_light)
+            ctx.set_source_rgba(1, 1, 1, 0.64)
         ctx.arc(center_x, center_y, rad, pos1, pos2)
         ctx.set_line_width(12)
         ctx.stroke()
 
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
         # Smile QUASI-GLOBALS
         title = "SMILE:"
         control = controls['smile']
         color = [1, 1, 0.1]
-        color_dark = [divide / 2 for divide in color]
-        color_light = [1, 1, 1]
         center_x = 660
 
         pos1 = 3.14 / 2 + 360 * ((control - 5) / 127) * (3.14 / 180)
@@ -371,39 +388,48 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.move_to(center_x, center_y)
         ctx.arc(center_x, center_y, rad, 3.14 / 2, 3.14 / 2 + 360 * (control / 127) * (3.14 / 180))
         ctx.close_path()
-        ctx.set_source_rgb(*color_dark)
+        ctx.set_source_rgba(*color, 0.5)
         ctx.fill()
         ctx.stroke()
 
         # Smile frame
-        ctx.arc(center_x, center_y, rad, 0, 2 * 3.14)
         if control == 0:
+            ctx.arc(center_x, center_y, rad, 0, 2 * 3.14)
             ctx.set_source_rgb(*screen_dark)
+            ctx.set_line_width(10)
+            ctx.stroke()
         else:
+            ctx.set_source_rgb(*color)
+            ctx.arc(center_x, center_y, rad, 0, 2 * 3.14)
+            ctx.set_line_width(line - 1)
+            ctx.stroke()
+
             pat = cairo.MeshPattern()
             pat.begin_patch()
-            pat.move_to(center_x, center_y - 50)
-            pat.line_to(center_x - 60, center_y - 50)
-            pat.line_to(center_x - 60, center_y + 50)
-            pat.line_to(center_x + 200, center_y + 200)
-            pat.set_corner_color_rgb(0, *color)
-            pat.set_corner_color_rgb(1, *color)
-            pat.set_corner_color_rgb(2, *color)
-            pat.set_corner_color_rgb(3, *color_dark)
+            pat.move_to(center_x, center_y - (rad / 4 + (line / 2)))
+            pat.line_to(center_x - (rad + (line / 2)), center_y - (rad / 4 + (line / 2)))
+            pat.line_to(center_x - (rad + (line / 2)), center_y + (rad + (line / 2)))
+            pat.line_to(center_x, center_y + (rad + (line / 2)))
+            pat.set_corner_color_rgba(0, *color, 1)
+            pat.set_corner_color_rgba(1, *color, 1)
+            pat.set_corner_color_rgba(2, *color, 1)
+            pat.set_corner_color_rgba(3, 0, 0, 0, 0.5)
             pat.end_patch()
             pat.begin_patch()
-            pat.move_to(center_x, center_y + 500)
-            pat.line_to(center_x + 60, center_y + 50)
-            pat.line_to(center_x + 60, center_y - 50)
-            pat.line_to(center_x, center_y - 50)
-            pat.set_corner_color_rgb(0, *color_light)
-            pat.set_corner_color_rgb(1, *color)
-            pat.set_corner_color_rgb(2, *color)
-            pat.set_corner_color_rgb(3, *color)
+            pat.move_to(center_x, center_y + (rad + (line / 2)))
+            pat.line_to(center_x + (rad + (line / 2)), center_y + (rad + (line / 2)))
+            pat.line_to(center_x + (rad + (line / 2)), center_y - (rad / 4 + (line / 2)))
+            pat.line_to(center_x, center_y - (rad / 4 + (line / 2)))
+            pat.set_corner_color_rgba(0, 1, 1, 1, 0.5)
+            pat.set_corner_color_rgba(1, *color, 1)
+            pat.set_corner_color_rgba(2, *color, 1)
+            pat.set_corner_color_rgba(3, *color, 1)
             pat.end_patch()
             ctx.set_source(pat)
-        ctx.set_line_width(10)
-        ctx.stroke()
+
+            ctx.arc(center_x, center_y, rad, 0, 2 * 3.14)
+            ctx.set_line_width(line)
+            ctx.stroke()
 
         # Smile indicator
         if control == 0:
@@ -416,17 +442,16 @@ class MainControlsMode(definitions.PyshaMode):
         if control == 0:
             ctx.set_source_rgb(*screen_dark)
         else:
-            ctx.set_source_rgb(*color_light)
+            ctx.set_source_rgba(1, 1, 1, 0.64)
         ctx.arc(center_x, center_y, rad, pos1, pos2)
         ctx.set_line_width(12)
         ctx.stroke()
 
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
         # Reverb QUASI-GLOBALS
         title = "REVERB:"
         control = controls['reverb']
         color = [0.1, 0.85, 1]
-        color_dark = [divide / 2 for divide in color]
-        color_light = [1, 1, 1]
         center_x = 780
 
         # Reverb
@@ -449,39 +474,48 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.move_to(center_x, center_y)
         ctx.arc(center_x, center_y, rad, 3.14 / 2, 3.14 / 2 + 360 * (control / 127) * (3.14 / 180))
         ctx.close_path()
-        ctx.set_source_rgb(*color_dark)
+        ctx.set_source_rgba(*color, 0.5)
         ctx.fill()
         ctx.stroke()
 
         # Reverb frame
-        ctx.arc(center_x, center_y, rad, 0, 2 * 3.14)
-        if controls['reverb'] == 0:
+        if control == 0:
+            ctx.arc(center_x, center_y, rad, 0, 2 * 3.14)
             ctx.set_source_rgb(*screen_dark)
+            ctx.set_line_width(10)
+            ctx.stroke()
         else:
+            ctx.set_source_rgb(*color)
+            ctx.arc(center_x, center_y, rad, 0, 2 * 3.14)
+            ctx.set_line_width(line - 1)
+            ctx.stroke()
+
             pat = cairo.MeshPattern()
             pat.begin_patch()
-            pat.move_to(center_x, center_y - 50)
-            pat.line_to(center_x - 60, center_y - 50)
-            pat.line_to(center_x - 60, center_y + 50)
-            pat.line_to(center_x + 200, center_y + 200)
-            pat.set_corner_color_rgb(0, *color)
-            pat.set_corner_color_rgb(1, *color)
-            pat.set_corner_color_rgb(2, *color)
-            pat.set_corner_color_rgb(3, *color_dark)
+            pat.move_to(center_x, center_y - (rad / 4 + (line / 2)))
+            pat.line_to(center_x - (rad + (line / 2)), center_y - (rad / 4 + (line / 2)))
+            pat.line_to(center_x - (rad + (line / 2)), center_y + (rad + (line / 2)))
+            pat.line_to(center_x, center_y + (rad + (line / 2)))
+            pat.set_corner_color_rgba(0, *color, 1)
+            pat.set_corner_color_rgba(1, *color, 1)
+            pat.set_corner_color_rgba(2, *color, 1)
+            pat.set_corner_color_rgba(3, 0, 0, 0, 0.5)
             pat.end_patch()
             pat.begin_patch()
-            pat.move_to(center_x, center_y + 500)
-            pat.line_to(center_x + 60, center_y + 50)
-            pat.line_to(center_x + 60, center_y - 50)
-            pat.line_to(center_x, center_y - 50)
-            pat.set_corner_color_rgb(0, *color_light)
-            pat.set_corner_color_rgb(1, *color)
-            pat.set_corner_color_rgb(2, *color)
-            pat.set_corner_color_rgb(3, *color)
+            pat.move_to(center_x, center_y + (rad + (line / 2)))
+            pat.line_to(center_x + (rad + (line / 2)), center_y + (rad + (line / 2)))
+            pat.line_to(center_x + (rad + (line / 2)), center_y - (rad / 4 + (line / 2)))
+            pat.line_to(center_x, center_y - (rad / 4 + (line / 2)))
+            pat.set_corner_color_rgba(0, 1, 1, 1, 0.5)
+            pat.set_corner_color_rgba(1, *color, 1)
+            pat.set_corner_color_rgba(2, *color, 1)
+            pat.set_corner_color_rgba(3, *color, 1)
             pat.end_patch()
             ctx.set_source(pat)
-        ctx.set_line_width(10)
-        ctx.stroke()
+
+            ctx.arc(center_x, center_y, rad, 0, 2 * 3.14)
+            ctx.set_line_width(line)
+            ctx.stroke()
 
         # Reverb indicator
         if controls['reverb'] == 0:
@@ -494,17 +528,16 @@ class MainControlsMode(definitions.PyshaMode):
         if controls['reverb'] == 0:
             ctx.set_source_rgb(*screen_dark)
         else:
-            ctx.set_source_rgb(*color_light)
+            ctx.set_source_rgba(1, 1, 1, 0.64)
         ctx.arc(center_x, center_y, rad, pos1, pos2)
         ctx.set_line_width(12)
         ctx.stroke()
 
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
         # Tape QUASI-GLOBALS
         title = "TAPE:"
         control = controls['tape']
         color = [1, 0.25, 0.25]
-        color_dark = [divide / 2 for divide in color]
-        color_light = [1, 1, 1]
         center_x = 900
 
         pos1 = 3.14 / 2 + 360 * ((controls['tape'] - 5) / 127) * (3.14 / 180)
@@ -518,7 +551,7 @@ class MainControlsMode(definitions.PyshaMode):
 
         # Tape value (canvas inverted)
         ctx.arc(center_x, center_y, rad, 0, 2 * 3.14)
-        ctx.set_source_rgb(*color_dark)
+        ctx.set_source_rgba(*color, 0.5)
         ctx.fill()
         ctx.stroke()
 
@@ -531,34 +564,43 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.stroke()
 
         # Tape frame
-        ctx.arc(center_x, center_y, rad, 0, 2 * 3.14)
-        if controls['tape'] == 127:
+        if controls['fx'] == 127:
+            ctx.arc(center_x, center_y, rad, 0, 2 * 3.14)
             ctx.set_source_rgb(*screen_dark)
+            ctx.set_line_width(10)
+            ctx.stroke()
         else:
+            ctx.set_source_rgb(*color)
+            ctx.arc(center_x, center_y, rad, 0, 2 * 3.14)
+            ctx.set_line_width(line - 1)
+            ctx.stroke()
+
             pat = cairo.MeshPattern()
             pat.begin_patch()
-            pat.move_to(center_x, center_y - 50)
-            pat.line_to(center_x - 60, center_y - 50)
-            pat.line_to(center_x - 60, center_y + 50)
-            pat.line_to(center_x + 200, center_y + 200)
-            pat.set_corner_color_rgb(0, *color)
-            pat.set_corner_color_rgb(1, *color)
-            pat.set_corner_color_rgb(2, *color)
-            pat.set_corner_color_rgb(3, *color_light)
+            pat.move_to(center_x, center_y - (rad / 4 + (line / 2)))
+            pat.line_to(center_x - (rad + (line / 2)), center_y - (rad / 4 + (line / 2)))
+            pat.line_to(center_x - (rad + (line / 2)), center_y + (rad + (line / 2)))
+            pat.line_to(center_x, center_y + (rad + (line / 2)))
+            pat.set_corner_color_rgba(0, *color, 1)
+            pat.set_corner_color_rgba(1, *color, 1)
+            pat.set_corner_color_rgba(2, *color, 1)
+            pat.set_corner_color_rgba(3, 1, 1, 1, 0.5)
             pat.end_patch()
             pat.begin_patch()
-            pat.move_to(center_x, center_y + 500)
-            pat.line_to(center_x + 60, center_y + 50)
-            pat.line_to(center_x + 60, center_y - 50)
-            pat.line_to(center_x, center_y - 50)
-            pat.set_corner_color_rgb(0, *color_dark)
-            pat.set_corner_color_rgb(1, *color)
-            pat.set_corner_color_rgb(2, *color)
-            pat.set_corner_color_rgb(3, *color)
+            pat.move_to(center_x, center_y + (rad + (line / 2)))
+            pat.line_to(center_x + (rad + (line / 2)), center_y + (rad + (line / 2)))
+            pat.line_to(center_x + (rad + (line / 2)), center_y - (rad / 4 + (line / 2)))
+            pat.line_to(center_x, center_y - (rad / 4 + (line / 2)))
+            pat.set_corner_color_rgba(0, 0, 0, 0, 0.5)
+            pat.set_corner_color_rgba(1, *color, 1)
+            pat.set_corner_color_rgba(2, *color, 1)
+            pat.set_corner_color_rgba(3, *color, 1)
             pat.end_patch()
             ctx.set_source(pat)
-        ctx.set_line_width(10)
-        ctx.stroke()
+
+            ctx.arc(center_x, center_y, rad, 0, 2 * 3.14)
+            ctx.set_line_width(line)
+            ctx.stroke()
 
         # Tape indicator
         if controls['tape'] == 127:
@@ -571,11 +613,12 @@ class MainControlsMode(definitions.PyshaMode):
         if controls['tape'] == 127:
             ctx.set_source_rgb(*screen_dark)
         else:
-            ctx.set_source_rgb(*color_light)
+            ctx.set_source_rgba(1, 1, 1, 0.64)
         ctx.arc(center_x, center_y, rad, pos1, pos2)
         ctx.set_line_width(12)
         ctx.stroke()
 
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
         # CUE 1
         color = [1, 1, 1]
         color_dark = [divide / 1.5 for divide in color]
@@ -617,6 +660,7 @@ class MainControlsMode(definitions.PyshaMode):
             ctx.set_line_width(2.5)
             ctx.stroke()
 
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
         # CUE 2
         color = [1, 1, 1]
         color_dark = [divide / 1.5 for divide in color]
@@ -658,6 +702,7 @@ class MainControlsMode(definitions.PyshaMode):
             ctx.set_line_width(2.5)
             ctx.stroke()
 
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
         # BAR 1
         color = [1, 1, 0]
         color_dark = [divide / 1.5 for divide in color]
@@ -701,6 +746,7 @@ class MainControlsMode(definitions.PyshaMode):
             ctx.set_source_rgb(0, 0, 0)
             ctx.stroke()
 
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
         # BAR 2
         color = [1, 1, 0]
         color_dark = [divide / 1.5 for divide in color]
@@ -744,6 +790,7 @@ class MainControlsMode(definitions.PyshaMode):
             ctx.set_line_width(2.5)
             ctx.stroke()
 
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
         # BEAT 1
         color = [1, 0.4, 0]
         color_dark = [divide / 1.5 for divide in color]
@@ -785,6 +832,7 @@ class MainControlsMode(definitions.PyshaMode):
             ctx.set_line_width(2.5)
             ctx.stroke()
 
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
         # BEAT 2
         color = [1, 0.4, 0]
         color_dark = [divide / 1.5 for divide in color]
@@ -826,6 +874,7 @@ class MainControlsMode(definitions.PyshaMode):
             ctx.set_line_width(2.5)
             ctx.stroke()
 
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
         # NUDGE 1
         color = [1, 0.4, 0.6]
         color_dark = [divide / 1.5 for divide in color]
@@ -885,6 +934,7 @@ class MainControlsMode(definitions.PyshaMode):
             ctx.set_line_cap(cairo.LINE_CAP_SQUARE)
             ctx.stroke()
 
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
         # NUDGE 2
         color = [1, 0.4, 0.6]
         color_dark = [divide / 1.5 for divide in color]
