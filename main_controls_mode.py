@@ -217,16 +217,14 @@ class MainControlsMode(definitions.PyshaMode):
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
         # NUDGE 1
         midi_value = transport['nudge1']
-        x_min = 720
-        # x = 780
-        draw_nudge_1(ctx, x_min, midi_value)
+        x = 780
+        draw_nudge_1(ctx, x, midi_value)
 
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
         # NUDGE 2
         midi_value = transport['nudge2']
-        x_min = 840
-        # x = 900
-        draw_nudge_2(ctx, x_min, midi_value)
+        x = 900
+        draw_nudge_2(ctx, x, midi_value)
 
         # End of drawing code
 
@@ -310,14 +308,12 @@ class MainControlsMode(definitions.PyshaMode):
                 if not definitions.ROOT_KEY == definitions.PURPLE:
                     definitions.ROOT_KEY = definitions.PURPLE
                     definitions.NOTE_ON_COLOR = definitions.WHITE
-                    # definitions.LAYOUT_INSTRUMENT = 'lrhytmic'
                     self.clean_currently_notes_being_played()
                     self.app.set_rhythmic_mode()
                     self.app.pads_need_update = True
                     self.update_pads()
                     self.app.buttons_need_update = True
                     self.update_buttons()
-                    # self.app.melodic_mode.remove_all_notes_being_played()
 
             if controls['instr'] >= ghost_min:
                 if not definitions.ROOT_KEY == definitions.WHITE:

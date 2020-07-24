@@ -199,16 +199,14 @@ draw_beat(ctx, x, midi_value)
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # NUDGE 1
 midi_value = transport['nudge1']
-x_min = 720
-# x = 780
-draw_nudge_1(ctx, x_min, midi_value)
+x = 780
+draw_nudge_1(ctx, x, midi_value)
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # NUDGE 2
 midi_value = transport['nudge2']
-x_min = 840
-# x = 900
-draw_nudge_2(ctx, x_min, midi_value)
+x = 900
+draw_nudge_2(ctx, x, midi_value)
 
 # End of drawing code
 

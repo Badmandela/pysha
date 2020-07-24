@@ -220,6 +220,12 @@ def draw_knob(ctx, center_x, center_y, rad, control, off_value, *color):
         ctx.set_line_width(12)
         ctx.stroke()
 
+def fill_button(ctx, x, y_min, *color):
+    # Fill "Button"
+    ctx.rectangle(x - 60, y_min, 120, 30)
+    ctx.set_source_rgb(*color)
+    ctx.fill()
+
 
 def draw_cue(ctx, x, midi_value):
     y_min = 130
@@ -308,11 +314,7 @@ def draw_cue(ctx, x, midi_value):
         ctx.stroke()
 
     else:
-        # Fill "button"
-        ctx.rectangle(x - 60, y_min, 120, 30)
-        ctx.set_source_rgb(*color)
-        ctx.fill()
-
+        fill_button(ctx, x, y_min, *color)
         # Paint Shape Black
         flag()
         ctx.set_source_rgb(0, 0, 0)
@@ -322,7 +324,7 @@ def draw_cue(ctx, x, midi_value):
 def draw_bar(ctx, x, midi_value):
     color = [1, 1, 0.3]
     y_min = 130
-    y_max = y_min + 30
+    y = y_min
 
     def bar():
         # Bar (More Wine Shape)
@@ -380,14 +382,9 @@ def draw_bar(ctx, x, midi_value):
         ctx.stroke()
 
     else:
-        # Fill "Button"
-        ctx.rectangle(x - 60, y_min, 120, 30)
-        ctx.set_source_rgb(*color)
-        ctx.fill()
-
+        fill_button(ctx, x, y_min, *color)
         # Paint Shape Black
         bar()
-
         ctx.set_source_rgb(0, 0, 0)
         ctx.fill()
 
@@ -395,7 +392,6 @@ def draw_bar(ctx, x, midi_value):
 def draw_beat(ctx, x, midi_value):
     color = [1, 0.4, 0.15]
     y_min = 130
-    y_max = y_min + 30
     y = y_min + 2
 
     def beat():
@@ -421,7 +417,7 @@ def draw_beat(ctx, x, midi_value):
         y = y_min + 2
         beat()
 
-        pat = cairo.LinearGradient(x, y_min + 10, x, y_max - 7)
+        pat = cairo.LinearGradient(x, y_min + 10, x, y_min + 23)
         pat.add_color_stop_rgba(0, *color, 1)
         pat.add_color_stop_rgba(1, *color, 0.5)
         ctx.set_source(pat)
@@ -438,18 +434,14 @@ def draw_beat(ctx, x, midi_value):
         ctx.stroke()
 
     else:
-        # Fill "Button"
-        ctx.rectangle(x - 60, y_min, 120, 30)
-        ctx.set_source_rgb(*color)
-        ctx.fill()
-
+        fill_button(ctx, x, y_min, *color)
         # Paint Shape Black
         beat()
         ctx.set_source_rgb(0, 0, 0)
         ctx.fill()
 
 
-def draw_nudge_1(ctx, x_min, midi_value):
+def draw_nudge_1(ctx, x, midi_value):
     color = [1, 0.4, 0.6]
     y_min = 130
     y_max = y_min + 30
@@ -458,112 +450,101 @@ def draw_nudge_1(ctx, x_min, midi_value):
     def nudge_1():
         # Nudge 1 (Shape)
         ctx.set_line_cap(cairo.LINE_CAP_SQUARE)
-        ctx.move_to(x_min + 48, y_min + 9.3)
-        ctx.line_to(x_min + 48, y_min + 21.7)
+        ctx.move_to(x - 12, y_min + 9.3)
+        ctx.line_to(x - 12, y_min + 21.7)
         ctx.set_line_width(5)
         ctx.stroke()
 
-        ctx.move_to(x_min + 56, y_min + 8.3)
-        ctx.line_to(x_min + 56, y_min + 22.7)
+        ctx.move_to(x - 4, y_min + 8.3)
+        ctx.line_to(x - 4, y_min + 22.7)
         ctx.set_line_width(3)
         ctx.stroke()
 
-        ctx.move_to(x_min + 64, y_min + 8.1)
-        ctx.line_to(x_min + 64, y_min + 22.9)
+        ctx.move_to(x + 4, y_min + 8.1)
+        ctx.line_to(x + 4, y_min + 22.9)
         ctx.set_line_width(2.5)
         ctx.stroke()
 
-        ctx.move_to(x_min + 72, y_min + 7.75)
-        ctx.line_to(x_min + 72, y_min + 23.2)
+        ctx.move_to(x + 12, y_min + 7.75)
+        ctx.line_to(x + 12, y_min + 23.2)
         ctx.set_line_width(1.7)
         ctx.stroke()
 
     if midi_value == 0:
         # Shadow
-        x_min = x_min - 2
+        x = x - 2
         y_min = 132
         ctx.set_source_rgba(*color, 0.25)
         ctx.set_line_cap(cairo.LINE_CAP_SQUARE)
         nudge_1()
 
         # Nudge 1 fill color
-        x_min = x_min + 2
+        x = x + 2
         y_min = 130
-        pat = cairo.LinearGradient(x_min, y_min + 10, x_min, y_max - 5)
+        pat = cairo.LinearGradient(x, y_min + 10, x, y_max - 5)
         pat.add_color_stop_rgba(0, *color, 1)
         pat.add_color_stop_rgba(1, *color, 0.5)
         ctx.set_source(pat)
         nudge_1()
 
     else:
-        # Fill "Button"
-        ctx.rectangle(x_min, y_min, 120, 30)
-        ctx.set_source_rgb(*color)
-        ctx.fill()
-
+        fill_button(ctx, x, y_min, *color)
         # Paint Shape Black
-        nudge_1()
         ctx.set_source_rgb(0, 0, 0)
-        ctx.fill()
+        nudge_1()
 
 
-def draw_nudge_2(ctx, x_min, midi_value):
+def draw_nudge_2(ctx, x, midi_value):
     color = [1, 0.4, 0.6]
     y_min = 130
-    y_max = y_min + 30
     ctx.set_line_width(2.5)
 
     def nudge_2():
-        ctx.move_to(x_min + 48, y_min + 7.75)
-        ctx.line_to(x_min + 48, y_min + 23.2)
+        ctx.move_to(x - 12, y_min + 7.75)
+        ctx.line_to(x - 12, y_min + 23.2)
         ctx.set_line_width(1.7)
         ctx.stroke()
 
-        ctx.move_to(x_min + 56, y_min + 8.1)
-        ctx.line_to(x_min + 56, y_min + 22.9)
+        ctx.move_to(x - 4, y_min + 8.1)
+        ctx.line_to(x - 4, y_min + 22.9)
         ctx.set_line_width(2.5)
         ctx.stroke()
 
-        ctx.move_to(x_min + 64, y_min + 8.3)
-        ctx.line_to(x_min + 64, y_min + 22.7)
+        ctx.move_to(x + 4, y_min + 8.3)
+        ctx.line_to(x + 4, y_min + 22.7)
         ctx.set_line_width(3)
         ctx.stroke()
 
-        ctx.move_to(x_min + 72, y_min + 9.3)
-        ctx.line_to(x_min + 72, y_min + 21.7)
+        ctx.move_to(x + 12, y_min + 9.3)
+        ctx.line_to(x + 12, y_min + 21.7)
         ctx.set_line_width(5)
         ctx.stroke()
 
     if midi_value == 0:
 
         # Shadow
-        x_min = x_min - 2
+        x = x - 2
         y_min = 132
         ctx.set_source_rgba(*color, 0.25)
         ctx.set_line_cap(cairo.LINE_CAP_SQUARE)
         nudge_2()
 
         # Nudge 2 (Fill color)
-        pat = cairo.LinearGradient(x_min, y_min + 10, x_min, y_max - 5)
+        pat = cairo.LinearGradient(x, y_min + 10, x, y_min + 25)
         pat.add_color_stop_rgba(0, *color, 1)
         pat.add_color_stop_rgba(1, *color, 0.5)
         ctx.set_source(pat)
         # ctx.fill()
 
         # Nudge 2 (Shape)
-        x_min = x_min + 2
+        x = x + 2
         y_min = 130
         ctx.set_source(pat)
         ctx.set_line_cap(cairo.LINE_CAP_SQUARE)
         nudge_2()
 
     else:
-        # Fill "Button"
-        ctx.rectangle(x_min, y_min, 120, 30)
-        ctx.set_source_rgb(*color)
-        ctx.fill()
-
+        fill_button(ctx, x, y_min, *color)
         # Paint Shape Black
-        nudge_2()
         ctx.set_source_rgb(0, 0, 0)
-        ctx.fill()
+        nudge_2()
