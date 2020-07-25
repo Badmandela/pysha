@@ -1,9 +1,8 @@
-import cairo
 import mido
 import push2_python
 
 import definitions
-from display_utils import draw_title, draw_knob, draw_cue, draw_bar, draw_beat, draw_nudge_1, draw_nudge_2
+from display_utils import draw_title, draw_list, draw_knob, draw_cue, draw_bar, draw_beat, draw_nudge_1, draw_nudge_2
 
 SETTINGS_BUTTON = push2_python.constants.BUTTON_SETUP
 
@@ -11,12 +10,10 @@ controls = {'instr': 0, 'instr_lpf': 127, 'master_lpf': 127, 'fx': 127, 'smile':
 transport = {'cue1': 0, 'cue2': 0, 'bar1': 0, 'bar2': 0, 'beat1': 0, 'beat2': 0, 'nudge1': 0, 'nudge2': 0}
 
 max_encoder_value = 127
-piano_max = 20
-synth_min = 21
-synth_max = 68
-sampler_min = 69
-sampler_max = 109
-ghost_min = 110
+piano_range = range(0, 20)
+synth_range = range(20, 70)
+sampler_range = range(70, 110)
+ghost_range = range(110, 128)
 
 
 class MainControlsMode(definitions.PyshaMode):
@@ -42,12 +39,6 @@ class MainControlsMode(definitions.PyshaMode):
         screen_dark = [0.05, 0.05, 0.05]
 
         # Globals
-        piano_max = 20
-        synth_min = 21
-        synth_max = 68
-        sampler_min = 69
-        sampler_max = 109
-        ghost_min = 110
         rad = 45
         line = 10
         center_y = 75
@@ -57,53 +48,58 @@ class MainControlsMode(definitions.PyshaMode):
         title = "INSTRUMENT:"
         control = controls['instr']
         center_x = 60
-        if controls['instr'] <= piano_max:
+        if control in piano_range:
             color = [1, 0.25, 0.5]
-        elif synth_min <= controls['instr'] <= synth_max:
+        elif control in synth_range:
             color = [0.1, 1, 0.7]
-        elif sampler_min <= controls['instr'] <= sampler_max:  # controls['instr'] >= sampler_min
+        elif control in sampler_range:
             color = [1, 0.1, 0.9]
-        else:
+        else:  # controls['instr'] in ghost_range:
             color = [0.75, 0.75, 0.75]
 
         draw_title(ctx, center_x, title, *color)
 
-        # Instrument selector canvas
+        # List selector canvas
         ctx.set_source_rgb(*color)
-        ctx.rectangle(5, 23 + (60 * (controls['instr'] / 127)), 112, 15)
+        ctx.rectangle(12, 23 + (60 * (control / 127)), 98, 15)
         ctx.fill()
 
         # Instruments list
-        ctx.set_font_size(10)
-        ctx.select_font_face("Unscreen", cairo.FONT_SLANT_ITALIC, cairo.FONT_WEIGHT_NORMAL)
-        s = "ELECTRIC PIANO"
-        ctx.move_to(center_x - (ctx.text_extents(s)[2] / 2), 33)
-        if controls['instr'] <= piano_max:
-            ctx.set_source_rgba(1, 1, 1, 1)
+        # 1
+        text = "ELECTRIC PIANO"
+        y = 34
+        if control in piano_range:
+            color = [1, 1, 1, 1]
         else:
-            ctx.set_source_rgba(1, 1, 1, 0.25)
-        ctx.show_text(s)
-        s = "SYNTHESIZER"
-        ctx.move_to(center_x - (ctx.text_extents(s)[2] / 2), 53)
-        if synth_min <= controls['instr'] <= synth_max:
-            ctx.set_source_rgba(1, 1, 1, 1)
+            color = [1, 1, 1, 0.25]
+        draw_list(ctx, center_x, y, text, *color)
+
+        # 2
+        text = "SYNTHESIZER"
+        y = 54
+        if control in synth_range:
+            color = [1, 1, 1, 1]
         else:
-            ctx.set_source_rgba(1, 1, 1, 0.25)
-        ctx.show_text(s)
-        s = "SAMPLER"
-        ctx.move_to(center_x - (ctx.text_extents(s)[2] / 2), 73)
-        if sampler_min <= controls['instr'] <= sampler_max:
-            ctx.set_source_rgba(1, 1, 1, 1)
+            color = [1, 1, 1, 0.25]
+        draw_list(ctx, center_x, y, text, *color)
+
+        # 3
+        text = "SAMPLER"
+        y = 74
+        if control in sampler_range:
+            color = [1, 1, 1, 1]
         else:
-            ctx.set_source_rgba(1, 1, 1, 0.25)
-        ctx.show_text(s)
-        s = "GHOST"
-        ctx.move_to(center_x - (ctx.text_extents(s)[2] / 2), 93)
-        if controls['instr'] >= ghost_min:
-            ctx.set_source_rgba(1, 1, 1, 1)
-        else:  # if controls['instr'] >= ghost_min:
-            ctx.set_source_rgba(1, 1, 1, 0.25)
-        ctx.show_text(s)
+            color = [1, 1, 1, 0.25]
+        draw_list(ctx, center_x, y, text, *color)
+
+        # 4
+        text = "GHOST"
+        y = 94
+        if control in ghost_range:
+            color = [1, 1, 1, 1]
+        else:
+            color = [1, 1, 1, 0.25]
+        draw_list(ctx, center_x, y, text, *color)
 
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
         # Instrument_filter QUASI-GLOBALS
@@ -111,11 +107,11 @@ class MainControlsMode(definitions.PyshaMode):
         control = controls['instr_lpf']
         off_value = 127
 
-        if controls['instr'] <= piano_max:
+        if controls['instr'] in piano_range:
             color = [1, 0.25, 0.5]
-        elif synth_min <= controls['instr'] <= synth_max:
+        elif controls['instr'] in synth_range:
             color = [0.1, 1, 0.7]
-        elif sampler_min <= controls['instr'] <= sampler_max:  # controls['instr'] >= sampler_min
+        elif controls['instr'] in sampler_range:  # controls['instr'] >= sampler_min
             color = [1, 0.1, 0.9]
         else:
             color = [0.75, 0.75, 0.75]
@@ -282,7 +278,7 @@ class MainControlsMode(definitions.PyshaMode):
             msg = mido.Message('control_change', control=21, value=controls['instr'])
             self.app.send_midi(msg)
 
-            if controls['instr'] <= piano_max:
+            if controls['instr'] in piano_range:
                 if not definitions.ROOT_KEY == definitions.PINK:
                     definitions.ROOT_KEY = definitions.PINK
                     definitions.NOTE_ON_COLOR = definitions.GREEN
@@ -293,7 +289,7 @@ class MainControlsMode(definitions.PyshaMode):
                     self.app.buttons_need_update = True
                     self.update_buttons()
 
-            if synth_min <= controls['instr'] <= synth_max:
+            if controls['instr'] in synth_range:
                 if not definitions.ROOT_KEY == definitions.GREEN:
                     definitions.ROOT_KEY = definitions.GREEN
                     definitions.NOTE_ON_COLOR = definitions.PINK
@@ -304,7 +300,7 @@ class MainControlsMode(definitions.PyshaMode):
                     self.app.buttons_need_update = True
                     self.update_buttons()
 
-            if sampler_min <= controls['instr'] <= sampler_max:
+            if controls['instr'] in sampler_range:
                 if not definitions.ROOT_KEY == definitions.PURPLE:
                     definitions.ROOT_KEY = definitions.PURPLE
                     definitions.NOTE_ON_COLOR = definitions.WHITE
@@ -315,7 +311,7 @@ class MainControlsMode(definitions.PyshaMode):
                     self.app.buttons_need_update = True
                     self.update_buttons()
 
-            if controls['instr'] >= ghost_min:
+            if controls['instr'] in ghost_range:
                 if not definitions.ROOT_KEY == definitions.WHITE:
                     definitions.ROOT_KEY = definitions.WHITE
                     definitions.NOTE_ON_COLOR = definitions.PURPLE

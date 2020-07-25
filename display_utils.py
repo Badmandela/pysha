@@ -34,6 +34,14 @@ def draw_title(ctx, center_x, text, *color):
     ctx.move_to(center_x - (ctx.text_extents(text)[2] / 2), 17)
     ctx.show_text(text)
 
+def draw_list(ctx, center_x, y, text, *color):
+    ctx.set_font_size(10)
+    # ctx.select_font_face("Unscreen", cairo.FONT_SLANT_ITALIC, cairo.FONT_WEIGHT_NORMAL)
+    ctx.select_font_face("Ableton Sans Light", cairo.FONT_SLANT_ITALIC, cairo.FONT_WEIGHT_NORMAL)
+    ctx.move_to(center_x - (ctx.text_extents(text)[2] / 2), y)
+    ctx.set_source_rgba(*color)
+    ctx.show_text(text)
+
 
 def show_value(ctx, x, h, text, color=[1, 1, 1]):
     text = str(text)
@@ -97,7 +105,8 @@ def draw_knob(ctx, center_x, center_y, rad, control, off_value, *color):
     else:
         # Frame Shadow
         ctx.set_source_rgba(*color, 0.25)
-        ctx.arc(center_x - 2.5, center_y + 2.5, rad + 5, 0, 2 * 3.14)
+        # ctx.arc(center_x - 2.5, center_y + 2.5, rad + 5, 0, 2 * 3.14)
+        ctx.arc(center_x, center_y, rad + 5, 0, 2 * 3.14)
         ctx.fill()
 
         # Main Frame
@@ -243,15 +252,15 @@ def draw_cue(ctx, x, midi_value):
         ctx.close_path()
 
     if midi_value == 0:
-        # Cue (Shadow)
-        x = x - 2
-        y = y_min + 2
-        flag()
-        ctx.set_source_rgba(*color, 0.25)
-        ctx.fill()
+        # # Cue (Shadow)
+        # x = x - 2
+        # y = y_min + 2
+        # flag()
+        # ctx.set_source_rgba(*color, 0.25)
+        # ctx.fill()
 
         # Cue (Fill)
-        x = x + 2
+        # x = x + 2
         y = y_min
         flag()
 
@@ -354,16 +363,16 @@ def draw_bar(ctx, x, midi_value):
         ctx.curve_to(x - 11, y + 2, x - 4, y + 5, x - 4, y + 5)
 
     if midi_value == 0:
-        # Bar (Shadow)
-        x = x - 2
-        y = y_min + 3
-        bar()
-        ctx.set_source_rgba(*color, 0.25)
-        ctx.fill()
+        # # Bar (Shadow)
+        # x = x - 2
+        # y = y_min + 3
+        # bar()
+        # ctx.set_source_rgba(*color, 0.25)
+        # ctx.fill()
 
         # Bar (Fill)
-        x = x + 2
-        y = y_min + 1
+        # x = x + 2
+        # y = y_min + 1
         bar()
 
         pat = cairo.LinearGradient(x, y_min + 10, x, y_min + 23)
@@ -405,16 +414,16 @@ def draw_beat(ctx, x, midi_value):
         ctx.set_line_cap(cairo.LINE_CAP_ROUND)
 
     if midi_value == 0:
-        # Beat (Shadow)
-        x = x - 2
-        y = y_min + 4
-        beat()
-        ctx.set_source_rgba(*color, 0.25)
-        ctx.fill()
+        # # Beat (Shadow)
+        # x = x - 2
+        # y = y_min + 4
+        # beat()
+        # ctx.set_source_rgba(*color, 0.25)
+        # ctx.fill()
 
         # Beat (Fill)
-        x = x + 2
-        y = y_min + 2
+        # x = x + 2
+        # y = y_min + 2
         beat()
 
         pat = cairo.LinearGradient(x, y_min + 10, x, y_min + 23)
@@ -471,15 +480,15 @@ def draw_nudge_1(ctx, x, midi_value):
         ctx.stroke()
 
     if midi_value == 0:
-        # Shadow
-        x = x - 2
-        y_min = 132
-        ctx.set_source_rgba(*color, 0.25)
-        ctx.set_line_cap(cairo.LINE_CAP_SQUARE)
-        nudge_1()
+        # # Shadow
+        # x = x - 2
+        # y_min = 132
+        # ctx.set_source_rgba(*color, 0.25)
+        # ctx.set_line_cap(cairo.LINE_CAP_SQUARE)
+        # nudge_1()
 
         # Nudge 1 fill color
-        x = x + 2
+        # x = x + 2
         y_min = 130
         pat = cairo.LinearGradient(x, y_min + 10, x, y_max - 5)
         pat.add_color_stop_rgba(0, *color, 1)
@@ -521,13 +530,12 @@ def draw_nudge_2(ctx, x, midi_value):
         ctx.stroke()
 
     if midi_value == 0:
-
-        # Shadow
-        x = x - 2
-        y_min = 132
-        ctx.set_source_rgba(*color, 0.25)
-        ctx.set_line_cap(cairo.LINE_CAP_SQUARE)
-        nudge_2()
+        # # Shadow
+        # x = x - 2
+        # y_min = 132
+        # ctx.set_source_rgba(*color, 0.25)
+        # ctx.set_line_cap(cairo.LINE_CAP_SQUARE)
+        # nudge_2()
 
         # Nudge 2 (Fill color)
         pat = cairo.LinearGradient(x, y_min + 10, x, y_min + 25)
@@ -537,7 +545,7 @@ def draw_nudge_2(ctx, x, midi_value):
         # ctx.fill()
 
         # Nudge 2 (Shape)
-        x = x + 2
+        # x = x + 2
         y_min = 130
         ctx.set_source(pat)
         ctx.set_line_cap(cairo.LINE_CAP_SQUARE)

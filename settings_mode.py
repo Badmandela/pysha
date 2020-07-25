@@ -104,7 +104,7 @@ class SettingsMode(definitions.PyshaMode):
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_5, definitions.OFF_BTN_COLOR)
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_6, definitions.OFF_BTN_COLOR)
             self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_7, definitions.OFF_BTN_COLOR)
-            self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_8, definitions.OFF_BTN_COLOR)
+            self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_8, definitions.PINK)
 
     def update_display(self, ctx, w, h):
 
@@ -237,6 +237,9 @@ class SettingsMode(definitions.PyshaMode):
                 elif i == 3:  # FPS indicator
                     show_title(ctx, part_x, h, 'FPS')
                     show_value(ctx, part_x, h, self.app.actual_frame_rate, color)
+
+                elif i == 7:  # FPS indicator
+                    show_title(ctx, part_x, h, 'Reset Colors')
 
         # After drawing all labels and values, draw other stuff if required
         if self.current_page == 0:  # Performance settings
@@ -397,3 +400,10 @@ class SettingsMode(definitions.PyshaMode):
             if button_name == push2_python.constants.BUTTON_UPPER_ROW_1:
                 # Save current settings
                 self.app.save_current_settings_to_file()
+
+            if button_name == push2_python.constants.BUTTON_UPPER_ROW_8:
+                # Update buttons... Maybe this will solve the "wrong colors" bug?
+                self.app.pads_need_update = True
+                self.update_pads()
+                self.app.buttons_need_update = True
+                self.update_buttons()
