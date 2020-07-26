@@ -14,6 +14,20 @@ def show_title(ctx, x, h, text, color=[1, 1, 1]):
     ctx.show_text(text)
 
 
+def draw_xr18_button(ctx, x, xr18_button, text, color):
+    if xr18_button == 0:
+        ctx.set_source_rgb(*color)
+    else:
+        color2 = [1, 1, 1]
+        fill_button(ctx, x, 0, *color2)
+        # Paint Shape Black
+        ctx.set_source_rgb(0, 0, 0)
+    ctx.select_font_face("Ableton Sans Bold", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
+    ctx.set_font_size(15)
+    ctx.move_to(x - (ctx.text_extents(text)[2] / 2), 17)
+    ctx.show_text(text)
+
+
 def draw_title(ctx, center_x, text, *color):
     text = str(text)
     ctx.select_font_face("Ableton Sans Bold", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
@@ -26,8 +40,7 @@ def draw_title(ctx, center_x, text, *color):
     ctx.fill()
 
     # Main Text
-    pat = cairo.LinearGradient(center_x - (ctx.text_extents(text)[2] / 2), ctx.text_extents(text)[3] / 2,
-                               center_x - (ctx.text_extents(text)[2] / 2), ctx.text_extents(text)[3] * 2)
+    pat = cairo.LinearGradient(center_x - (ctx.text_extents(text)[2] / 2), ctx.text_extents(text)[3] / 2, center_x - (ctx.text_extents(text)[2] / 2), ctx.text_extents(text)[3] * 2)
     pat.add_color_stop_rgb(0, *color)
     pat.add_color_stop_rgba(1, *color, 0.42)
     ctx.set_source(pat)
@@ -556,3 +569,71 @@ def draw_nudge_2(ctx, x, midi_value):
         # Paint Shape Black
         ctx.set_source_rgb(0, 0, 0)
         nudge_2()
+
+
+def draw_mute_button(ctx, x, mute_value, color):
+    ctx.select_font_face("Ableton Sans Bold", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
+    ctx.set_font_size(15)
+
+    if mute_value == 0:
+        text = "MUTE"
+        ctx.set_source_rgb(0.25, 0.25, 0.25)
+    else:
+        text = "ON"
+        ctx.set_source_rgb(*color)
+
+    ctx.move_to(x - (ctx.text_extents(text)[2] / 2), 150)
+    ctx.show_text(text)
+
+
+def draw_potentiometer(ctx, x, control, mute_value, color):
+    # Line
+    if mute_value == 0:
+        ctx.set_source_rgb(0.125, 0.125, 0.125)
+    else:
+        ctx.set_source_rgba(*color, 0.25)
+    ctx.set_line_width(2)
+    ctx.move_to(x, 47.5)
+    ctx.line_to(x, 118)
+    ctx.stroke()
+
+    # Markers
+    # + 6
+    ctx.move_to(x - 7.5, 47.5)
+    ctx.line_to(x + 7.5, 47.5)
+    ctx.stroke()
+
+    # 0
+    ctx.move_to(x - 15, 64.5)
+    ctx.line_to(x + 15, 64.5)
+    ctx.stroke()
+
+    # Mitten
+    ctx.move_to(x - 10, 82.5)
+    ctx.line_to(x + 10, 82.5)
+    ctx.stroke()
+
+    # 1/4
+    ctx.move_to(x - 10, 100)
+    ctx.line_to(x + 10, 100)
+    ctx.stroke()
+
+    # - 30
+    ctx.move_to(x - 7.5, 118)
+    ctx.line_to(x + 7.5, 118)
+    ctx.stroke()
+
+    # Pot
+    if mute_value == 0:
+        ctx.set_source_rgb(0.25, 0.25, 0.25)
+
+    else:
+        pat = cairo.LinearGradient(x, 110 - (70 * (control / 127)), x, 125 - (70 * (control / 127)))
+        pat.add_color_stop_rgb(0, 0.75, 0.75, 0.75)
+        pat.add_color_stop_rgb(0.5, 0.5, 0.5, 0.5)
+        pat.add_color_stop_rgb(1, 0.75, 0.75, 0.75)
+        ctx.set_source(pat)
+
+    ctx.rectangle(x - 5, 110 - (70 * (control / 127)), 10, 15)
+    ctx.fill_preserve()
+    ctx.stroke()

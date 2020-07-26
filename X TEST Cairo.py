@@ -105,6 +105,7 @@ else:
     color = [1, 1, 1, 0.25]
 draw_list(ctx, center_x, y, text, *color)
 
+
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Instrument_filter QUASI-GLOBALS
 title = "INSTR. LPF:"
@@ -147,6 +148,7 @@ center_x = 540
 draw_title(ctx, center_x, title, *color)
 draw_knob(ctx, center_x, center_y, rad, control, off_value, *color)
 
+
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Smile QUASI-GLOBALS
 title = "SMILE:"
@@ -157,6 +159,7 @@ off_value = 0
 
 draw_title(ctx, center_x, title, *color)
 draw_knob(ctx, center_x, center_y, rad, control, off_value, *color)
+
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Reverb QUASI-GLOBALS
