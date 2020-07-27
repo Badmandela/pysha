@@ -127,7 +127,8 @@ class SettingsMode(definitions.PyshaMode):
                 if i == 0:  # Root note
                     if not self.app.is_mode_active(self.app.melodic_mode):
                         color = definitions.get_color_rgb_float(definitions.FONT_COLOR_DISABLED)
-                    show_title(ctx, part_x, h, 'ROOT NOTE')
+                    # show_title(ctx, part_x, h, 'ROOT NOTE')
+                    show_title(ctx, part_x, h, "ROOT NOTE")
                     show_value(ctx, part_x, h, "{0} ({1})".format(self.app.melodic_mode.note_number_to_name(
                         self.app.melodic_mode.root_midi_note), self.app.melodic_mode.root_midi_note), color)
 

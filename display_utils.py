@@ -24,7 +24,7 @@ def draw_xr18_button(ctx, x, xr18_button, text, color):
         ctx.set_source_rgb(0, 0, 0)
     ctx.select_font_face("Ableton Sans Bold", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
     ctx.set_font_size(15)
-    ctx.move_to(x - (ctx.text_extents(text)[2] / 2), 17)
+    ctx.move_to(x - (ctx.text_extents(text)[2] / 2), 25)
     ctx.show_text(text)
 
 
@@ -77,8 +77,8 @@ def draw_text_at(ctx, x, y, text, font_size=12, color=[1, 1, 1]):
 
 def draw_knob(ctx, center_x, center_y, rad, control, off_value, *color):
     line = 10
-    pos1 = 3.14 / 2 + 360 * ((control - 5) / 127) * (3.14 / 180)
-    pos2 = 3.14 / 2 + 360 * ((control + 5) / 127) * (3.14 / 180)
+    pos1 = 3.14 / 2 + 360 * ((control - 10) / 254) * (3.14 / 180)
+    pos2 = 3.14 / 2 + 360 * ((control + 10) / 254) * (3.14 / 180)
 
     # Canvas
     if off_value == 0:
@@ -95,14 +95,14 @@ def draw_knob(ctx, center_x, center_y, rad, control, off_value, *color):
     # Value-canvas
     if off_value == 0:
         ctx.move_to(center_x, center_y)
-        ctx.arc(center_x, center_y, rad, 3.14 / 2, 3.14 / 2 + 360 * (control / 127) * (3.14 / 180))
+        ctx.arc(center_x, center_y, rad, 3.14 / 2, 3.14 / 2 + 360 * (control / 254) * (3.14 / 180))
         ctx.close_path()
         ctx.set_source_rgba(*color, 0.5)
         ctx.fill()
         ctx.stroke()
     else:
         ctx.move_to(center_x, center_y)
-        ctx.arc(center_x, center_y, rad, 3.14 / 2, 3.14 / 2 + 360 * (control / 127) * (3.14 / 180))
+        ctx.arc(center_x, center_y, rad, 3.14 / 2, 3.14 / 2 + 360 * (control / 254) * (3.14 / 180))
         ctx.close_path()
         ctx.set_source_rgb(*screen_black)
         ctx.fill()
@@ -597,33 +597,93 @@ def draw_potentiometer(ctx, x, control, mute_value, color):
     ctx.line_to(x, 118)
     ctx.stroke()
 
+    ctx.select_font_face("Verdana", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_BOLD)
+    font_size = 9
+    ctx.set_font_size(font_size)
+
     # Markers
     # + 6
     ctx.move_to(x - 7.5, 47.5)
     ctx.line_to(x + 7.5, 47.5)
+    ctx.set_source_rgb(*color)
+    ctx.stroke()
+
+    ctx.move_to(x - 25, 50)
+    ctx.set_source_rgba(*color, 0.25)
+    ctx.show_text("10")
+    ctx.stroke()
+
+    ctx.arc(x + 25, 47.5, 4, 0, 2 * 3.14)
+    ctx.set_line_width(2)
+    ctx.set_source_rgba(*color, 0.25)
     ctx.stroke()
 
     # 0
     ctx.move_to(x - 15, 64.5)
     ctx.line_to(x + 15, 64.5)
+    ctx.set_source_rgb(*color)
+    ctx.stroke()
+
+    ctx.move_to(x - 25, 68)
+    ctx.set_source_rgba(*color, 0.25)
+    ctx.show_text("0")
+    ctx.stroke()
+
+    ctx.arc(x + 25, 64.5, 4, 0, 2 * 3.14)
+    ctx.set_line_width(2)
+    ctx.set_source_rgba(*color, 0.25)
     ctx.stroke()
 
     # Mitten
     ctx.move_to(x - 10, 82.5)
     ctx.line_to(x + 10, 82.5)
+    ctx.set_source_rgb(*color)
     ctx.stroke()
 
-    # 1/4
-    ctx.move_to(x - 10, 100)
-    ctx.line_to(x + 10, 100)
+    ctx.move_to(x - 25, 86)
+    ctx.set_source_rgba(*color, 0.25)
+    ctx.show_text("10")
+    ctx.stroke()
+
+    ctx.arc(x + 25, 82.5, 4, 0, 2 * 3.14)
+    ctx.set_line_width(2)
+    ctx.set_source_rgba(*color, 0.25)
     ctx.stroke()
 
     # - 30
+    ctx.move_to(x - 10, 100)
+    ctx.line_to(x + 10, 100)
+    ctx.set_source_rgb(*color)
+    ctx.stroke()
+
+    ctx.move_to(x - 25, 103)
+    ctx.set_source_rgba(*color, 0.25)
+    ctx.show_text("30")
+    ctx.stroke()
+
+    ctx.arc(x + 25, 100, 4, 0, 2 * 3.14)
+    ctx.set_line_width(2)
+    ctx.set_source_rgba(*color, 0.25)
+    ctx.stroke()
+
+    # - 60
     ctx.move_to(x - 7.5, 118)
     ctx.line_to(x + 7.5, 118)
+    ctx.set_source_rgb(*color)
+    ctx.stroke()
+
+    ctx.move_to(x - 25, 120)
+    ctx.set_source_rgba(*color, 0.25)
+    ctx.show_text(" ∞")
+    ctx.stroke()
+
+    ctx.arc(x + 25, 117.5, 4, 0, 2 * 3.14)
+    ctx.set_line_width(2)
+    ctx.set_source_rgba(*color, 0.25)
     ctx.stroke()
 
     # Pot
+    # Pot (Color)
     if mute_value == 0:
         ctx.set_source_rgb(0.25, 0.25, 0.25)
 
@@ -634,6 +694,14 @@ def draw_potentiometer(ctx, x, control, mute_value, color):
         pat.add_color_stop_rgb(1, 0.75, 0.75, 0.75)
         ctx.set_source(pat)
 
+    # Pot (Main)
     ctx.rectangle(x - 5, 110 - (70 * (control / 127)), 10, 15)
     ctx.fill_preserve()
+    ctx.set_source_rgba(*color, 0.25)
+    ctx.stroke()
+
+    # Pot (Outlines)
+    ctx.move_to(x - 5, 110 - (70 * (control / 127)) + 7.5)
+    ctx.line_to(x + 5, 110 - (70 * (control / 127)) + 7.5)
+    ctx.set_source_rgba(*color, 0.5)
     ctx.stroke()

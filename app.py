@@ -15,6 +15,10 @@ from rhythmic_mode import RhythmicMode
 from settings_mode import SettingsMode
 
 
+# from play_mode import PlayMode
+# from mix_mode import MixMode
+
+
 class PyshaApp(object):
 
     # midi
@@ -66,6 +70,8 @@ class PyshaApp(object):
         self.melodic_mode = MelodicMode(self, settings=settings)
         self.rhyhtmic_mode = RhythmicMode(self, settings=settings)
         self.settings_mode = SettingsMode(self, settings=settings)
+        # self.play_mode = PlayMode(self, settings=settings)
+        # self.mix_mode = MixMode(self, settings=settings)
         self.main_controls_mode = MainControlsMode(self, settings=settings)
 
     def get_all_modes(self):
@@ -84,6 +90,26 @@ class PyshaApp(object):
         else:
             self.active_modes.append(self.settings_mode)
             self.settings_mode.activate()
+
+    # def toggle_and_rotate_play_mode(self):
+    #     if self.is_mode_active(self.play_mode):
+    #         rotation_finished = self.play_mode.move_to_next_play_page()
+    #         if rotation_finished:
+    #             self.active_modes = [mode for mode in self.active_modes if mode != self.play_mode]
+    #             self.play_mode.deactivate()
+    #     else:
+    #         self.active_modes.append(self.play_mode)
+    #         self.play_mode.activate()
+
+    # def toggle_and_rotate_mix_mode(self):
+    #     if self.is_mode_active(self.mix_mode):
+    #         rotation_finished = self.mix_mode.move_to_next_mix_page()
+    #         if rotation_finished:
+    #             self.active_modes = [mode for mode in self.active_modes if mode != self.mix_mode]
+    #             self.mix_mode.deactivate()
+    #     else:
+    #         self.active_modes.append(self.mix_mode)
+    #         self.mix_mode.activate()
 
     def toggle_melodic_rhythmic_modes(self):
         if self.is_mode_active(self.melodic_mode):
@@ -132,12 +158,6 @@ class PyshaApp(object):
         # noinspection PyUnresolvedReferences
         self.available_midi_in_device_names = [name for name in mido.get_input_names() if not any([banned_names in name for banned_names in ["Ableton Push", "Midi Through", "RtMidi"]])]
         # self.available_midi_in_device_names = [name for name in mido.get_input_names() if 'Ableton Push' not in name]
-        #
-        # if "Midi Through" in device_name:
-        #     device_name = None
-        #
-        # if 'RtMidi' in device_name:
-        #     device_name = None
 
         if device_name is not None:
             if self.midi_in is not None:
@@ -295,7 +315,7 @@ class PyshaApp(object):
                     self.actual_frame_rate = self.current_frame_rate_measurement
                     self.current_frame_rate_measurement = 0
                     self.current_frame_rate_measurement_second = now
-                    print('{0} fps'.format(self.actual_frame_rate))
+                    # print('{0} fps'.format(self.actual_frame_rate))
 
                 # Check if any delayed actions need to be applied
                 self.check_for_delayed_actions()

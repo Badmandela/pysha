@@ -3,17 +3,11 @@ import push2_python
 
 from display_utils import draw_potentiometer, draw_xr18_button, draw_mute_button
 
-x_air = {
-    'trm': 96, 'bas': 96, 'gtr': 96, 'v1': 96, 'v2': 96, 'bt': 96, 'delay': 96, 'reverb': 96}
+x_air = {'trm': 96, 'bas': 96, 'gtr': 96, 'v1': 96, 'v2': 96, 'bt': 96, 'delay': 96, 'reverb': 96}
 
 x_air_button = {'trm': 0, 'bas': 0, 'gtr': 0, 'v1': 0, 'v2': 0, 'bt': 0, 'delay': 0, 'reverb': 0}
 
 mute_value_list = {'trm': 127, 'bas': 127, 'gtr': 127, 'v1': 127, 'v2': 127, 'bt': 127, 'delay': 127, 'reverb': 127}
-
-piano_range = range(0, 20)
-synth_range = range(20, 70)
-sampler_range = range(70, 110)
-ghost_range = range(110, 128)
 
 w, h = push2_python.constants.DISPLAY_LINE_PIXELS, push2_python.constants.DISPLAY_N_LINES
 surface = cairo.ImageSurface(cairo.FORMAT_RGB16_565, w, h)
@@ -53,10 +47,6 @@ color = [1, 1, 0]
 draw_xr18_button(ctx, x, xr18_button, text, color)
 draw_potentiometer(ctx, x, control, mute_value, color)
 draw_mute_button(ctx, x, mute_value, color)
-
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
