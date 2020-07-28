@@ -444,7 +444,7 @@ class MainControlsMode(definitions.PyshaMode):
                 self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_2, definitions.ROOT_KEY)
                 controls['instr_lpf'] = 254
                 # msg = mido.Message('control_change', control=22, value=controls['instr_lpf'])
-                msg = mido.Message('control_change', control=24, value=int(round(controls['instr_lpf'] / 2)))
+                msg = mido.Message('control_change', control=22, value=int(round(controls['instr_lpf'] / 2)))
                 self.app.send_midi(msg)
 
             # RELEASED UPP button 4
@@ -460,7 +460,7 @@ class MainControlsMode(definitions.PyshaMode):
                 self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_5, definitions.PURPLE)
                 controls['fx'] = 254
                 # msg = mido.Message('control_change', control=25, value=controls['fx'])
-                msg = mido.Message('control_change', control=24, value=int(round(controls['fx'] / 2)))
+                msg = mido.Message('control_change', control=25, value=int(round(controls['fx'] / 2)))
                 self.app.send_midi(msg)
 
             # RELEASED UPP button 6
@@ -468,7 +468,7 @@ class MainControlsMode(definitions.PyshaMode):
                 self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_6, definitions.YELLOW)
                 controls['smile'] = 0
                 # msg = mido.Message('control_change', control=26, value=controls['smile'])
-                msg = mido.Message('control_change', control=24, value=int(round(controls['smile'] / 2)))
+                msg = mido.Message('control_change', control=26, value=int(round(controls['smile'] / 2)))
                 self.app.send_midi(msg)
 
             # RELEASED UPP button 7
@@ -476,7 +476,7 @@ class MainControlsMode(definitions.PyshaMode):
                 self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_7, definitions.CYAN)
                 controls['reverb'] = 0
                 # msg = mido.Message('control_change', control=27, value=controls['reverb'])
-                msg = mido.Message('control_change', control=24, value=int(round(controls['reverb'] / 2)))
+                msg = mido.Message('control_change', control=27, value=int(round(controls['reverb'] / 2)))
                 self.app.send_midi(msg)
 
             # RELEASED UPP button 8
@@ -484,7 +484,7 @@ class MainControlsMode(definitions.PyshaMode):
                 self.push.buttons.set_button_color(push2_python.constants.BUTTON_UPPER_ROW_8, definitions.RED)
                 controls['tape'] = 254
                 # msg = mido.Message('control_change', control=28, value=controls['tape'])
-                msg = mido.Message('control_change', control=24, value=int(round(controls['tape'] / 2)))
+                msg = mido.Message('control_change', control=28, value=int(round(controls['tape'] / 2)))
                 self.app.send_midi(msg)
 
             # RELEASED LOW button 1
