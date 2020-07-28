@@ -3,21 +3,16 @@ import push2_python
 
 import definitions
 from display_utils import draw_title, draw_list, draw_knob, draw_cue, draw_bar, draw_beat, draw_nudge_1, draw_nudge_2
-
-SETTINGS_BUTTON = push2_python.constants.BUTTON_SETUP
-
-controls = {'instr': 0, 'instr_lpf': 254, 'master_lpf': 254, 'fx': 254, 'smile': 0, 'reverb': 0, 'tape': 254}
-transport = {'cue1': 0, 'cue2': 0, 'bar1': 0, 'bar2': 0, 'beat1': 0, 'beat2': 0, 'nudge1': 0, 'nudge2': 0}
-
-# max_encoder_value = 127
-# def max_encoder_value():
-#     return 254
+from knob import update_encoder
 
 max_encoder_value = 254
 piano_range = range(0, 40)
 synth_range = range(40, 140)
 sampler_range = range(140, 220)
 ghost_range = range(220, 254)
+
+controls = {'instr': 0, 'instr_lpf': 254, 'master_lpf': 254, 'fx': 254, 'smile': 0, 'reverb': 0, 'tape': 254}
+transport = {'cue1': 0, 'cue2': 0, 'bar1': 0, 'bar2': 0, 'beat1': 0, 'beat2': 0, 'nudge1': 0, 'nudge2': 0}
 
 
 class MainControlsMode(definitions.PyshaMode):
@@ -26,7 +21,7 @@ class MainControlsMode(definitions.PyshaMode):
         self.update_buttons()
 
     def deactivate(self):
-        self.push.buttons.set_button_color(SETTINGS_BUTTON, definitions.BLACK)
+        self.push.buttons.set_button_color(push2_python.constants.BUTTON_SETUP, definitions.BLACK)
 
     def update_display(self, ctx, w, h):
 
@@ -36,10 +31,6 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.rectangle(0, 0, w, h)
         ctx.set_source_rgb(0, 0, 0)
         ctx.fill()
-
-        # Colors
-        screen_black = [0, 0, 0]
-        screen_dark = [0.05, 0.05, 0.05]
 
         # Globals
         rad = 45
@@ -265,194 +256,92 @@ class MainControlsMode(definitions.PyshaMode):
 
             # encoder 1
             if encoder_name == push2_python.constants.ENCODER_TRACK1_ENCODER:
-                cc = 21
-
-                def update_encoder_value(increment):
-                    updated_value = int(controls['instr'] + increment)
-                    if updated_value < 0:
-                        controls['instr'] = 0
-                    elif updated_value > max_encoder_value:
-                        controls['instr'] = max_encoder_value
-                    else:
-                        controls['instr'] = updated_value
-
-                update_encoder_value(increment)
-                msg = mido.Message('control_change', control=cc, value=int(round(controls['instr'] / 2)))
+                msg, encoder = update_encoder(controls['instr'], 21, increment)
                 self.app.send_midi(msg)
+                controls['instr'] = encoder
+
+                def update_instrument():
+                    self.clean_currently_notes_being_played()
+                    self.app.pads_need_update = True
+                    self.update_pads()
+                    self.app.buttons_need_update = True
+                    self.update_buttons()
 
                 if controls['instr'] in piano_range:
                     if not definitions.ROOT_KEY == definitions.PINK:
                         definitions.ROOT_KEY = definitions.PINK
                         definitions.NOTE_ON_COLOR = definitions.GREEN
-                        self.clean_currently_notes_being_played()
                         self.app.set_melodic_mode()
-                        self.app.pads_need_update = True
-                        self.update_pads()
-                        self.app.buttons_need_update = True
-                        self.update_buttons()
+                        update_instrument()
 
                 if controls['instr'] in synth_range:
                     if not definitions.ROOT_KEY == definitions.GREEN:
                         definitions.ROOT_KEY = definitions.GREEN
                         definitions.NOTE_ON_COLOR = definitions.PINK
-                        self.clean_currently_notes_being_played()
                         self.app.set_melodic_mode()
-                        self.app.pads_need_update = True
-                        self.update_pads()
-                        self.app.buttons_need_update = True
-                        self.update_buttons()
+                        update_instrument()
 
                 if controls['instr'] in sampler_range:
                     if not definitions.ROOT_KEY == definitions.PURPLE:
                         definitions.ROOT_KEY = definitions.PURPLE
                         definitions.NOTE_ON_COLOR = definitions.WHITE
-                        self.clean_currently_notes_being_played()
                         self.app.set_rhythmic_mode()
-                        self.app.pads_need_update = True
-                        self.update_pads()
-                        self.app.buttons_need_update = True
-                        self.update_buttons()
+                        update_instrument()
 
                 if controls['instr'] in ghost_range:
                     if not definitions.ROOT_KEY == definitions.WHITE:
                         definitions.ROOT_KEY = definitions.WHITE
                         definitions.NOTE_ON_COLOR = definitions.PURPLE
-                        self.clean_currently_notes_being_played()
                         self.app.set_melodic_mode()
-                        self.app.pads_need_update = True
-                        self.update_pads()
-                        self.app.buttons_need_update = True
-                        self.update_buttons()
+                        update_instrument()
 
             # encoder 2
             if encoder_name == push2_python.constants.ENCODER_TRACK2_ENCODER:
-                def update_encoder_value(increment):
-                    updated_filter_value = int(controls['instr_lpf'] + increment)
-                    if updated_filter_value < 0:
-                        controls['instr_lpf'] = 0
-                    elif updated_filter_value > max_encoder_value:
-                        controls['instr_lpf'] = max_encoder_value
-                    else:
-                        controls['instr_lpf'] = updated_filter_value
-
-                update_encoder_value(increment)
-                # msg = mido.Message('control_change', control=22, value=controls['instr_lpf'])
-                msg = mido.Message('control_change', control=22, value=int(round(controls['instr_lpf'] / 2)))
+                msg, encoder = update_encoder(controls['instr_lpf'], 22, increment)
                 self.app.send_midi(msg)
-
-            # # encoder 3
-            # if encoder_name == push2_python.constants.ENCODER_TRACK3_ENCODER:
-            #     def update_encoder_value(increment):
-            #         updated_filter_value = int(controls['instr_vol'] + increment)
-            #         if updated_filter_value < 0:
-            #             controls['instr_vol'] = 0
-            #         elif updated_filter_value > max_encoder_value:
-            #             controls['instr_vol'] = max_encoder_value
-            #         else:
-            #             controls['instr_vol'] = updated_filter_value
-            #
-            #     update_encoder_value(increment)
-            #     msg = mido.Message('control_change', control=23, value=controls['instr_vol'])
-            #     self.app.send_midi(msg)
+                controls['instr_lpf'] = encoder
 
             # encoder 4
             if encoder_name == push2_python.constants.ENCODER_TRACK4_ENCODER:
-
-                def update_encoder_value(increment):
-                    updated_filter_value = int(controls['master_lpf'] + increment)
-
-                    if updated_filter_value < 0:
-                        controls['master_lpf'] = 0
-                    elif updated_filter_value > max_encoder_value:
-                        controls['master_lpf'] = max_encoder_value
-                    else:
-                        controls['master_lpf'] = updated_filter_value
-
-                    print("Increment", increment)
-                    print("LPF", int(round(controls['master_lpf'] / 2)))
-                    print("UPDATED", int(round(updated_filter_value)))
-
-                update_encoder_value(increment)
-
-                msg = mido.Message('control_change', control=24, value=int(round(controls['master_lpf'] / 2)))
+                msg, encoder = update_encoder(controls['master_lpf'], 24, increment)
                 self.app.send_midi(msg)
-
+                controls['master_lpf'] = encoder
 
             # encoder 5
             if encoder_name == push2_python.constants.ENCODER_TRACK5_ENCODER:
-                def update_encoder_value(increment):
-                    updated_filter_value = int(controls['fx'] + increment)
-                    if updated_filter_value < 0:
-                        controls['fx'] = 0
-                    elif updated_filter_value > max_encoder_value:
-                        controls['fx'] = max_encoder_value
-                    else:
-                        controls['fx'] = updated_filter_value
-
-                update_encoder_value(increment)
-                # msg = mido.Message('control_change', control=25, value=controls['fx'])
-                msg = mido.Message('control_change', control=25, value=int(round(controls['fx'] / 2)))
+                msg, encoder = update_encoder(controls['fx'], 25, increment)
                 self.app.send_midi(msg)
+                controls['fx'] = encoder
 
             # encoder 6
             if encoder_name == push2_python.constants.ENCODER_TRACK6_ENCODER:
-                def update_encoder_value(increment):
-                    updated_filter_value = int(controls['smile'] + increment)
-                    if updated_filter_value < 0:
-                        controls['smile'] = 0
-                    elif updated_filter_value > max_encoder_value:
-                        controls['smile'] = max_encoder_value
-                    else:
-                        controls['smile'] = updated_filter_value
-
-                update_encoder_value(increment)
-                # msg = mido.Message('control_change', control=26, value=controls['smile'])
-                msg = mido.Message('control_change', control=26, value=int(round(controls['smile'] / 2)))
+                msg, encoder = update_encoder(controls['smile'], 26, increment)
                 self.app.send_midi(msg)
+                controls['smile'] = encoder
 
             # encoder 7
             if encoder_name == push2_python.constants.ENCODER_TRACK7_ENCODER:
-                def update_encoder_value(increment):
-                    updated_filter_value = int(controls['reverb'] + increment)
-                    if updated_filter_value < 0:
-                        controls['reverb'] = 0
-                    elif updated_filter_value > max_encoder_value:
-                        controls['reverb'] = max_encoder_value
-                    else:
-                        controls['reverb'] = updated_filter_value
-
-                update_encoder_value(increment)
-                # msg = mido.Message('control_change', control=27, value=controls['reverb'])
-                msg = mido.Message('control_change', control=27, value=int(round(controls['reverb'] / 2)))
+                msg, encoder = update_encoder(controls['reverb'], 27, increment)
                 self.app.send_midi(msg)
+                controls['reverb'] = encoder
 
             # encoder 8
             if encoder_name == push2_python.constants.ENCODER_TRACK8_ENCODER:
-                def update_encoder_value(increment):
-                    updated_filter_value = int(controls['tape'] + increment)
-                    if updated_filter_value < 0:
-                        controls['tape'] = 0
-                    elif updated_filter_value > max_encoder_value:
-                        controls['tape'] = max_encoder_value
-                    else:
-                        controls['tape'] = updated_filter_value
-
-                update_encoder_value(increment)
-                # msg = mido.Message('control_change', control=28, value=controls['tape'])
-                msg = mido.Message('control_change', control=28, value=int(round(controls['tape'] / 2)))
+                msg, encoder = update_encoder(controls['tape'], 28, increment)
                 self.app.send_midi(msg)
+                controls['tape'] = encoder
 
     def on_button_pressed(self, button_name):
 
-        if button_name == SETTINGS_BUTTON:
+        if button_name == push2_python.constants.BUTTON_SETUP:
             self.app.toggle_and_rotate_settings_mode()
             self.app.buttons_need_update = True
 
-        if not self.app.is_mode_active(self.app.settings_mode):
+        # if button_name == push2_python.constants.BUTTON_DEVICE:
+        #     self.app.toggle_and_rotate_play_mode()
+        #     self.app.buttons_need_update = True
 
-            # if button_name == push2_python.constants.BUTTON_DEVICE:
-            #     self.app.toggle_and_rotate_play_mode()
-            #     self.app.buttons_need_update = True
+        if not self.app.is_mode_active(self.app.settings_mode):
 
             # PRESSED UPP button 2
             if button_name == push2_python.constants.BUTTON_UPPER_ROW_2:
