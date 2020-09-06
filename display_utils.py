@@ -14,36 +14,13 @@ def show_title(ctx, x, h, text, color=[1, 1, 1]):
     ctx.show_text(text)
 
 
-def draw_xr18_button(ctx, x, xr18_button, text, color):
-    if xr18_button == 0:
-        ctx.set_source_rgb(*color)
-    else:
-        color2 = [1, 1, 1]
-        fill_button(ctx, x, 0, *color2)
-        # Paint Shape Black
-        ctx.set_source_rgb(0, 0, 0)
-    ctx.select_font_face("Ableton Sans Bold", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
-    ctx.set_font_size(15)
-    ctx.move_to(x - (ctx.text_extents(text)[2] / 2), 25)
-    ctx.show_text(text)
-
-
 def draw_title(ctx, center_x, text, *color):
     text = str(text)
     ctx.select_font_face("Ableton Sans Bold", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
     ctx.set_font_size(15)
 
-    # Text Shadow
-    ctx.set_source_rgba(*color, 0.25)
-    ctx.move_to(center_x - (ctx.text_extents(text)[2] / 2) - 1, 18)
-    ctx.text_path(text)
-    ctx.fill()
-
     # Main Text
-    pat = cairo.LinearGradient(center_x - (ctx.text_extents(text)[2] / 2), ctx.text_extents(text)[3] / 2, center_x - (ctx.text_extents(text)[2] / 2), ctx.text_extents(text)[3] * 2)
-    pat.add_color_stop_rgb(0, *color)
-    pat.add_color_stop_rgba(1, *color, 0.42)
-    ctx.set_source(pat)
+    ctx.set_source_rgb(*color)
     ctx.move_to(center_x - (ctx.text_extents(text)[2] / 2), 17)
     ctx.show_text(text)
 
@@ -129,29 +106,7 @@ def draw_knob(ctx, center_x, center_y, rad, control, off_value, *color):
             ctx.set_line_width(line)
             ctx.stroke()
 
-            pat = cairo.MeshPattern()
-            pat.begin_patch()
-            pat.move_to(center_x, center_y - (rad / 4 + (line / 2)))
-            pat.line_to(center_x - (rad + (line / 2)), center_y - (rad / 4 + (line / 2)))
-            pat.line_to(center_x - (rad + (line / 2)), center_y + (rad + (line / 2)))
-            pat.line_to(center_x, center_y + (rad + (line / 2)))
-            pat.set_corner_color_rgba(0, *color, 1)
-            pat.set_corner_color_rgba(1, *color, 1)
-            pat.set_corner_color_rgba(2, *color, 1)
-            pat.set_corner_color_rgba(3, 0, 0, 0, 0.25)
-            pat.end_patch()
-
-            pat.begin_patch()
-            pat.move_to(center_x, center_y + (rad + (line / 2)))
-            pat.line_to(center_x + (rad + (line / 2)), center_y + (rad + (line / 2)))
-            pat.line_to(center_x + (rad + (line / 2)), center_y - (rad / 4 + (line / 2)))
-            pat.line_to(center_x, center_y - (rad / 4 + (line / 2)))
-            pat.set_corner_color_rgba(0, 1, 1, 1, 0.05)
-            pat.set_corner_color_rgba(1, *color, 1)
-            pat.set_corner_color_rgba(2, *color, 1)
-            pat.set_corner_color_rgba(3, *color, 1)
-            pat.end_patch()
-            ctx.set_source(pat)
+            ctx.set_source_rgb(*color)
 
             ctx.arc(center_x, center_y, rad, 0, 2 * 3.14)
             ctx.set_line_width(line)
@@ -162,85 +117,34 @@ def draw_knob(ctx, center_x, center_y, rad, control, off_value, *color):
             ctx.set_line_width(line)
             ctx.stroke()
 
-            pat = cairo.MeshPattern()
-            pat.begin_patch()
-            pat.move_to(center_x, center_y - (rad / 4 + (line / 2)))
-            pat.line_to(center_x - (rad + (line / 2)), center_y - (rad / 4 + (line / 2)))
-            pat.line_to(center_x - (rad + (line / 2)), center_y + (rad + (line / 2)))
-            pat.line_to(center_x, center_y + (rad + (line / 2)))
-            pat.set_corner_color_rgba(0, *color, 1)
-            pat.set_corner_color_rgba(1, *color, 1)
-            pat.set_corner_color_rgba(2, *color, 1)
-            pat.set_corner_color_rgba(3, 1, 1, 1, 0.05)
-            pat.end_patch()
-
-            pat.begin_patch()
-            pat.move_to(center_x, center_y + (rad + (line / 2)))
-            pat.line_to(center_x + (rad + (line / 2)), center_y + (rad + (line / 2)))
-            pat.line_to(center_x + (rad + (line / 2)), center_y - (rad / 4 + (line / 2)))
-            pat.line_to(center_x, center_y - (rad / 4 + (line / 2)))
-            pat.set_corner_color_rgba(0, 0, 0, 0, 0.25)
-            pat.set_corner_color_rgba(1, *color, 1)
-            pat.set_corner_color_rgba(2, *color, 1)
-            pat.set_corner_color_rgba(3, *color, 1)
-            pat.end_patch()
-            ctx.set_source(pat)
+            ctx.set_source_rgb(*color)
 
             ctx.arc(center_x, center_y, rad, 0, 2 * 3.14)
             ctx.set_line_width(line)
             ctx.stroke()
 
-        # Frame - Frame, inner
-        ctx.arc(center_x, center_y, rad - 5, 0, 2 * 3.14)
-        ctx.set_line_width(2)
-        pat = cairo.LinearGradient(center_x, center_y - 50, center_x, center_y + 50)
-        pat.add_color_stop_rgba(0, 0, 0, 0, 0.25)
-        pat.add_color_stop_rgba(1, 1, 1, 1, 0.25)
-        ctx.set_source(pat)
-        ctx.stroke()
-
-        # Frame - Frame, outer
-        ctx.arc(center_x, center_y, rad + 5, 0, 2 * 3.14)
-        ctx.set_line_width(2)
-        pat = cairo.LinearGradient(center_x, center_y - 50, center_x, center_y + 50)
-        pat.add_color_stop_rgba(0, 1, 1, 1, 0.25)
-        pat.add_color_stop_rgba(1, 0, 0, 0, 0.25)
-        ctx.set_source(pat)
-        ctx.stroke()
 
     # # Indicator
     # Inner (if value is "0")
     if control == off_value:
         ctx.set_source_rgb(*screen_dark)
-        ctx.arc(center_x, center_y, rad + 6, pos1, pos2)
+        # ctx.arc(center_x, center_y, rad + 6, pos1, pos2)
+        ctx.arc(center_x, center_y, rad, pos1, pos2)
         ctx.line_to(center_x, center_y)
         ctx.fill()
     else:
-        # Shadow
-        ctx.set_source_rgba(0, 0, 0, 0.25)
-        ctx.arc(center_x, center_y + 2, rad + 6, pos1, pos2)
-        ctx.line_to(center_x, center_y + 2)
-        ctx.fill()
-
         # Main
         ctx.set_source_rgb(*color)
-        ctx.arc(center_x, center_y, rad + 6, pos1, pos2)
+        # ctx.arc(center_x, center_y, rad + 6, pos1, pos2)
+        ctx.arc(center_x, center_y, rad, pos1, pos2)
         ctx.line_to(center_x, center_y)
         ctx.fill()
 
-        # Lighting
-        ctx.set_source_rgba(1, 1, 1, 0.25)
-        ctx.arc(center_x, center_y, rad + 6, pos1, pos2)
-        ctx.line_to(center_x, center_y)
-        ctx.close_path()
-        ctx.set_line_width(1)
-        ctx.stroke()
-
-        # Outer Indicator "marker"
-        ctx.set_source_rgba(1, 1, 1, 0.64)
-        ctx.arc(center_x, center_y, rad, pos1, pos2)
-        ctx.set_line_width(12)
-        ctx.stroke()
+        # # Outer Indicator "marker"
+        # ctx.set_source_rgba(1, 1, 1, 0.64)
+        # ctx.arc(center_x, center_y, rad, pos1, pos2)
+        # ctx.set_line_width(12)
+        # ctx.stroke()
 
 def fill_button(ctx, x, y_min, *color):
     # Fill "Button"
@@ -277,62 +181,18 @@ def draw_cue(ctx, x, midi_value):
         y = y_min
         flag()
 
-        pat = cairo.LinearGradient(x, y_min + 10, x, y_min + 25)
-        pat.add_color_stop_rgba(0, *color, 1)
-        pat.add_color_stop_rgba(1, *color, 0.5)
-        ctx.set_source(pat)
+        # pat = cairo.LinearGradient(x, y_min + 10, x, y_min + 25)
+        # pat.add_color_stop_rgba(0, *color, 1)
+        # pat.add_color_stop_rgba(1, *color, 0.5)
+        # ctx.set_source(pat)
+
+        ctx.set_source_rgb(*color)
 
         ctx.fill_preserve()
 
         # Cue (Stroke color)
-        pat = cairo.MeshPattern()
-
-        pat.begin_patch()
-        pat.move_to(x - 10, y_min + 5)
-        pat.line_to(x - 10, y_min + 26)
-        pat.line_to(x - 6, y_min + 26)
-        pat.line_to(x - 9, y_min + 5)
-        pat.set_corner_color_rgba(0, 1, 1, 1, 0.32)
-        pat.set_corner_color_rgba(1, 0, 0, 0, 0.32)
-        pat.set_corner_color_rgba(2, 0, 0, 0, 0.32)
-        pat.set_corner_color_rgba(3, 0, 0, 0, 0.32)
-        pat.end_patch()
-
-        pat.begin_patch()
-        pat.move_to(x - 8, y_min + 5)
-        pat.line_to(x - 6, y_min + 17)
-        pat.line_to(x - 4, y_min + 17)
-        pat.line_to(x - 4, y_min + 5)
-        pat.set_corner_color_rgba(0, 0, 0, 0, 0.32)
-        pat.set_corner_color_rgba(1, 0, 0, 0, 0.32)
-        pat.set_corner_color_rgba(2, 1, 1, 1, 0.32)
-        pat.set_corner_color_rgba(3, 1, 1, 1, 0.32)
-        pat.end_patch()
-
-        pat.begin_patch()
-        pat.move_to(x - 4, y_min + 5)
-        pat.line_to(x - 4, y_min + 17)
-        pat.line_to(x + 2, y_min + 17)
-        pat.line_to(x + 2, y_min + 5)
-        pat.set_corner_color_rgba(0, 1, 1, 1, 0.32)
-        pat.set_corner_color_rgba(1, 1, 1, 1, 0.32)
-        pat.set_corner_color_rgba(2, 0, 0, 0, 0.32)
-        pat.set_corner_color_rgba(3, 1, 1, 1, 0.32)
-        pat.end_patch()
-
-        pat.begin_patch()
-        pat.move_to(x + 2, y_min + 5)
-        pat.line_to(x + 2, y_min + 17)
-        pat.line_to(x + 8, y_min + 17)
-        pat.line_to(x + 8, y_min + 5)
-        pat.set_corner_color_rgba(0, 0, 0, 0, 0.32)
-        pat.set_corner_color_rgba(1, 0, 0, 0, 0.32)
-        pat.set_corner_color_rgba(2, 0, 0, 0, 0.32)
-        pat.set_corner_color_rgba(3, 1, 1, 1, 0.32)
-        pat.end_patch()
-
-        ctx.set_source(pat)
-        ctx.set_line_width(1)
+        ctx.set_source_rgb(*color)
+        ctx.set_line_width(0)
         ctx.stroke()
 
     else:
@@ -376,30 +236,15 @@ def draw_bar(ctx, x, midi_value):
         ctx.curve_to(x - 11, y + 2, x - 4, y + 5, x - 4, y + 5)
 
     if midi_value == 0:
-        # # Bar (Shadow)
-        # x = x - 2
-        # y = y_min + 3
-        # bar()
-        # ctx.set_source_rgba(*color, 0.25)
-        # ctx.fill()
-
-        # Bar (Fill)
-        # x = x + 2
-        # y = y_min + 1
         bar()
 
-        pat = cairo.LinearGradient(x, y_min + 10, x, y_min + 23)
-        pat.add_color_stop_rgba(0, *color, 1)
-        pat.add_color_stop_rgba(1, *color, 0.5)
-        ctx.set_source(pat)
+        ctx.set_source_rgb(*color)
+
         ctx.fill_preserve()
 
         # Bar (Stroke color)
-        pat = cairo.LinearGradient(x, y_min + 7, x, y_min + 25)
-        pat.add_color_stop_rgba(0, 1, 1, 1, 0.5)
-        pat.add_color_stop_rgba(1, 0, 0, 0, 0.32)
-        ctx.set_source(pat)
-        ctx.set_line_width(1)
+        ctx.set_source_rgb(*color)
+        ctx.set_line_width(0.5)
         ctx.set_line_cap(cairo.LINE_CAP_BUTT)
         ctx.stroke()
 
@@ -427,32 +272,16 @@ def draw_beat(ctx, x, midi_value):
         ctx.set_line_cap(cairo.LINE_CAP_ROUND)
 
     if midi_value == 0:
-        # # Beat (Shadow)
-        # x = x - 2
-        # y = y_min + 4
-        # beat()
-        # ctx.set_source_rgba(*color, 0.25)
-        # ctx.fill()
 
-        # Beat (Fill)
-        # x = x + 2
-        # y = y_min + 2
         beat()
 
-        pat = cairo.LinearGradient(x, y_min + 10, x, y_min + 23)
-        pat.add_color_stop_rgba(0, *color, 1)
-        pat.add_color_stop_rgba(1, *color, 0.5)
-        ctx.set_source(pat)
-        ctx.set_source(pat)
+        ctx.set_source_rgb(*color)
         ctx.fill_preserve()
 
         # Beat (Stroke)
-        pat = cairo.LinearGradient(x, y_min + 5, x, y_min + 25)
-        pat.add_color_stop_rgba(0, 1, 1, 1, 0.25)
-        pat.add_color_stop_rgba(1, 0, 0, 0, 0.25)
-        ctx.set_source(pat)
+        ctx.set_source_rgb(*color)
         ctx.set_line_cap(cairo.LINE_CAP_ROUND)
-        ctx.set_line_width(1)
+        ctx.set_line_width(0)
         ctx.stroke()
 
     else:
@@ -503,10 +332,7 @@ def draw_nudge_1(ctx, x, midi_value):
         # Nudge 1 fill color
         # x = x + 2
         y_min = 130
-        pat = cairo.LinearGradient(x, y_min + 10, x, y_max - 5)
-        pat.add_color_stop_rgba(0, *color, 1)
-        pat.add_color_stop_rgba(1, *color, 0.5)
-        ctx.set_source(pat)
+        ctx.set_source_rgb(*color)
         nudge_1()
 
     else:
@@ -543,24 +369,12 @@ def draw_nudge_2(ctx, x, midi_value):
         ctx.stroke()
 
     if midi_value == 0:
-        # # Shadow
-        # x = x - 2
-        # y_min = 132
-        # ctx.set_source_rgba(*color, 0.25)
-        # ctx.set_line_cap(cairo.LINE_CAP_SQUARE)
-        # nudge_2()
-
         # Nudge 2 (Fill color)
-        pat = cairo.LinearGradient(x, y_min + 10, x, y_min + 25)
-        pat.add_color_stop_rgba(0, *color, 1)
-        pat.add_color_stop_rgba(1, *color, 0.5)
-        ctx.set_source(pat)
+        ctx.set_source_rgb(*color)
         # ctx.fill()
 
-        # Nudge 2 (Shape)
-        # x = x + 2
-        y_min = 130
-        ctx.set_source(pat)
+        # Nudge 2 (Stroke color)
+        ctx.set_source_rgb(*color)
         ctx.set_line_cap(cairo.LINE_CAP_SQUARE)
         nudge_2()
 

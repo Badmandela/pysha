@@ -3,7 +3,7 @@ import push2_python
 
 from display_utils import draw_title, draw_list, draw_knob, draw_cue, draw_bar, draw_beat, draw_nudge_1, draw_nudge_2
 
-controls = {'instr': 0, 'instr_lpf': 64, 'master_lpf': 64, 'fx': 64, 'smile': 64, 'reverb': 64, 'tape': 64}
+controls = {'instr': 0, 'instr_lpf': 128, 'master_lpf': 64, 'fx': 100, 'smile': 200, 'reverb': 64, 'tape': 230}
 
 transport = {'cue1': 0, 'cue2': 0, 'bar1': 0, 'bar2': 0, 'beat1': 0, 'beat2': 0, 'nudge1': 0, 'nudge2': 0}
 
@@ -95,7 +95,7 @@ draw_list(ctx, center_x, y, text, *color)
 # Instrument_filter QUASI-GLOBALS
 title = "INSTR. LPF:"
 control = controls['instr_lpf']
-off_value = 127
+off_value = 254
 
 if controls['instr'] in piano_range:
     color = [1, 0.25, 0.5]
@@ -117,7 +117,7 @@ title = "MASTER LPF:"
 control = controls['master_lpf']
 color = [1, 0.55, 0.1]
 center_x = 420
-off_value = 127
+off_value = 254
 
 draw_title(ctx, center_x, title, *color)
 draw_knob(ctx, center_x, center_y, rad, control, off_value, *color)
@@ -129,6 +129,7 @@ title = "FX LVL:"
 control = controls['fx']
 color = [0.75, 0.3, 1]
 center_x = 540
+off_value = 0
 
 draw_title(ctx, center_x, title, *color)
 draw_knob(ctx, center_x, center_y, rad, control, off_value, *color)
@@ -164,7 +165,7 @@ title = "TAPE:"
 control = controls['tape']
 color = [1, 0.3, 0.3]
 center_x = 900
-off_value = 127
+off_value = 254
 
 draw_title(ctx, center_x, title, *color)
 draw_knob(ctx, center_x, center_y, rad, control, off_value, *color)
