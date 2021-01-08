@@ -5,8 +5,6 @@ import definitions
 from display_utils import draw_title, draw_list, draw_knob, draw_cue, draw_bar, draw_beat, draw_nudge_1, draw_nudge_2
 from knob import update_encoder
 
-#
-
 max_encoder_value = 254
 piano_range = range(0, 40)
 synth_range = range(40, 140)
@@ -132,6 +130,7 @@ class MainControlsMode(definitions.PyshaMode):
         control = controls['fx']
         color = [0.75, 0.3, 1]
         center_x = 540
+        off_value = 0
 
         draw_title(ctx, center_x, title, *color)
         draw_knob(ctx, center_x, center_y, rad, control, off_value, *color)
