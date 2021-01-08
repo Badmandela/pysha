@@ -1,0 +1,1 @@
+{"midi_in_default_channel": 0, "midi_out_default_channel": 0, "default_midi_in_device_name": null, "default_midi_out_device_name": "Live Performer", "use_push2_display": true, "target_frame_rate": 60, "use_poly_at": true, "root_midi_note": 48, "channel_at_range_start": 401, "channel_at_range_end": 800, "poly_at_max_range": 40, "poly_at_curve_bending": 60}
