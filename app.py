@@ -253,10 +253,12 @@ class PyshaApp(object):
         self.push = push2_python.Push2()
         if platform.system() == "Linux":
             # When this app runs in Linux is because it is running on the Raspberrypi
-            #  I've overved problems trying to reconnect many times withotu success on the Raspberrypi, resulting in
+            #  I've overved problems trying to reconnect many times without success on the Raspberrypi, resulting in
             # "ALSA lib seq_hw.c:466:(snd_seq_hw_open) open /dev/snd/seq failed: Cannot allocate memory" issues.
             # A work around is make the reconnection time bigger, but a better solution should probably be found.
-            self.push.set_push2_reconnect_call_interval(2)
+            # self.push.set_push2_reconnect_call_interval(2)
+            # Is this enough time for the RPI? /N
+            self.push.set_push2_reconnect_call_interval(7)
 
     def update_push2_pads(self):
         for mode in self.active_modes:
@@ -281,6 +283,7 @@ class PyshaApp(object):
             buf = surface.get_data()
             frame = numpy.ndarray(shape=(h, w), dtype=numpy.uint16, buffer=buf).transpose()
             self.push.display.display_frame(frame, input_format=push2_python.constants.FRAME_FORMAT_RGB565)
+            # surface.write_to_png("screenshot_from_main_app.png")
 
     def check_for_delayed_actions(self):
         # If MIDI not configured, make sure we try sending messages so it gets configured

@@ -11,7 +11,7 @@ synth_range = range(40, 140)
 sampler_range = range(140, 220)
 ghost_range = range(220, 254)
 
-controls = {'instr': 0, 'instr_lpf': 254, 'master_lpf': 254, 'fx': 254, 'smile': 0, 'reverb': 0, 'tape': 254}
+controls = {'instr': 0, 'instr_lpf': 254, 'master_lpf': 254, 'fx': 0, 'smile': 0, 'reverb': 0, 'tape': 254}
 transport = {'cue1': 0, 'cue2': 0, 'bar1': 0, 'bar2': 0, 'beat1': 0, 'beat2': 0, 'nudge1': 0, 'nudge2': 0}
 
 
