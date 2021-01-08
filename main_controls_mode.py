@@ -5,6 +5,8 @@ import definitions
 from display_utils import draw_title, draw_list, draw_knob, draw_cue, draw_bar, draw_beat, draw_nudge_1, draw_nudge_2
 from knob import update_encoder
 
+#
+
 max_encoder_value = 254
 piano_range = range(0, 40)
 synth_range = range(40, 140)
