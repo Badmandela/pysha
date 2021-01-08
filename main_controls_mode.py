@@ -9,7 +9,7 @@ max_encoder_value = 254
 piano_range = range(0, 40)
 synth_range = range(40, 140)
 sampler_range = range(140, 220)
-ghost_range = range(220, 254)
+ghost_range = range(220, 255)
 
 controls = {'instr': 0, 'instr_lpf': 254, 'master_lpf': 254, 'fx': 0, 'smile': 0, 'reverb': 0, 'tape': 254}
 transport = {'cue1': 0, 'cue2': 0, 'bar1': 0, 'bar2': 0, 'beat1': 0, 'beat2': 0, 'nudge1': 0, 'nudge2': 0}
@@ -33,7 +33,7 @@ class MainControlsMode(definitions.PyshaMode):
         ctx.fill()
 
         # Globals
-        rad = 45
+        rad = 36
         center_y = 75
 
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -94,22 +94,48 @@ class MainControlsMode(definitions.PyshaMode):
             color = [1, 1, 1, 0.25]
         draw_list(ctx, center_x, y, text, *color)
 
-        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
         # Instrument_filter QUASI-GLOBALS
         title = "INSTR. LPF:"
+        instrument = controls['instr']
         control = controls['instr_lpf']
         off_value = 254
 
-        if controls['instr'] in piano_range:
+        # Active text
+        if instrument in piano_range and control != off_value:
             color = [1, 0.25, 0.5]
-        elif controls['instr'] in synth_range:
-            color = [0.1, 1, 0.7]
-        elif controls['instr'] in sampler_range:  # controls['instr'] >= sampler_min
-            color = [1, 0.1, 0.9]
-        else:
-            color = [0.75, 0.75, 0.75]
-        center_x = 180
 
+        # Inactive text
+        elif instrument in piano_range and control == off_value:
+            color = [0.25, 0.06, 0.12]
+
+        # Active synth text
+        elif instrument in synth_range and control != off_value:
+            color = [0.1, 1, 0.7]
+
+        # Inactive synth text
+        elif instrument in synth_range and control == off_value:
+            color = [0.02, 0.25, 0.17]
+
+        # Active sampler text
+        elif instrument in sampler_range and control != off_value:  # controls['instr'] >= sampler_min
+            color = [1, 0.1, 0.9]
+
+        # Inactive sampler text
+        elif instrument in sampler_range and control == off_value:
+            color = [0.25, 0.02, 0.21]
+
+        # Active ghost text
+        elif instrument in ghost_range and control != off_value:
+            color = [0.75, 0.75, 0.75]
+
+        # Inactive ghost text
+        elif instrument in ghost_range and control == off_value:
+            color = [0.18, 0.18, 0.18]
+
+        else:
+            color = [1, 0.75, 0.75]
+
+        center_x = 180
         draw_title(ctx, center_x, title, *color)
         draw_knob(ctx, center_x, center_y, rad, control, off_value, *color)
 
@@ -117,9 +143,13 @@ class MainControlsMode(definitions.PyshaMode):
         # Master_filter QUASI-GLOBALS
         title = "MASTER LPF:"
         control = controls['master_lpf']
-        color = [1, 0.55, 0.1]
         center_x = 420
         off_value = 254
+
+        if control != off_value:
+            color = [1, 0.55, 0.1]
+        else:
+            color = [0.25, 0.11, 0.02]
 
         draw_title(ctx, center_x, title, *color)
         draw_knob(ctx, center_x, center_y, rad, control, off_value, *color)
@@ -128,9 +158,13 @@ class MainControlsMode(definitions.PyshaMode):
         # FX QUASI-GLOBALS
         title = "FX LVL:"
         control = controls['fx']
-        color = [0.75, 0.3, 1]
         center_x = 540
         off_value = 0
+
+        if control != off_value:
+            color = [0.75, 0.3, 1]
+        else:
+            color = [0.18, 0.07, 0.25]
 
         draw_title(ctx, center_x, title, *color)
         draw_knob(ctx, center_x, center_y, rad, control, off_value, *color)
@@ -139,9 +173,13 @@ class MainControlsMode(definitions.PyshaMode):
         # Smile QUASI-GLOBALS
         title = "SMILE:"
         control = controls['smile']
-        color = [1, 1, 0.2]
         center_x = 660
         off_value = 0
+
+        if control != off_value:
+            color = [1, 1, 0.2]
+        else:
+            color = [0.25, 0.25, 0.05]
 
         draw_title(ctx, center_x, title, *color)
         draw_knob(ctx, center_x, center_y, rad, control, off_value, *color)
@@ -150,9 +188,13 @@ class MainControlsMode(definitions.PyshaMode):
         # Reverb QUASI-GLOBALS
         title = "REVERB:"
         control = controls['reverb']
-        color = [0.2, 0.85, 1]
         center_x = 780
         off_value = 0
+
+        if control != off_value:
+            color = [0.2, 0.85, 1]
+        else:
+            color = [0.02, 0.21, 0.25]
 
         draw_title(ctx, center_x, title, *color)
         draw_knob(ctx, center_x, center_y, rad, control, off_value, *color)
@@ -161,9 +203,13 @@ class MainControlsMode(definitions.PyshaMode):
         # Tape QUASI-GLOBALS
         title = "TAPE:"
         control = controls['tape']
-        color = [1, 0.3, 0.3]
         center_x = 900
         off_value = 254
+
+        if control != off_value:
+            color = [1, 0.3, 0.3]
+        else:
+            color = [0.25, 0.07, 0.07]
 
         draw_title(ctx, center_x, title, *color)
         draw_knob(ctx, center_x, center_y, rad, control, off_value, *color)
@@ -241,8 +287,6 @@ class MainControlsMode(definitions.PyshaMode):
         self.push.buttons.set_button_color(push2_python.constants.BUTTON_PLAY, definitions.PINK)
         self.push.buttons.set_button_color(push2_python.constants.BUTTON_RECORD, definitions.YELLOW)
 
-        self.push.buttons.set_button_color(push2_python.constants.BUTTON_MIX, definitions.WHITE)
-        self.push.buttons.set_button_color(push2_python.constants.BUTTON_DEVICE, definitions.WHITE)
         self.push.buttons.set_button_color(push2_python.constants.BUTTON_SETUP, definitions.WHITE)
 
     def clean_currently_notes_being_played(self):
