@@ -17,18 +17,18 @@ def show_title(ctx, x, h, text, color=[1, 1, 1]):
 def draw_title(ctx, center_x, text, *color):
     text = str(text)
     ctx.select_font_face("Ableton Sans Bold", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
-    ctx.set_font_size(15)
+    ctx.set_font_size(14)
 
     # Main Text
     ctx.set_source_rgb(*color)
-    ctx.move_to(center_x - (ctx.text_extents(text)[2] / 2), 17)
+    ctx.move_to(center_x - (ctx.text_extents(text)[2] / 2), 22)
     ctx.show_text(text)
 
 def draw_list(ctx, center_x, y, text, *color):
     ctx.set_font_size(10)
     # ctx.select_font_face("Unscreen", cairo.FONT_SLANT_ITALIC, cairo.FONT_WEIGHT_NORMAL)
     ctx.select_font_face("Ableton Sans Light", cairo.FONT_SLANT_ITALIC, cairo.FONT_WEIGHT_NORMAL)
-    ctx.move_to(center_x - (ctx.text_extents(text)[2] / 2), y)
+    ctx.move_to(center_x - (ctx.text_extents(text)[2] / 2), y + 5)
     ctx.set_source_rgba(*color)
     ctx.show_text(text)
 
@@ -154,7 +154,8 @@ def fill_button(ctx, x, y_min, *color):
 
 
 def draw_cue(ctx, x, midi_value):
-    y_min = 130
+    # y_min = 130
+    y_min = 125
     y = y_min
     color = [0.75, 0.75, 0.75]
 
@@ -205,7 +206,8 @@ def draw_cue(ctx, x, midi_value):
 
 def draw_bar(ctx, x, midi_value):
     color = [1, 1, 0.3]
-    y_min = 130
+    # y_min = 130
+    y_min = 125
     y = y_min
 
     def bar():
@@ -258,7 +260,8 @@ def draw_bar(ctx, x, midi_value):
 
 def draw_beat(ctx, x, midi_value):
     color = [1, 0.4, 0.15]
-    y_min = 130
+    # y_min = 130
+    y_min = 125
     y = y_min + 2
 
     def beat():
@@ -294,7 +297,8 @@ def draw_beat(ctx, x, midi_value):
 
 def draw_nudge_1(ctx, x, midi_value):
     color = [1, 0.4, 0.6]
-    y_min = 130
+    # y_min = 130
+    y_min = 125
     y_max = y_min + 30
     ctx.set_line_width(2.5)
 
@@ -331,7 +335,6 @@ def draw_nudge_1(ctx, x, midi_value):
 
         # Nudge 1 fill color
         # x = x + 2
-        y_min = 130
         ctx.set_source_rgb(*color)
         nudge_1()
 
@@ -344,7 +347,8 @@ def draw_nudge_1(ctx, x, midi_value):
 
 def draw_nudge_2(ctx, x, midi_value):
     color = [1, 0.4, 0.6]
-    y_min = 130
+    # y_min = 130
+    y_min = 125
     ctx.set_line_width(2.5)
 
     def nudge_2():

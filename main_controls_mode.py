@@ -6,10 +6,11 @@ from display_utils import draw_title, draw_list, draw_knob, draw_cue, draw_bar, 
 from knob import update_encoder
 
 max_encoder_value = 254
-piano_range = range(0, 40)
-synth_range = range(40, 140)
-sampler_range = range(140, 220)
-ghost_range = range(220, 255)
+piano_range = range(0, 35)
+synth_range = range(35, 95)
+sampler_range = range(95, 170)
+ghost_range = range(170, 230)
+sequencer_range = range(230, 255)
 
 controls = {'instr': 0, 'instr_lpf': 254, 'master_lpf': 254, 'fx': 0, 'smile': 0, 'reverb': 0, 'tape': 254}
 transport = {'cue1': 0, 'cue2': 0, 'bar1': 0, 'bar2': 0, 'beat1': 0, 'beat2': 0, 'nudge1': 0, 'nudge2': 0}
@@ -54,13 +55,14 @@ class MainControlsMode(definitions.PyshaMode):
 
         # List selector canvas
         ctx.set_source_rgb(*color)
-        ctx.rectangle(12, 23 + (60 * (control / 254)), 98, 15)
+        # ctx.rectangle(12, 34 + (60 * (control / 254)), 98, 15)
+        ctx.rectangle(12, 34 + (60 * (control / 254)), 98, 15)
         ctx.fill()
 
         # Instruments list
         # 1
         text = "ELECTRIC PIANO"
-        y = 34
+        y = 40
         if control in piano_range:
             color = [1, 1, 1, 1]
         else:
@@ -69,7 +71,7 @@ class MainControlsMode(definitions.PyshaMode):
 
         # 2
         text = "SYNTHESIZER"
-        y = 54
+        y = 55
         if control in synth_range:
             color = [1, 1, 1, 1]
         else:
@@ -78,7 +80,7 @@ class MainControlsMode(definitions.PyshaMode):
 
         # 3
         text = "SAMPLER"
-        y = 74
+        y = 70
         if control in sampler_range:
             color = [1, 1, 1, 1]
         else:
@@ -87,8 +89,17 @@ class MainControlsMode(definitions.PyshaMode):
 
         # 4
         text = "GHOST"
-        y = 94
+        y = 85
         if control in ghost_range:
+            color = [1, 1, 1, 1]
+        else:
+            color = [1, 1, 1, 0.25]
+        draw_list(ctx, center_x, y, text, *color)
+
+        # 5
+        text = "SEQUENCER"
+        y = 100
+        if control in sequencer_range:
             color = [1, 1, 1, 1]
         else:
             color = [1, 1, 1, 0.25]
@@ -100,7 +111,6 @@ class MainControlsMode(definitions.PyshaMode):
         control = controls['instr_lpf']
         off_value = 254
 
-        # Active text
         if instrument in piano_range and control != off_value:
             color = [1, 0.25, 0.5]
 
@@ -132,8 +142,17 @@ class MainControlsMode(definitions.PyshaMode):
         elif instrument in ghost_range and control == off_value:
             color = [0.18, 0.18, 0.18]
 
+        # Active sequencer text
+        elif instrument in sequencer_range and control != off_value:
+            color = [0.75, 0.75, 0.75]
+
+        # Inactive sequencer text
+        elif instrument in sequencer_range and control == off_value:
+            color = [0.18, 0.18, 0.18]
+
         else:
             color = [1, 0.75, 0.75]
+        # Active text
 
         center_x = 180
         draw_title(ctx, center_x, title, *color)

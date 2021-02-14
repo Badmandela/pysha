@@ -15,10 +15,6 @@ from rhythmic_mode import RhythmicMode
 from settings_mode import SettingsMode
 
 
-# from play_mode import PlayMode
-# from mix_mode import MixMode
-
-
 class PyshaApp(object):
 
     # midi
@@ -44,8 +40,13 @@ class PyshaApp(object):
 
     # other state vars
     active_modes = []
+    previously_active_mode_for_xor_group = {}
     pads_need_update = True
     buttons_need_update = True
+
+    # notifications
+    notification_text = None
+    notification_time = 0
 
     def __init__(self):
         if os.path.exists('settings.json'):
@@ -59,24 +60,24 @@ class PyshaApp(object):
         self.use_push2_display = settings.get('use_push2_display', True)
 
         self.init_midi_in(device_name=settings.get('default_midi_in_device_name', None))
-        self.init_midi_out(device_name=settings.get('default_midi_out_device_name', "iConnectAUDIO2+ USB1"))
+        self.init_midi_out(device_name=settings.get('default_midi_out_device_name', None))
         self.init_push()
 
         self.init_modes(settings)
-        self.active_modes.append(self.main_controls_mode)
-        self.toggle_melodic_rhythmic_modes()
+        # self.toggle_melodic_rhythmic_modes()
 
     def init_modes(self, settings):
+        self.main_controls_mode = MainControlsMode(self, settings=settings)
+        self.active_modes.append(self.main_controls_mode)
+
         self.melodic_mode = MelodicMode(self, settings=settings)
         self.rhyhtmic_mode = RhythmicMode(self, settings=settings)
+        self.set_melodic_mode()
+
         self.settings_mode = SettingsMode(self, settings=settings)
-        # self.play_mode = PlayMode(self, settings=settings)
-        # self.mix_mode = MixMode(self, settings=settings)
-        self.main_controls_mode = MainControlsMode(self, settings=settings)
 
     def get_all_modes(self):
-        return [getattr(self, element) for element in vars(self) if
-                isinstance(getattr(self, element), definitions.PyshaMode)]
+        return [getattr(self, element) for element in vars(self) if isinstance(getattr(self, element), definitions.PyshaMode)]
 
     def is_mode_active(self, mode):
         return mode in self.active_modes
@@ -91,44 +92,58 @@ class PyshaApp(object):
             self.active_modes.append(self.settings_mode)
             self.settings_mode.activate()
 
-    # def toggle_and_rotate_play_mode(self):
-    #     if self.is_mode_active(self.play_mode):
-    #         rotation_finished = self.play_mode.move_to_next_play_page()
-    #         if rotation_finished:
-    #             self.active_modes = [mode for mode in self.active_modes if mode != self.play_mode]
-    #             self.play_mode.deactivate()
-    #     else:
-    #         self.active_modes.append(self.play_mode)
-    #         self.play_mode.activate()
-
-    # def toggle_and_rotate_mix_mode(self):
-    #     if self.is_mode_active(self.mix_mode):
-    #         rotation_finished = self.mix_mode.move_to_next_mix_page()
-    #         if rotation_finished:
-    #             self.active_modes = [mode for mode in self.active_modes if mode != self.mix_mode]
-    #             self.mix_mode.deactivate()
-    #     else:
-    #         self.active_modes.append(self.mix_mode)
-    #         self.mix_mode.activate()
+    # def set_mode_for_xor_group(self, mode_to_set):
+    #     '''This activates the mode_to_set, but makes sure that if any other modes are currently activated
+    #     for the same xor_group, these other modes get deactivated. This also stores a reference to the
+    #     latest active mode for xor_group, so once a mode gets unset, the previously active one can be
+    #     automatically set'''
+    #
+    #     if not self.is_mode_active(mode_to_set):
+    #
+    #         # First deactivate all existing modes for that xor group
+    #         new_active_modes = []
+    #         for mode in self.active_modes:
+    #             if mode.xor_group is not None and mode.xor_group == mode_to_set.xor_group:
+    #                 mode.deactivate()
+    #                 self.previously_active_mode_for_xor_group[
+    #                     mode.xor_group] = mode  # Store last mode that was active for the group
+    #             else:
+    #                 new_active_modes.append(mode)
+    #         self.active_modes = new_active_modes
+    #
+    #         # Now add the mode to set to the active modes list and activate it
+    #         new_active_modes.append(mode_to_set)
+    #         mode_to_set.activate()
+    #
+    # def unset_mode_for_xor_group(self, mode_to_unset):
+    #     """This deactivates the mode_to_unset and reactivates the previous mode that was active for this xor_group.
+    #     This allows to make sure that one (and only one) mode will be always active for a given xor_group."""
+    #
+    #     if self.is_mode_active(mode_to_unset):
+    #
+    #         # Deactivate the mode to unset
+    #         self.active_modes = [mode for mode in self.active_modes if mode != mode_to_unset]
+    #         mode_to_unset.deactivate()
+    #
+    #         # Activate the previous mode that was activated for the same xor_group. If none listed, activate a default one
+    #         previous_mode = self.previously_active_mode_for_xor_group.get(mode_to_unset.xor_group, None)
+    #         if previous_mode is not None:
+    #             del self.previously_active_mode_for_xor_group[mode_to_unset.xor_group]
+    #             self.set_mode_for_xor_group(previous_mode)
+    #         else:
+    #             # Enable default
+    #             # tod o: here we hardcoded the default mode for a specific xor_group, I should clean this a little bit in the future...
+    #             if mode_to_unset.xor_group == 'pads':
+    #                 self.set_mode_for_xor_group(self.melodic_mode)
 
     def toggle_melodic_rhythmic_modes(self):
         if self.is_mode_active(self.melodic_mode):
-            # Switch to rhythmic mode
-            self.active_modes = [mode for mode in self.active_modes if mode != self.melodic_mode]
-            self.active_modes += [self.rhyhtmic_mode]
-            self.melodic_mode.deactivate()
-            self.rhyhtmic_mode.activate()
+            self.set_rhythmic_mode()
         elif self.is_mode_active(self.rhyhtmic_mode):
-            # Switch to melodic mode
-            self.active_modes = [mode for mode in self.active_modes if mode != self.rhyhtmic_mode]
-            self.active_modes += [self.melodic_mode]
-            self.rhyhtmic_mode.deactivate()
-            self.melodic_mode.activate()
-
+            self.set_melodic_mode()
         else:
             # If none of melodic or rhythmic modes were active, enable melodic by default
-            self.active_modes += [self.melodic_mode]
-            self.melodic_mode.activate()
+            self.set_melodic_mode()
 
     def set_melodic_mode(self):
         if self.is_mode_active(self.rhyhtmic_mode):
@@ -257,8 +272,9 @@ class PyshaApp(object):
             # "ALSA lib seq_hw.c:466:(snd_seq_hw_open) open /dev/snd/seq failed: Cannot allocate memory" issues.
             # A work around is make the reconnection time bigger, but a better solution should probably be found.
             # self.push.set_push2_reconnect_call_interval(2)
+            #
             # Is this enough time for the RPI? /N
-            self.push.set_push2_reconnect_call_interval(7)
+            self.push.set_push2_reconnect_call_interval(9)
 
     def update_push2_pads(self):
         for mode in self.active_modes:
@@ -290,7 +306,7 @@ class PyshaApp(object):
         if not self.push.midi_is_configured():
             self.push.configure_midi()
 
-        # Call dalyed actions in active modes
+        # Call delayed actions in active modes
         for mode in self.active_modes:
             mode.check_for_delayed_actions()
 
